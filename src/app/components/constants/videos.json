@@ -1,0 +1,116 @@
+[
+  {
+    "id": "video1",
+    "src": "/videos/VID-20250219-WA0118.mp4",
+    "thumbnail": "/images/IMG-20250219-WA0107(1).jpg",
+    "title": {
+      "en": "Epic Goal Moments",
+      "ru": "Эпические моменты голов",
+      "fr": "Moments Épiques de Buts",
+      "es": "Momentos Épicos de Gol"
+    },
+    "description": {
+      "en": "A compilation of breathtaking goal moments that changed the game. Every clip captures the passion and skill of the players at their best.",
+      "ru": "Сборник захватывающих моментов голов, которые изменили ход игры. Каждый клип отражает страсть и мастерство игроков в их лучшем проявлении.",
+      "fr": "Une compilation de moments de buts spectaculaires qui ont changé le cours du match. Chaque séquence illustre la passion et le talent des joueurs.",
+      "es": "Una compilación de momentos épicos de goles que cambiaron el juego. Cada clip captura la pasión y habilidad de los jugadores en su máxima expresión."
+    },
+    "link": "/video/video1",
+    "date": "2023-08-15"
+  },
+  {
+    "id": "video2",
+    "src": "/videos/VID-20250219-WA0072.mp4",
+    "thumbnail": "/images/IMG-20250219-WA0117.jpg",
+    "title": {
+      "en": "Best Assists Compilation",
+      "ru": "Лучшие ассисты",
+      "fr": "Compilation des Meilleures Passes",
+      "es": "Compilación de las Mejores Asistencias"
+    },
+    "description": {
+      "en": "Watch the finest assists that set up stunning goals in every match. The precision and timing of each pass make for an unforgettable display.",
+      "ru": "Смотрите лучшие передачи, которые создавали потрясающие голы в каждом матче. Точность и синхронность каждого паса создают незабываемое зрелище.",
+      "fr": "Regardez les meilleures passes qui ont créé des buts spectaculaires lors de chaque match. La précision et le timing parfait rendent chaque action mémorable.",
+      "es": "Mira las mejores asistencias que prepararon goles impresionantes en cada partido. La precisión y el timing de cada pase ofrecen un espectáculo inolvidable."
+    },
+    "link": "/video/video2",
+    "date": "2023-08-16"
+  },
+  {
+    "id": "video3",
+    "src": "/videos/VID-20250219-WA0078.mp4",
+    "thumbnail": "/images/IMG-20250219-WA0123.jpg",
+    "title": {
+      "en": "Top Saves of the Year",
+      "ru": "Лучшие сейвы года",
+      "fr": "Meilleurs Arrêts de l'Année",
+      "es": "Las Mejores Paradas del Año"
+    },
+    "description": {
+      "en": "Relive the moments of extraordinary saves that left the crowd in awe. Every stop is a testament to skill and determination.",
+      "ru": "Вспомните моменты невероятных сейвов, оставивших зрителей в изумлении. Каждый сейв свидетельствует о мастерстве и решимости.",
+      "fr": "Revivez les arrêts spectaculaires qui ont émerveillé la foule. Chaque arrêt témoigne de la compétence et de la détermination du gardien.",
+      "es": "Revive los momentos de paradas extraordinarias que dejaron a la multitud asombrada. Cada parada es un testimonio de habilidad y determinación."
+    },
+    "link": "/video/video3",
+    "date": "2023-08-17"
+  },
+  {
+    "id": "video4",
+    "src": "/videos/VID-20250220-WA0014.mp4",
+    "thumbnail": "/images/IMG-20250219-WA0128.jpg",
+    "title": {
+      "en": "Unbelievable Dribbles",
+      "ru": "Невероятные дриблинг",
+      "fr": "Dribbles Incroyables",
+      "es": "Dribles Increíbles"
+    },
+    "description": {
+      "en": "Experience the magic of dribbling skills that defy logic on the field. Watch as players weave through defenses with incredible finesse.",
+      "ru": "Ощутите магию дриблинга, который бросает вызов логике на поле. Смотрите, как игроки с невероятной ловкостью проходят сквозь защиту.",
+      "fr": "Découvrez la magie des dribbles qui défient la logique sur le terrain. Observez les joueurs se faufiler à travers la défense avec une grande finesse.",
+      "es": "Experimenta la magia de los dribles que desafían la lógica en el campo. Mira cómo los jugadores se deslizan por la defensa con una increíble destreza."
+    },
+    "link": "/video/video4",
+    "date": "2023-08-18"
+  },
+  {
+    "id": "video5",
+    "src": "/videos/video5.mp4",
+    "thumbnail": "/images/thumb5.jpg",
+    "title": {
+      "en": "Last-Minute Goals",
+      "ru": "Голы в последнюю минуту",
+      "fr": "Buts de Dernière Minute",
+      "es": "Goles de Última Hora"
+    },
+    "description": {
+      "en": "Dramatic last-minute goals that turned the tide of the game. Feel the intensity and excitement of these unforgettable moments.",
+      "ru": "Драматичные голы в последнюю минуту, изменившие ход игры. Почувствуйте напряжение и волнение этих незабываемых моментов.",
+      "fr": "Des buts dramatiques à la dernière minute qui ont changé le cours du match. Ressentez l'intensité et l'excitation de ces moments inoubliables.",
+      "es": "Goles dramáticos de última hora que cambiaron el curso del partido. Siente la intensidad y la emoción de estos momentos inolvidables."
+    },
+    "link": "/video/video5",
+    "date": "2023-08-19"
+  },
+  {
+    "id": "video6",
+    "src": "/videos/video6.mp4",
+    "thumbnail": "/images/thumb6.jpg",
+    "title": {
+      "en": "Celebrations Gone Wild",
+      "ru": "Безумные празднования",
+      "fr": "Célébrations Folles",
+      "es": "Celebraciones Descontroladas"
+    },
+    "description": {
+      "en": "Wild and unforgettable celebrations that capture the passion of the game. The energy of the crowd and players is simply contagious.",
+      "ru": "Дикие и незабываемые празднования, отражающие страсть игры. Энергия болельщиков и игроков просто заразительна.",
+      "fr": "Des célébrations sauvages et inoubliables qui capturent la passion du jeu. L'énergie de la foule et des joueurs est tout simplement contagieuse.",
+      "es": "Celebraciones salvajes e inolvidables que capturan la pasión del juego. La energía de la multitud y de los jugadores es simplemente contagiosa."
+    },
+    "link": "/video/video6",
+    "date": "2023-08-20"
+  }
+]

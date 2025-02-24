@@ -1,0 +1,29 @@
+{
+    "news": [
+      {
+        "title": "Barcelona Triumphs in a Classic El Clásico",
+        "description": "In an exhilarating clash, Barcelona showcased top-notch skill and teamwork to defeat their fierce rivals.",
+        "image": "https://images.pexels.com/photos/29599716/pexels-photo-29599716/free-photo-of-dynamic-football-match-on-dusty-field.jpeg?auto=compress&cs=tinysrgb&w=600",
+        "link": "#"
+      },
+      {
+        "title": "Manchester United's New Signing Shakes Up the Squad",
+        "description": "The Red Devils welcome a dynamic new talent as they prepare for a challenging season ahead.",
+        "image": "https://images.pexels.com/photos/30461480/pexels-photo-30461480/free-photo-of-african-goalkeeper-in-action-on-soccer-field.jpeg?auto=compress&cs=tinysrgb&w=600",
+        "link": "#"
+      },
+      {
+        "title": "Champions League Finals: Clash of the Titans",
+        "description": "Anticipation is building as two European giants prepare to face off in one of the most eagerly awaited matches of the season.",
+        "image": "https://images.pexels.com/photos/30461777/pexels-photo-30461777/free-photo-of-aerial-fish-eye-view-of-soccer-stadium.jpeg?auto=compress&cs=tinysrgb&w=600",
+        "link": "#"
+      },
+      {
+        "title": "Premier League Highlights: Week in Review",
+        "description": "Catch up on the most dramatic moments, stunning goals, and key plays from this week’s Premier League action.",
+        "image": "https://images.pexels.com/photos/30393792/pexels-photo-30393792/free-photo-of-amateur-soccer-match-with-spectators-in-bleachers.jpeg?auto=compress&cs=tinysrgb&w=600",
+        "link": "#"
+      }
+    ]
+  }
+  

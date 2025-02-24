@@ -1,21 +1,83 @@
+@import url('https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+
+/* Tailwind Base, Components, and Utilities */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* Footer Styling */
+.foot {
+  font-family: "Fira Sans", serif;
+  font-weight: 600;
+  font-style: normal;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  border: none;
+  outline: none;
+}
+
+FormInput::placeholder {
+  color: black;
+}
+
+/* Smooth Transition for Light/Dark Mode */
+body {
+  font-family: "Fira Sans", serif;
+  font-weight: 400;
+  padding-top: 30px;
+  font-style: normal;
+  transition: background 0.9s ease-in-out, color 0.9s ease-in-out;
+}
+
+/* Light Mode (Default) */
+body {
+  --background: #ffffff;
+  --foreground: #0a0a0a;
+  --gradient-start: #e0f2fe;  /* Soft blue */
+  --gradient-end: #ffffff;    /* White */
+}
+
+/* Dark Mode */
+body.dark {
+  --background: #121212;
+  --foreground: #ffffff;
+  --gradient-start: #facc15;  /* Warm yellow */
+  --gradient-end: #121212;    /* Deep black */
+}
+
+/* Automatic Background Gradient for All Pages */
+body {
+  background: linear-gradient(to bottom left, var(--gradient-start), var(--gradient-end));
+}
+
+/* Navbar Background Transition */
+.navbar {
+  transition: background-color 0.5s ease-in-out;
+}
+
+/* Button & Link Transitions */
+button, a {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Define Custom Border Class */
+@layer components {
+  .border-border {
+    border: 1px solid currentColor; /* Adjust as needed */
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+@layer base {
+  * {
+    @apply border-border; /* or use @apply border; */
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
 }
