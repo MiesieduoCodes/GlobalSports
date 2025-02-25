@@ -203,7 +203,7 @@ const Navbar = () => {
           <select
             value={language}
             onChange={(e) => handleLanguageChange(e.target.value)}
-            className="ml-4 p-2 border rounded"
+            className="ml-4 p-2 border-none rounded"
           >
             <option value="en" onClick={() => handleLanguageChange("en")}>English</option>
 

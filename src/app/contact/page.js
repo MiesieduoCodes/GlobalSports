@@ -31,8 +31,69 @@ const translations = {
       location: "Kazakhstan",
     },
   },
-  // Other translations...
+  ru: {
+    contactUs: "Свяжитесь с нами",
+    sendMessage: "Отправьте нам сообщение",
+    namePlaceholder: "Имя",
+    emailPlaceholder: "Электронная почта",
+    phonePlaceholder: "Телефон",
+    messagePlaceholder: "Сообщение",
+    preferredMethod: "Предпочтительный способ связи",
+    email: "Электронная почта",
+    phone: "Телефон",
+    sending: "Отправка...",
+    sendMessageButton: "Отправить сообщение",
+    successMessage: "✅ Ваше сообщение успешно отправлено!",
+    errorMessage: "❌ Что-то пошло не так. Пожалуйста, попробуйте еще раз.",
+    contactInfo: {
+      phone: "+77273274755, +77025895922",
+      email: "globalsportint2017@gmail.com , info@gsfc.com",
+      location: "Казахстан",
+    },
+  },
+  fr: {
+    contactUs: "Contactez-nous",
+    sendMessage: "Envoyez-nous un message",
+    namePlaceholder: "Nom",
+    emailPlaceholder: "E-mail",
+    phonePlaceholder: "Téléphone",
+    messagePlaceholder: "Message",
+    preferredMethod: "Méthode de communication préférée",
+    email: "E-mail",
+    phone: "Téléphone",
+    sending: "Envoi...",
+    sendMessageButton: "Envoyer le message",
+    successMessage: "✅ Votre message a été envoyé avec succès!",
+    errorMessage: "❌ Une erreur s'est produite. Veuillez réessayer.",
+    contactInfo: {
+      phone: "+77273274755, +77025895922",
+      email: "globalsportint2017@gmail.com , info@gsfc.com",
+      location: "Kazakhstan",
+    },
+  },
+  es: {
+    contactUs: "Contáctanos",
+    sendMessage: "Envíanos un mensaje",
+    namePlaceholder: "Nombre",
+    emailPlaceholder: "Correo electrónico",
+    phonePlaceholder: "Teléfono",
+    messagePlaceholder: "Mensaje",
+    preferredMethod: "Método de comunicación preferido",
+    email: "Correo electrónico",
+    phone: "Teléfono",
+    sending: "Enviando...",
+    sendMessageButton: "Enviar mensaje",
+    successMessage: "✅ ¡Tu mensaje ha sido enviado con éxito!",
+    errorMessage: "❌ Algo salió mal. Por favor, inténtalo de nuevo.",
+    contactInfo: {
+      phone: "+77273274755, +77025895922",
+      email: "globalsportint2017@gmail.com , info@gsfc.com",
+      location: "Kazajistán",
+    },
+  },
 };
+
+
 
 const ContactPage = () => {
   const [formData, setFormData] = useState({

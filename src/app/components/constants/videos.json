@@ -74,43 +74,5 @@
     },
     "link": "/video/video4",
     "date": "2023-08-18"
-  },
-  {
-    "id": "video5",
-    "src": "/videos/video5.mp4",
-    "thumbnail": "/images/thumb5.jpg",
-    "title": {
-      "en": "Last-Minute Goals",
-      "ru": "Голы в последнюю минуту",
-      "fr": "Buts de Dernière Minute",
-      "es": "Goles de Última Hora"
-    },
-    "description": {
-      "en": "Dramatic last-minute goals that turned the tide of the game. Feel the intensity and excitement of these unforgettable moments.",
-      "ru": "Драматичные голы в последнюю минуту, изменившие ход игры. Почувствуйте напряжение и волнение этих незабываемых моментов.",
-      "fr": "Des buts dramatiques à la dernière minute qui ont changé le cours du match. Ressentez l'intensité et l'excitation de ces moments inoubliables.",
-      "es": "Goles dramáticos de última hora que cambiaron el curso del partido. Siente la intensidad y la emoción de estos momentos inolvidables."
-    },
-    "link": "/video/video5",
-    "date": "2023-08-19"
-  },
-  {
-    "id": "video6",
-    "src": "/videos/video6.mp4",
-    "thumbnail": "/images/thumb6.jpg",
-    "title": {
-      "en": "Celebrations Gone Wild",
-      "ru": "Безумные празднования",
-      "fr": "Célébrations Folles",
-      "es": "Celebraciones Descontroladas"
-    },
-    "description": {
-      "en": "Wild and unforgettable celebrations that capture the passion of the game. The energy of the crowd and players is simply contagious.",
-      "ru": "Дикие и незабываемые празднования, отражающие страсть игры. Энергия болельщиков и игроков просто заразительна.",
-      "fr": "Des célébrations sauvages et inoubliables qui capturent la passion du jeu. L'énergie de la foule et des joueurs est tout simplement contagieuse.",
-      "es": "Celebraciones salvajes e inolvidables que capturan la pasión del juego. La energía de la multitud y de los jugadores es simplemente contagiosa."
-    },
-    "link": "/video/video6",
-    "date": "2023-08-20"
   }
 ]

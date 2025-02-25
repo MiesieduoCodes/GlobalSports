@@ -501,72 +501,72 @@ const KidsClubPage = () => {
 
         {/* Registration Section */}
         <section className="max-w-2xl mx-auto">
-          <div className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md border-2 border-blue-700 dark:border-blue-600 transition-colors duration-300">
-            <h2 className="text-2xl font-bold mb-6 text-blue-700 dark:text-blue-300">
-              {content.joinAcademy}
-            </h2>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label className="block text-gray-700 dark:text-gray-300 mb-2">
-                  {content.parentName}
-                </label>
-                <input
-                  type="text"
-                  value={formData.parentName}
-                  onChange={(e) => setFormData({...formData, parentName: e.target.value})}
-                  className="w-full p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white transition-colors duration-300"
-                  required
-                  disabled={isSubmitting}
-                />
-              </div>
-              <div>
-                <label className="block text-gray-700 dark:text-gray-300 mb-2">
-                  {content.childName}
-                </label>
-                <input
-                  type="text"
-                  value={formData.childName}
-                  onChange={(e) => setFormData({...formData, childName: e.target.value})}
-                  className="w-full p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white transition-colors duration-300"
-                  required
-                  disabled={isSubmitting}
-                />
-              </div>
-              <div>
-                <label className="block text-gray-700 dark:text-gray-300 mb-2">
-                  {content.childAge}
-                </label>
-                <input
-                  type="number"
-                  value={formData.childAge}
-                  onChange={(e) => setFormData({...formData, childAge: e.target.value})}
-                  className="w-full p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white transition-colors duration-300"
-                  required
-                  disabled={isSubmitting}
-                />
-              </div>
-              <div>
-                <label className="block text-gray-700 dark:text-gray-300 mb-2">
-                  {content.medicalInfo}
-                </label>
-                <textarea
-                  value={formData.medicalInfo}
-                  onChange={(e) => setFormData({...formData, medicalInfo: e.target.value})}
-                  className="w-full p-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white transition-colors duration-300"
-                  rows="3"
-                  disabled={isSubmitting}
-                ></textarea>
-              </div>
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full bg-yellow-500 dark:bg-yellow-600 text-blue-900 dark:text-blue-100 py-3 rounded-md hover:bg-yellow-600 dark:hover:bg-yellow-700 transition-colors duration-300 font-bold disabled:opacity-70 disabled:cursor-not-allowed"
-              >
-                {isSubmitting ? content.submitting : content.registerNow}
-              </button>
-            </form>
-          </div>
-        </section>
+  <div className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md border-2 border-blue-700 dark:border-blue-600 transition-colors duration-300">
+    <h2 className="text-2xl font-bold mb-6 text-blue-700 dark:text-blue-300">
+      {content.joinAcademy}
+    </h2>
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div>
+        <label className="block text-gray-700 dark:text-gray-300 mb-2">
+          {content.parentName}
+        </label>
+        <input
+          type="text"
+          value={formData.parentName}
+          onChange={(e) => setFormData({...formData, parentName: e.target.value})}
+          className="w-full p-2 border-2 border-blue-400 rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white transition-colors duration-300"
+          required
+          disabled={isSubmitting}
+        />
+      </div>
+      <div>
+        <label className="block text-gray-700 dark:text-gray-300 mb-2">
+          {content.childName}
+        </label>
+        <input
+          type="text"
+          value={formData.childName}
+          onChange={(e) => setFormData({...formData, childName: e.target.value})}
+          className="w-full p-2 border-2 border-blue-400 rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white transition-colors duration-300"
+          required
+          disabled={isSubmitting}
+        />
+      </div>
+      <div>
+        <label className="block text-gray-700 dark:text-gray-300 mb-2">
+          {content.childAge}
+        </label>
+        <input
+          type="number"
+          value={formData.childAge}
+          onChange={(e) => setFormData({...formData, childAge: e.target.value})}
+          className="w-full p-2 border-2 border-blue-400 rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white transition-colors duration-300"
+          required
+          disabled={isSubmitting}
+        />
+      </div>
+      <div>
+        <label className="block text-gray-700 dark:text-gray-300 mb-2">
+          {content.medicalInfo}
+        </label>
+        <textarea
+          value={formData.medicalInfo}
+          onChange={(e) => setFormData({...formData, medicalInfo: e.target.value})}
+          className="w-full p-2 border-2 border-blue-400 rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white transition-colors duration-300"
+          rows="3"
+          disabled={isSubmitting}
+        ></textarea>
+      </div>
+      <button
+        type="submit"
+        disabled={isSubmitting}
+        className="w-full bg-yellow-500 dark:bg-yellow-600 text-blue-900 dark:text-blue-100 py-3 rounded-md hover:bg-yellow-600 dark:hover:bg-yellow-700 transition-colors duration-300 font-bold disabled:opacity-70 disabled:cursor-not-allowed"
+      >
+        {isSubmitting ? content.submitting : content.registerNow}
+      </button>
+    </form>
+  </div>
+</section>
       </main>
     </div>
   );
