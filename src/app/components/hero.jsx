@@ -113,7 +113,7 @@ const Hero = () => {
           exit="exit"
           transition={{ duration: 0.5, ease: "easeInOut" }}
         >
-          <div className="absolute inset-0 bg-black bg-opacity-60" />
+          <div className="absolute inset-0 bg-black bg-opacity-80" />
           <div className="relative z-10 h-full flex flex-col justify-center items-start text-left px-4 lg:px-16">
             <motion.div
               className="max-w-2xl w-full"
