@@ -50,7 +50,7 @@ const translations = {
       { name: "Michael Rios", role: "All-Time Top Scorer", img: "https://placehold.co/100x100?text=MR" },
       { name: "Carlos Mendes", role: "Iconic Goalkeeper", img: "https://placehold.co/100x100?text=CM" },
     ],
-    legendsSectionTitle: "Meet Our Legends", // Added title for legends section
+    legendsSectionTitle: "Meet Our Legends",
   },
   ru: {
     title: "Присоединяйтесь к нашей команде",
@@ -218,137 +218,116 @@ export default function JoinOurTeam() {
         breakpoints: {
           0: { slidesPerView: 1, centeredSlides: false },
           768: { slidesPerView: 2 },
-          1024: { slidesPerView: 3 } // Added missing closing bracket
+          1024: { slidesPerView: 3 },
         },
       });
     };
   
     initializeSwiper();
   }, []);
-  
 
   return (
-<div className="relative isolate overflow-hidden bg-white text-black dark:bg-black dark:text-white transition-colors duration-300">
-  {/* Hero Section with Background Image */}
-  <div className="relative py-24 sm:py-32">
-    <div className="absolute inset-0 -z-10">
-      <div className="absolute inset-0 bg-blue-200 dark:bg-blue-900 opacity-70 transition-colors duration-300"></div>
-      <Image
-        alt="Football stadium background"
-        src="/images/hero-background.jpg" // Update with your image path
-        fill
-        priority
-        className="object-cover"
-      />
-    </div>
-
-    <div className="mx-auto max-w-7xl px-6 lg:px-8 text-center">
-      <h1 className="text-5xl font-bold tracking-tight sm:text-7xl">
-        {content.title}
-      </h1>
-      <p className="mt-8 text-lg text-gray-600 dark:text-gray-300 sm:text-xl">
-        {content.description}
-      </p>
-
-      {/* Call-to-Action Buttons */}
-      <div className="mt-10 flex flex-wrap justify-center gap-6">
-        {content.links.map((link) => (
-          <a
-            key={link.name}
-            href={link.href}
-            className="text-lg font-semibold text-white dark:text-black bg-blue-600 dark:bg-yellow-400 px-6 py-3 rounded-lg hover:bg-blue-500 dark:hover:bg-yellow-300 transition-all focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-            aria-label={`Go to ${link.name}`}
-          >
-            {link.name} →
-          </a>
-        ))}
-      </div>
-    </div>
-  </div>
-
-  {/* Stats Section */}
-  <div className="mx-auto max-w-7xl px-6 lg:px-8 py-20">
-    <dl className="grid grid-cols-2 sm:grid-cols-4 gap-8">
-      {content.stats.map((stat) => (
-        <div key={stat.name} className="text-center">
-          <dd className="text-4xl font-bold text-black dark:text-white">{stat.value}</dd>
-          <dt className="text-gray-600 dark:text-gray-300">{stat.name}</dt>
+    <div className="relative isolate overflow-hidden bg-white text-black dark:bg-black dark:text-white transition-colors duration-300">
+      {/* Hero Section with Background Image */}
+      <div className="relative py-24 sm:py-32">
+        <div className="absolute inset-0 -z-10">
+          <div className="absolute inset-0 bg-blue-200 dark:bg-blue-900 opacity-70 transition-colors duration-300"></div>
+          <Image
+            alt="Football stadium background"
+            src="/images/hero-background.jpg" // Update with your image path
+            fill
+            priority
+            className="object-cover"
+          />
         </div>
-      ))}
-    </dl>
-  </div>
 
-  {/* Gallery Section */}
-  <section className="bg-gray-100 dark:bg-gray-900 py-20">
-    <div className="mx-auto max-w-7xl px-6 lg:px-8">
-      <h2 className="text-center text-4xl font-bold mb-10">Gallery</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {content.gallery.map((image, index) => (
-          <div key={index} className="relative aspect-w-16 aspect-h-9 rounded-lg overflow-hidden shadow-lg">
-            <Image
-              src={image.src}
-              alt={image.alt}
-              fill
-              className="object-cover"
-              loading="lazy"
-            />
+        <div className="mx-auto max-w-7xl px-6 lg:px-8 text-center">
+          <h1 className="text-5xl font-bold tracking-tight sm:text-7xl">
+            {content.title}
+          </h1>
+          <p className="mt-8 text-lg text-gray-600 dark:text-gray-300 sm:text-xl">
+            {content.description}
+          </p>
+
+          {/* Call-to-Action Buttons */}
+          <div className="mt-10 flex flex-wrap justify-center gap-6">
+            {content.links.map((link) => (
+              <a
+                key={link.name}
+                href={link.href}
+                className="text-lg font-semibold text-white dark:text-black bg-blue-600 dark:bg-yellow-400 px-6 py-3 rounded-lg hover:bg-blue-500 dark:hover:bg-yellow-300 transition-all focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                aria-label={`Go to ${link.name}`}
+              >
+                {link.name} →
+              </a>
+            ))}
           </div>
-        ))}
+        </div>
       </div>
-    </div>
-  </section>
 
-  {/* Legends Section */}
-  <section className="py-20">
-    <div className="mx-auto max-w-7xl px-6 lg:px-8 text-center">
-      <h2 className="text-4xl font-bold">{content.legendsSectionTitle}</h2>
-      <div className="flex flex-wrap justify-center gap-10 mt-10">
-        {content.legends.map((legend) => (
-          <div key={legend.name} className="text-center">
-            <img
-              className="w-24 h-24 rounded-full mx-auto"
-              src={legend.img}
-              alt={legend.name}
-              loading="lazy"
-            />
-            <h4 className="mt-4 font-semibold">{legend.name}</h4>
-            <p className="text-gray-600 dark:text-gray-400">{legend.role}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  {/* Testimonials Section */}
-  <section className="bg-gray-100 dark:bg-gray-900 py-20">
-    <div className="mx-auto max-w-7xl px-6 lg:px-8">
-      <h2 className="text-center text-4xl font-bold mb-10">Fan & Player Testimonials</h2>
-      <div className="swiper mySwiper">
-        <div className="swiper-wrapper">
-          {content.testimonials.map((testimonial, index) => (
-            <div
-              key={index}
-              className="swiper-slide bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg transition-colors duration-300"
-            >
-              <p className="mb-6 text-lg">&quot;{testimonial.text}&quot;</p>
-              <div className="flex items-center gap-4">
-                <img
-                  className="w-14 h-14 rounded-full"
-                  src={testimonial.img}
-                  alt={testimonial.name}
-                  loading="lazy"
-                />
-                <div>
-                  <h5 className="font-semibold">{testimonial.name}</h5>
-                  <span className="text-sm text-gray-600 dark:text-gray-400">{testimonial.role}</span>
-                </div>
-              </div>
+      {/* Stats Section */}
+      <div className="mx-auto max-w-7xl px-6 lg:px-8 py-20">
+        <dl className="grid grid-cols-2 sm:grid-cols-4 gap-8">
+          {content.stats.map((stat) => (
+            <div key={stat.name} className="text-center">
+              <dd className="text-4xl font-bold text-black dark:text-white">{stat.value}</dd>
+              <dt className="text-gray-600 dark:text-gray-300">{stat.name}</dt>
             </div>
           ))}
-        </div>
+        </dl>
       </div>
+
+      {/* Legends Section */}
+      <section className="py-20">
+        <div className="mx-auto max-w-7xl px-6 lg:px-8 text-center">
+          <h2 className="text-4xl font-bold">{content.legendsSectionTitle}</h2>
+          <div className="flex flex-wrap justify-center gap-10 mt-10">
+            {content.legends.map((legend) => (
+              <div key={legend.name} className="text-center">
+                <img
+                  className="w-24 h-24 rounded-full mx-auto"
+                  src={legend.img}
+                  alt={legend.name}
+                  loading="lazy"
+                />
+                <h4 className="mt-4 font-semibold">{legend.name}</h4>
+                <p className="text-gray-600 dark:text-gray-400">{legend.role}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section className="bg-gray-100 dark:bg-gray-900 py-20">
+        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+          <h2 className="text-center text-4xl font-bold mb-10">Fan & Player Testimonials</h2>
+          <div className="swiper mySwiper">
+            <div className="swiper-wrapper">
+              {content.testimonials.map((testimonial, index) => (
+                <div
+                  key={index}
+                  className="swiper-slide bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg transition-colors duration-300"
+                >
+                  <p className="mb-6 text-lg">&quot;{testimonial.text}&quot;</p>
+                  <div className="flex items-center gap-4">
+                    <img
+                      className="w-14 h-14 rounded-full"
+                      src={testimonial.img}
+                      alt={testimonial.name}
+                      loading="lazy"
+                    />
+                    <div>
+                      <h5 className="font-semibold">{testimonial.name}</h5>
+                      <span className="text-sm text-gray-600 dark:text-gray-400">{testimonial.role}</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
-  </section>
-</div>
   );
 }
