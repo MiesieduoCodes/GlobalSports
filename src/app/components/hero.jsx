@@ -6,70 +6,70 @@ import { useLanguage } from "@/app/context/LanguageContext";
 const translations = {
   en: [
     {
-      title: "Feel the Passion of Football",
-      text: "Experience the thrill of every match, every goal, every moment.",
-      buttonText: "Join the Game",
+      title: "Exciting Logo Change Ahead",
+      text: "Our club is set to unveil a new logo next week! Stay tuned for the reveal and share your thoughts.",
+      buttonText: "Learn More",
     },
     {
-      title: "Legends Are Made Here",
-      text: "Follow the journey of football icons and rising stars.",
-      buttonText: "Discover More",
+      title: "Players Gear Up for Next Match",
+      text: "Our team is in full training mode as they prepare for the upcoming match against our rivals this Saturday.",
+      buttonText: "Learn More",
     },
     {
-      title: "Every Kick Counts",
-      text: "From local pitches to world championships, football unites us all.",
-      buttonText: "Be Part of It",
+      title: "Youth Academy Shines",
+      text: "Our youth academy has produced another star! Join us in celebrating the achievements of our rising talent.",
+      buttonText: "Learn More",
     },
   ],
   ru: [
     {
-      title: "Почувствуйте страсть футбола",
-      text: "Ощутите азарт каждого матча, каждого гола, каждого момента.",
-      buttonText: "Присоединяйтесь к игре",
-    },
-    {
-      title: "Легенды рождаются здесь",
-      text: "Следите за путешествием футбольных икон и восходящих звезд.",
+      title: "Скоро новое изменение логотипа",
+      text: "Наш клуб готовится представить новый логотип на следующей неделе! Оставайтесь с нами для раскрытия и делитесь своими мыслями.",
       buttonText: "Узнать больше",
     },
     {
-      title: "Каждый удар имеет значение",
-      text: "От местных полей до мировых чемпионатов, футбол объединяет нас всех.",
-      buttonText: "Будьте частью",
+      title: "Игроки готовятся к следующему матчу",
+      text: "Наша команда полна сил и готовится к предстоящему матчу против соперников в эту субботу.",
+      buttonText: "Узнать больше",
+    },
+    {
+      title: "Успехи молодежной академии",
+      text: "Наша молодежная академия вновь произвела звезду! Присоединяйтесь к нам, чтобы отпраздновать достижения нашего подрастающего таланта.",
+      buttonText: "Узнать больше",
     },
   ],
   fr: [
     {
-      title: "Ressentez la passion du football",
-      text: "Vivez l'excitation de chaque match, chaque but, chaque moment.",
-      buttonText: "Rejoignez le jeu",
+      title: "Changement de logo passionnant à venir",
+      text: "Notre club s'apprête à dévoiler un nouveau logo la semaine prochaine ! Restez à l'écoute pour la révélation et partagez vos pensées.",
+      buttonText: "En savoir plus",
     },
     {
-      title: "Les légendes naissent ici",
-      text: "Suivez le parcours des icônes du football et des étoiles montantes.",
-      buttonText: "Découvrir plus",
+      title: "Les joueurs se préparent pour le prochain match",
+      text: "Notre équipe est en pleine préparation pour le match à venir contre nos rivaux ce samedi.",
+      buttonText: "En savoir plus",
     },
     {
-      title: "Chaque coup compte",
-      text: "Des terrains locaux aux championnats du monde, le football nous unit tous.",
-      buttonText: "Faites-en partie",
+      title: "L'académie des jeunes brille",
+      text: "Notre académie de jeunes a produit une nouvelle star ! Joignez-vous à nous pour célébrer les réalisations de notre talent en pleine émergence.",
+      buttonText: "En savoir plus",
     },
   ],
   es: [
     {
-      title: "Siente la pasión del fútbol",
-      text: "Vive la emoción de cada partido, cada gol, cada momento.",
-      buttonText: "Únete al juego",
+      title: "Cambio de logo emocionante por delante",
+      text: "¡Nuestro club está a punto de revelar un nuevo logo la próxima semana! Mantente atento para la revelación y comparte tus pensamientos.",
+      buttonText: "Aprender más",
     },
     {
-      title: "Las leyendas nacen aquí",
-      text: "Sigue el viaje de los íconos del fútbol y las estrellas emergentes.",
-      buttonText: "Descubre más",
+      title: "Los jugadores se preparan para el próximo partido",
+      text: "Nuestro equipo está en plena fase de entrenamiento mientras se prepara para el próximo partido contra nuestros rivales este sábado.",
+      buttonText: "Aprender más",
     },
     {
-      title: "Cada golpe cuenta",
-      text: "Desde los campos locales hasta los campeonatos mundiales, el fútbol nos une a todos.",
-      buttonText: "Sé parte de ello",
+      title: "La academia juvenil brilla",
+      text: "¡Nuestra academia juvenil ha producido otra estrella! Únete a nosotros para celebrar los logros de nuestro talento emergente.",
+      buttonText: "Aprender más",
     },
   ],
 };
@@ -79,11 +79,10 @@ const Hero = () => {
   const { language } = useLanguage();
   const slides = translations[language];
 
-  // Dynamic images from your storage
   const images = [
     "/images/IMG-20250219-WA0123.jpg",
-    "/images/IMG-20250219-WA0127.jpg",
-    "/images/IMG-20250219-WA0107.jpg",
+    "/images/IMG-20250219-WA0070.jpg",
+    "/images/IMG-20250219-WA0126.jpg",
   ];
 
   const nextSlide = useCallback(() => {
@@ -92,13 +91,9 @@ const Hero = () => {
 
   useEffect(() => {
     const timer = setInterval(nextSlide, 5000);
-
     return () => clearInterval(timer);
-    
-
   }, [nextSlide]);
 
-  // Variants for sliding animation
   const variants = {
     enter: { x: "100%" },
     center: { x: 0 },
@@ -118,13 +113,10 @@ const Hero = () => {
           exit="exit"
           transition={{ duration: 0.5, ease: "easeInOut" }}
         >
-          {/* Overlay */}
           <div className="absolute inset-0 bg-black bg-opacity-60" />
-
-          {/* Content Container */}
-          <div className="relative z-10 h-full flex flex-col justify-center items-center text-center px-4">
+          <div className="relative z-10 h-full flex flex-col justify-center items-start text-left px-4 lg:px-16">
             <motion.div
-              className="max-w-4xl w-full px-4 lg:px-8"
+              className="max-w-2xl w-full"
               initial={{ y: 50, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: -50, opacity: 0 }}
@@ -135,7 +127,7 @@ const Hero = () => {
               </h1>
 
               <motion.p
-                className="text-xl md:text-2xl text-gray-200 mb-8 max-w-2xl mx-auto drop-shadow-md"
+                className="text-xl md:text-2xl text-gray-200 mb-8 drop-shadow-md"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.4 }}
@@ -143,16 +135,35 @@ const Hero = () => {
                 {slides[currentSlide].text}
               </motion.p>
 
-              <motion.button
+              <motion.div
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="bg-yellow-400 text-black px-8 py-3 rounded-full text-lg md:text-xl font-semibold hover:bg-yellow-300 transition-colors shadow-lg"
+                className="text-white font-bold text-lg md:text-xl cursor-pointer"
               >
+                <button className="relative flex items-center justify-evenly w-44 h-10 uppercase tracking-wide border-none bg-transparent transition-all duration-200 ease-[cubic-bezier(0.19,1,0.22,1)] opacity-60 hover:opacity-100 hover:tracking-wider group">
                 {slides[currentSlide].buttonText}
-              </motion.button>
+      <span className="absolute top-0 left-1 h-full w-0 border-b-2 border-dashed border-yellow-300 opacity-70 transition-all duration-200 group-hover:w-[90%]"></span>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        height="15px"
+        width="15px"
+        className="transition-transform duration-200 group-hover:translate-x-2 animate-bounce"
+      >
+        <path
+          strokeLinejoin="round"
+          strokeLinecap="round"
+          strokeMiterlimit="10"
+          strokeWidth="1.5"
+          stroke="#292D32"
+          d="M8.91016 19.9201L15.4302 13.4001C16.2002 12.6301 16.2002 11.3701 15.4302 10.6001L8.91016 4.08008"
+        ></path>
+      </svg>
+    </button>
+              </motion.div>
             </motion.div>
 
-            {/* Slide Indicators */}
             <div className="absolute bottom-44 flex space-x-2 z-10">
               {slides.map((_, index) => (
                 <button
