@@ -1,10 +1,10 @@
 "use client";
 import React, { useState } from "react";
-import Link from "next/link";
 import Image from "next/image";
 import { Menu, X, ChevronDown } from "lucide-react";  
 import { useLanguage } from "@/app/context/LanguageContext";
 import { ModeToggle } from "@/app/components/mode-toggle";
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 
 // Language translations
@@ -111,16 +111,14 @@ const Navdata = {
 };
 
 const Navbar = () => {
-  const { language, setLanguage } = useLanguage(); 
+  const { language, setLanguage } = useLanguage();
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
 
   const closeMobileMenu = () => {
     setIsMobileMenuOpen(false);
     setActiveDropdown(null);
   };
-
 
   const handleLanguageChange = (lang) => {
     setLanguage(lang);
@@ -205,14 +203,10 @@ const Navbar = () => {
             onChange={(e) => handleLanguageChange(e.target.value)}
             className="ml-4 p-2 border-none rounded"
           >
-            <option value="en" onClick={() => handleLanguageChange("en")}>English</option>
-
-            <option value="ru" onClick={() => handleLanguageChange("ru")}>Pycckий</option>
-
-            <option value="fr" onClick={() => handleLanguageChange("fr")}>Français</option>
-
-            <option value="es" onClick={() => handleLanguageChange("es")}>Español</option>
-
+            <option value="en">English</option>
+            <option value="ru">Pycckий</option>
+            <option value="fr">Français</option>
+            <option value="es">Español</option>
           </select>
         </div>
 
@@ -285,21 +279,16 @@ const Navbar = () => {
               ))}
               <div className="px-4 py-2">
                 <ModeToggle />
-                 {/* Language Selector */}
-    <select
-            value={language}
-            onChange={(e) => handleLanguageChange(e.target.value)}
-            className="ml-4 p-2 border rounded"
-          >
-            <option value="en" onClick={() => handleLanguageChange("en")}>English</option>
-
-            <option value="ru" onClick={() => handleLanguageChange("ru")}>Pycckий</option>
-
-            <option value="fr" onClick={() => handleLanguageChange("fr")}>Français</option>
-
-            <option value="es" onClick={() => handleLanguageChange("es")}>Español</option>
-
-          </select>
+                <select
+                  value={language}
+                  onChange={(e) => handleLanguageChange(e.target.value)}
+                  className="ml-4 p-2 border rounded"
+                >
+                  <option value="en">English</option>
+                  <option value="ru">Pycckий</option>
+                  <option value="fr">Français</option>
+                  <option value="es">Español</option>
+                </select>
               </div>
             </div>
           </motion.div>

@@ -151,13 +151,14 @@ const ContactPage = () => {
           <h1 className="absolute top-10 left-10 text-black text-4xl font-bold">
             {content.contactUs}
           </h1>
-          <div className="absolute bottom-0 p-6 w-full bg-white rounded-lg shadow-lg">
-            <ContactInfo icon="📞" text={content.contactInfo.phone} />
+          <div className="absolute bottom-0 p-6 w-full bg-white dark:bg-gray-800  rounded-lg shadow-lg">
+            <ContactInfo icon="📞" className="text-black dark:text-white" text={content.contactInfo.phone} />
             <ContactInfo
               icon="📧"
+              className="text-black dark:text-white"
               text={content.contactInfo.email}
             />
-            <ContactInfo icon="📍" text={content.contactInfo.location} />
+            <ContactInfo icon="📍" className="text-black dark:text-white" text={content.contactInfo.location} />
           </div>
         </div>
 

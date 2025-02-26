@@ -73,15 +73,6 @@ export default function News() {
   const { language } = useLanguage();
   const content = translations[language] || translations.en;
 
-  useEffect(() => {
-    gsap.from(sectionRef.current, {
-      opacity: 0,
-      y: 50,
-      duration: 1,
-      ease: "power3.out",
-    });
-  }, []);
-
   return (
     <section
       ref={sectionRef}
