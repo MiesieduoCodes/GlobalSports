@@ -80,9 +80,9 @@ const Hero = () => {
   const slides = translations[language];
 
   const images = [
-    "/images/IMG-20250219-WA0115.jpg",
-    "/images/IMG-20250219-WA0070.jpg",
-    "/images/IMG-20250219-WA0115.jpg",
+    "/videos/IMG-20250219-WA0115.jpg",
+    "/videos/IMG-20250227-WA0012.jpg",
+    "/videos/IMG-20250227-WA0017.jpg",
   ];
 
   const nextSlide = useCallback(() => {

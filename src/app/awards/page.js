@@ -90,7 +90,7 @@ export default function Awards() {
   }}
 >
   {/* Overlay to darken the image */}
-  <div className="hero-overlay absolute inset-0 bg-black bg-opacity-70"></div>
+  <div className="hero-overlay absolute inset-0 bg-black bg-opacity-40"></div>
 
   {/* Centered content */}
   <div className="hero-content text-center relative z-10">
