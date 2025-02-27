@@ -145,17 +145,18 @@ const Hero = () => {
       <span className="absolute top-0 left-1 h-full w-0 border-b-2 border-dashed border-yellow-300 opacity-70 transition-all duration-200 group-hover:w-[90%]"></span>
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        fill="none"
+        fill="white"
         viewBox="0 0 24 24"
         height="15px"
         width="15px"
-        className="transition-transform duration-200 group-hover:translate-x-2 animate-bounce"
+        className="transition-transform  duration-200 group-hover:translate-x-2 animate-bounce"
       >
         <path
           strokeLinejoin="round"
           strokeLinecap="round"
           strokeMiterlimit="10"
           strokeWidth="1.5"
+          className="bg-white"
           stroke="#292D32"
           d="M8.91016 19.9201L15.4302 13.4001C16.2002 12.6301 16.2002 11.3701 15.4302 10.6001L8.91016 4.08008"
         ></path>
