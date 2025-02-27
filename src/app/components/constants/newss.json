@@ -1,0 +1,116 @@
+{
+    "news": [
+      {
+        "id": 1,
+        "date": "2024-03-01",
+        "category": "Club News",
+        "images": ["/images/IMG-20250219-WA0107.jpg"],
+        "translations": {
+          "en": {
+            "title": "Exciting Logo Change Ahead",
+            "content": "Our club is set to unveil a new logo next week! Stay tuned for the reveal and share your thoughts...",
+            "buttonText": "Learn More"
+          },
+          "ru": {
+            "title": "Скоро новое изменение логотипа",
+            "content": "Наш клуб готовится представить новый логотип на следующей неделе! Оставайтесь с нами для раскрытия и делитесь своими мыслями...",
+            "buttonText": "Узнать больше"
+          },
+          "fr": {
+            "title": "Changement de logo passionnant à venir",
+            "content": "Notre club s'apprête à dévoiler un nouveau logo la semaine prochaine ! Restez à l'écoute pour la révélation et partagez vos pensées...",
+            "buttonText": "En savoir plus"
+          },
+          "es": {
+            "title": "Cambio de logo emocionante por delante",
+            "content": "¡Nuestro club está a punto de revelar un nuevo logo la próxima semana! Mantente atento para la revelación y comparte tus pensamientos...",
+            "buttonText": "Aprender más"
+          }
+        }
+      },
+      {
+        "id": 2,
+        "date": "2024-03-05",
+        "category": "Match Preview",
+        "images": ["/images/IMG-20250219-WA0125.jpg"],
+        "translations": {
+          "en": {
+            "title": "Players Gear Up for Next Match",
+            "content": "Our team is in full training mode as they prepare for the upcoming match against our rivals this Saturday.",
+            "buttonText": "Learn More"
+          },
+          "ru": {
+            "title": "Игроки готовятся к следующему матчу",
+            "content": "Наша команда полна сил и готовится к предстоящему матчу против соперников в эту субботу.",
+            "buttonText": "Узнать больше"
+          },
+          "fr": {
+            "title": "Les joueurs se préparent pour le prochain match",
+            "content": "Notre équipe est en pleine préparation pour le match à venir contre nos rivaux ce samedi.",
+            "buttonText": "En savoir plus"
+          },
+          "es": {
+            "title": "Los jugadores se preparan para el próximo partido",
+            "content": "Nuestro equipo está en plena fase de entrenamiento mientras se prepara para el próximo partido contra nuestros rivales este sábado.",
+            "buttonText": "Aprender más"
+          }
+        }
+      },
+      {
+        "id": 3,
+        "date": "2024-03-10",
+        "category": "Youth Academy",
+        "images": ["/videos/IMG-20250227-WA0017.jpg"],
+        "translations": {
+          "en": {
+            "title": "Youth Academy Shines",
+            "content": "Our youth academy has produced another star! Join us in celebrating the achievements of our rising talent.",
+            "buttonText": "Learn More"
+          },
+          "ru": {
+            "title": "Успехи молодежной академии",
+            "content": "Наша молодежная академия вновь произвела звезду! Присоединяйтесь к нам, чтобы отпраздновать достижения нашего подрастающего таланта.",
+            "buttonText": "Узнать больше"
+          },
+          "fr": {
+            "title": "L'académie des jeunes brille",
+            "content": "Notre académie de jeunes a produit une nouvelle star ! Joignez-vous à nous pour célébrer les réalisations de notre talent en pleine émergence.",
+            "buttonText": "En savoir plus"
+          },
+          "es": {
+            "title": "La academia juvenil brilla",
+            "content": "¡Nuestra academia juvenil ha producido otra estrella! Únete a nosotros para celebrar los logros de nuestro talento emergente.",
+            "buttonText": "Aprender más"
+          }
+        }
+      },
+      {
+        "id": 4,
+        "date": "2024-03-15",
+        "category": "Community Event",
+        "images": ["/images/IMG-20250219-WA0108.jpg"],
+        "translations": {
+          "en": {
+            "title": "Community Day Celebration",
+            "content": "Join us this Sunday for our annual Community Day celebration! Fun activities, games, and prizes await.",
+            "buttonText": "Learn More"
+          },
+          "ru": {
+            "title": "Празднование Дня сообщества",
+            "content": "Присоединяйтесь к нам в это воскресенье на ежегодное празднование Дня сообщества! Вас ждут веселые мероприятия, игры и призы.",
+            "buttonText": "Узнать больше"
+          },
+          "fr": {
+            "title": "Célébration de la Journée Communautaire",
+            "content": "Rejoignez-nous ce dimanche pour notre célébration annuelle de la Journée Communautaire ! Des activités amusantes, des jeux et des prix vous attendent.",
+            "buttonText": "En savoir plus"
+          },
+          "es": {
+            "title": "Celebración del Día de la Comunidad",
+            "content": "¡Únete a nosotros este domingo para nuestra celebración anual del Día de la Comunidad! Te esperan actividades divertidas, juegos y premios.",
+            "buttonText": "Aprender más"
+          }
+        }
+      }
+    ]
+  }
