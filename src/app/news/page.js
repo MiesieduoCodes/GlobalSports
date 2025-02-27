@@ -1,5 +1,6 @@
 "use client";
 export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 import { useLanguage } from "@/app/context/LanguageContext";
 import newsData from "@/app/components/constants/newss.json";
@@ -8,7 +9,6 @@ import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { Suspense } from "react";
 
-// Main NewsPage component with Suspense
 const NewsPage = () => {
   return (
     <Suspense fallback={<div>Loading...</div>}>
@@ -17,13 +17,11 @@ const NewsPage = () => {
   );
 };
 
-// Separate component for content logic
 const NewsPageContent = () => {
   const { language } = useLanguage();
   const searchParams = useSearchParams();
   const newsId = searchParams.get("id");
 
-  // If newsId exists, show single news item
   if (newsId) {
     const newsItem = newsData.news.find((item) => item.id === Number(newsId));
     if (!newsItem) return <div>News not found</div>;
@@ -60,7 +58,6 @@ const NewsPageContent = () => {
     );
   }
 
-  // Show all news items
   return (
     <div className="bg-white dark:bg-gray-800 mx-auto px-4 py-12">
       <h1 className="text-4xl font-bold mb-8 text-gray-900 dark:text-white text-center">
