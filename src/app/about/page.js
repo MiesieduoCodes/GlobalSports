@@ -1,8 +1,11 @@
-import React from 'react'
+import React from 'react';
+import Teams from "@/app/components/teams";
 
 const page = () => {
   return (
-    <div>page</div>
+    <div>
+      <Teams/>
+    </div>
   )
 }
 

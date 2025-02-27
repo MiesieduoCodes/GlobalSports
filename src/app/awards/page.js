@@ -80,11 +80,11 @@ export default function Awards() {
 
   return (
     <div className="bg-white dark:bg-gray-900 transition-colors duration-300">
-      {/* Hero Section */}
-      <div
-  className="hero min-h-[60vh] relative"
+{/* Hero Section */}
+<div
+  className="hero min-h-[60vh] relative flex items-center justify-center"
   style={{
-    backgroundImage: "url(/images/IMG-20250219-WA0124.jpg)",
+    backgroundImage: "url(/images/IMG-20250219-WA0115.jpg)",
     backgroundSize: "cover",
     backgroundPosition: "center",
   }}
@@ -93,18 +93,17 @@ export default function Awards() {
   <div className="hero-overlay absolute inset-0 bg-black bg-opacity-70"></div>
 
   {/* Centered content */}
-  <div className="hero-content text-center justify-center items-center text-neutral-content relative z-10">
-    <div className="max-w-2xl justify-center items-center ">
-      <h1 className="mb-6 text-5xl justify-center items-center font-bold text-white">
+  <div className="hero-content text-center relative z-10">
+    <div className="max-w-2xl">
+      <h1 className="mb-6 text-5xl font-bold text-white">
         {translations[selectedLanguage].hero.title}
       </h1>
-      <p className="mb-6 text-lg justify-center items-center text-white">
+      <p className="mb-6 text-lg text-white">
         {translations[selectedLanguage].hero.description}
       </p>
     </div>
   </div>
 </div>
-
       {/* Awards Section */}
       <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="text-center">

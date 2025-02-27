@@ -80,9 +80,9 @@ const Hero = () => {
   const slides = translations[language];
 
   const images = [
-    "/images/IMG-20250219-WA0117.jpg",
+    "/images/IMG-20250219-WA0115.jpg",
     "/images/IMG-20250219-WA0070.jpg",
-    "/images/IMG-20250219-WA0124.jpg",
+    "/images/IMG-20250219-WA0115.jpg",
   ];
 
   const nextSlide = useCallback(() => {
@@ -113,7 +113,7 @@ const Hero = () => {
           exit="exit"
           transition={{ duration: 0.5, ease: "easeInOut" }}
         >
-          <div className="absolute inset-0 bg-black bg-opacity-80" />
+          <div className="absolute inset-0 bg-black bg-opacity-50" />
           <div className="relative z-10 h-full flex flex-col justify-center items-start text-left px-4 lg:px-16">
             <motion.div
               className="max-w-2xl w-full"
@@ -122,7 +122,7 @@ const Hero = () => {
               exit={{ y: -50, opacity: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
             >
-              <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight drop-shadow-xl">
+              <h1 className="text-3xl md:text-4xl font-bold text-white mb-6 leading-tight drop-shadow-xl">
                 {slides[currentSlide].title}
               </h1>
 
