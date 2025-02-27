@@ -1,10 +1,27 @@
 "use client";
-import { useRef } from "react";
+
+import { useRef, useEffect, useState } from "react";
 import Image from "next/image";
 
-export default function NextMatch({ team1, team1Logo, team2, team2Logo }) {
+export default function NextMatch() {
   const headerRef = useRef(null);
   const teamsRef = useRef(null);
+  const [match, setMatch] = useState(null);
+
+  useEffect(() => {
+    // Fetch match data from the JSON file
+    const fetchMatchData = async () => {
+      const response = await fetch('@/app/components/constants/matches.json'); // Update this path based on where you put the JSON file
+      const data = await response.json();
+      setMatch(data[0]); // Assuming you want to display the first match
+    };
+
+    fetchMatchData();
+  }, []);
+
+  if (!match) return <p>Loading...</p>; // Loading state
+
+  const { team1, team1Logo, team2, team2Logo } = match;
 
   return (
     <section className="bg-white text-black dark:bg-gray-900 dark:text-white py-8">

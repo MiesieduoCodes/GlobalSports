@@ -80,8 +80,8 @@ const Hero = () => {
   const slides = translations[language];
 
   const images = [
-    "/videos/IMG-20250219-WA0115.jpg",
-    "/videos/IMG-20250227-WA0012.jpg",
+    "/images/IMG-20250219-WA0107.jpg",
+    "/images/IMG-20250219-WA0125.jpg",
     "/videos/IMG-20250227-WA0017.jpg",
   ];
 
