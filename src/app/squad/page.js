@@ -266,7 +266,7 @@ export default function PlayersPage() {
     </div>
 
     {/* Players Grid */}
-    <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
+    <div className="grid grid-cols-2 gap-9 sm:grid-cols-3 lg:grid-cols-5">
       {players.map((player, index) => (
         <div
           key={index}
