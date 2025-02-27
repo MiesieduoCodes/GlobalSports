@@ -1,3 +1,4 @@
+// app/news/page.js
 "use client";
 import { useLanguage } from "@/app/context/LanguageContext";
 import newsData from "@/app/components/constants/newss.json";
@@ -6,6 +7,16 @@ import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { Suspense } from "react";
 
+// Wrap the main component in Suspense
+const NewsPage = () => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <NewsPageContent />
+    </Suspense>
+  );
+};
+
+// Move the main logic to a separate component
 const NewsPageContent = () => {
   const { language } = useLanguage();
   const searchParams = useSearchParams();
@@ -102,20 +113,12 @@ const NewsPageContent = () => {
                     />
                   </svg>
                 </div>
-              </Link>
-            </motion.div>
-          ))}
-        </div>
+              </div>
+            </Link>
+          </motion.div>
+        ))}
       </div>
-    );
-  }
-};
-
-const NewsPage = () => {
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <NewsPageContent />
-    </Suspense>
+    </div>
   );
 };
 
