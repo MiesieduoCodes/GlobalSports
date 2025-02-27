@@ -1,5 +1,6 @@
-// app/news/page.js
 "use client";
+export const dynamic = "force-dynamic";
+
 import { useLanguage } from "@/app/context/LanguageContext";
 import newsData from "@/app/components/constants/newss.json";
 import Link from "next/link";
@@ -7,7 +8,7 @@ import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { Suspense } from "react";
 
-// Wrap the main component in Suspense
+// Main NewsPage component with Suspense
 const NewsPage = () => {
   return (
     <Suspense fallback={<div>Loading...</div>}>
@@ -16,7 +17,7 @@ const NewsPage = () => {
   );
 };
 
-// Move the main logic to a separate component
+// Separate component for content logic
 const NewsPageContent = () => {
   const { language } = useLanguage();
   const searchParams = useSearchParams();
