@@ -3,19 +3,22 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 import { Suspense } from "react";
-import dynamic from "next/dynamic";
+import dynamicImport from "next/dynamic";
 import { useLanguage } from "@/app/context/LanguageContext";
 import newsData from "@/app/components/constants/newss.json";
 import Link from "next/link";
 import { motion } from "framer-motion";
 
-// This component contains the useSearchParams hook and related logic.
-const NewsPageContentComponent = () => {
-  // useSearchParams is a client-side hook.
-  const { language } = useLanguage();
-  // Import useSearchParams here so it's only run on the client.
+/**
+ * The NewsPageContent component contains the useSearchParams hook.
+ * It is defined as a separate function and will be loaded dynamically
+ * to ensure that it’s rendered only on the client.
+ */
+const NewsPageContent = () => {
+  // Import useSearchParams here so that it runs only on the client.
   const { useSearchParams } = require("next/navigation");
   const searchParams = useSearchParams();
+  const { language } = useLanguage();
   const newsId = searchParams.get("id");
 
   if (newsId) {
@@ -54,7 +57,7 @@ const NewsPageContentComponent = () => {
     );
   }
 
-  // Render the list of news items when no specific id is given.
+  // If no specific news ID is provided, display all news items.
   return (
     <div className="bg-white dark:bg-gray-800 mx-auto px-4 py-12">
       <h1 className="text-4xl font-bold mb-8 text-gray-900 dark:text-white text-center">
@@ -117,12 +120,19 @@ const NewsPageContentComponent = () => {
   );
 };
 
-// Dynamically import the component with SSR disabled and Suspense enabled.
-const DynamicNewsPageContent = dynamic(
-  () => Promise.resolve(NewsPageContentComponent),
+/**
+ * Dynamically import NewsPageContent with server-side rendering disabled
+ * and Suspense enabled. This ensures that useSearchParams runs only on the client.
+ */
+const DynamicNewsPageContent = dynamicImport(
+  () => Promise.resolve(NewsPageContent),
   { ssr: false, suspense: true }
 );
 
+/**
+ * The main page component simply wraps the dynamically imported content
+ * in a Suspense boundary.
+ */
 const NewsPage = () => {
   return (
     <Suspense fallback={<div>Loading...</div>}>
