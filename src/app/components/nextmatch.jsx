@@ -2,6 +2,7 @@
 
 import { useRef, useEffect, useState } from "react";
 import Image from "next/image";
+import Matches from '@/app/components/constants/matches.json';
 
 export default function NextMatch() {
   const headerRef = useRef(null);
@@ -9,14 +10,8 @@ export default function NextMatch() {
   const [match, setMatch] = useState(null);
 
   useEffect(() => {
-    // Fetch match data from the JSON file
-    const fetchMatchData = async () => {
-      const response = await fetch('@/app/components/constants/matches.json'); // Update this path based on where you put the JSON file
-      const data = await response.json();
-      setMatch(data[0]); // Assuming you want to display the first match
-    };
-
-    fetchMatchData();
+    // Directly use the imported Matches data
+    setMatch(Matches[0]); // Assuming you want to display the first match
   }, []);
 
   if (!match) return <p>Loading...</p>; // Loading state
