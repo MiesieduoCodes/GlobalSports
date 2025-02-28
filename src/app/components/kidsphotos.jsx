@@ -49,7 +49,7 @@ export default function Gallery() {
       id: "item2",
       type: "video",
       src: "/videos/VID-20250219-WA0121.mp4",
-      poster: "IMG-20250219-WA0120(2).jpg",
+      poster: "/images/IMG-20250219-WA0120(2).jpg",
     },
   ];
 
@@ -63,7 +63,7 @@ export default function Gallery() {
       id: "item4",
       type: "video",
       src: "https://www.w3schools.com/html/movie.mp4",
-      poster: "IMG-20250219-WA0120(2).jpg",
+      poster: "/images/IMG-20250219-WA0120(2).jpg",
     },
     {
       id: "item5",
