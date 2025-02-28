@@ -1,8 +1,8 @@
 "use client";
 export const dynamic = "force-dynamic";
-export const revalidate = 0;
 
 import { Suspense } from "react";
+import dynamicImport from "next/dynamic";
 import { useLanguage } from "@/app/context/LanguageContext";
 import newsData from "@/app/components/constants/newss.json";
 import Link from "next/link";
@@ -12,7 +12,7 @@ import { motion } from "framer-motion";
 const NewsPageContentComponent = () => {
   // useSearchParams is a client-side hook.
   const { language } = useLanguage();
-  // Import useSearchParams here so it's only run on the client.
+  // Import useSearchParams so it's only run on the client.
   const { useSearchParams } = require("next/navigation");
   const searchParams = useSearchParams();
   const newsId = searchParams.get("id");
@@ -53,7 +53,7 @@ const NewsPageContentComponent = () => {
     );
   }
 
-  // Render the list of news items when no specific id is given.
+  // Render the list of news items when no specific id is provided.
   return (
     <div className="bg-white dark:bg-gray-800 mx-auto px-4 py-12">
       <h1 className="text-4xl font-bold mb-8 text-gray-900 dark:text-white text-center">
@@ -117,7 +117,7 @@ const NewsPageContentComponent = () => {
 };
 
 // Dynamically import the component with SSR disabled and Suspense enabled.
-const DynamicNewsPageContent = dynamic(
+const DynamicNewsPageContent = dynamicImport(
   () => Promise.resolve(NewsPageContentComponent),
   { ssr: false, suspense: true }
 );
