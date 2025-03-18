@@ -111,6 +111,90 @@
             "buttonText": "Aprender más"
           }
         }
+      },
+      {
+        "id": 5,
+        "date": "2024-03-20",
+        "category": "Sponsorship",
+        "images": ["/images/sponsorship.jpg"],
+        "translations": {
+          "en": {
+            "title": "GSFC Secures Landmark Sponsorship with [Company Name]!",
+            "content": "We are thrilled to announce a landmark sponsorship deal with [Company Name]. This partnership will fuel our grassroots mission and help us reach new heights.",
+            "buttonText": "Learn More"
+          },
+          "ru": {
+            "title": "GSFC заключает знаковое спонсорство с [Company Name]!",
+            "content": "Мы рады объявить о знаковом спонсорском соглашении с [Company Name]. Это партнерство поможет нам в реализации нашей миссии на местах и достижении новых высот.",
+            "buttonText": "Узнать больше"
+          },
+          "fr": {
+            "title": "GSFC obtient un partenariat historique avec [Company Name] !",
+            "content": "Nous sommes ravis d'annoncer un partenariat historique avec [Company Name]. Ce partenariat alimentera notre mission de base et nous aidera à atteindre de nouveaux sommets.",
+            "buttonText": "En savoir plus"
+          },
+          "es": {
+            "title": "¡GSFC asegura un patrocinio histórico con [Company Name]!",
+            "content": "Estamos encantados de anunciar un acuerdo de patrocinio histórico con [Company Name]. Esta asociación impulsará nuestra misión de base y nos ayudará a alcanzar nuevas alturas.",
+            "buttonText": "Aprender más"
+          }
+        }
+      },
+      {
+        "id": 6,
+        "date": "2024-03-25",
+        "category": "Tournament Victory",
+        "images": ["/images/tournament-victory.jpg"],
+        "translations": {
+          "en": {
+            "title": "Triumph on the Pitch! GSFC Claims Victory in [Tournament Name]",
+            "content": "GSFC has emerged victorious in the [Tournament Name]! Relive the glory and celebrate this incredible achievement with us.",
+            "buttonText": "Learn More"
+          },
+          "ru": {
+            "title": "Триумф на поле! GSFC одерживает победу в [Tournament Name]",
+            "content": "GSFC одержал победу в [Tournament Name]! Вспомните моменты славы и отпразднуйте это невероятное достижение вместе с нами.",
+            "buttonText": "Узнать больше"
+          },
+          "fr": {
+            "title": "Triomphe sur le terrain ! GSFC remporte la victoire dans [Tournament Name]",
+            "content": "GSFC a remporté la victoire dans le [Tournament Name] ! Revivez la gloire et célébrez cet incroyable exploit avec nous.",
+            "buttonText": "En savoir plus"
+          },
+          "es": {
+            "title": "¡Triunfo en el campo! GSFC se proclama campeón en [Tournament Name]",
+            "content": "¡GSFC ha salido victorioso en el [Tournament Name]! Revive la gloria y celebra este increíble logro con nosotros.",
+            "buttonText": "Aprender más"
+          }
+        }
+      },
+      {
+        "id": 7,
+        "date": "2024-03-30",
+        "category": "Player Journey",
+        "images": ["/images/player-journey.jpg"],
+        "translations": {
+          "en": {
+            "title": "From Local Fields to Pro Leagues: [Player Name]'s Inspiring Journey",
+            "content": "Witness the inspiring journey of [Player Name], who rose from local fields to professional leagues. A true testament to the power of dreams and hard work.",
+            "buttonText": "Learn More"
+          },
+          "ru": {
+            "title": "С местных полей до профессиональных лиг: Вдохновляющий путь [Player Name]",
+            "content": "Станьте свидетелем вдохновляющего пути [Player Name], который поднялся с местных полей до профессиональных лиг. Настоящее свидетельство силы мечты и упорного труда.",
+            "buttonText": "Узнать больше"
+          },
+          "fr": {
+            "title": "Des terrains locaux aux ligues professionnelles : Le parcours inspirant de [Player Name]",
+            "content": "Découvrez le parcours inspirant de [Player Name], qui est passé des terrains locaux aux ligues professionnelles. Une véritable preuve de la puissance des rêves et du travail acharné.",
+            "buttonText": "En savoir plus"
+          },
+          "es": {
+            "title": "De los campos locales a las ligas profesionales: El viaje inspirador de [Player Name]",
+            "content": "Presencia el viaje inspirador de [Player Name], quien pasó de los campos locales a las ligas profesionales. Un verdadero testimonio del poder de los sueños y el trabajo duro.",
+            "buttonText": "Aprender más"
+          }
+        }
       }
     ]
   }

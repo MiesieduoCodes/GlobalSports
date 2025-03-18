@@ -203,10 +203,10 @@ const Navbar = () => {
             onChange={(e) => handleLanguageChange(e.target.value)}
             className="ml-4 p-2 border-none rounded"
           >
-            <option value="en">English</option>
-            <option value="ru">Pycckий</option>
-            <option value="fr">Français</option>
-            <option value="es">Español</option>
+            <option className="w-full" value="en">English</option>
+            <option className="w-" value="ru">Pycckий</option>
+            <option className="w-" value="fr">Français</option>
+            <option className="w-" value="es">Español</option>
           </select>
         </div>
 

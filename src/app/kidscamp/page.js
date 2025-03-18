@@ -14,7 +14,7 @@ import { useLanguage } from "@/app/context/LanguageContext";
 
 const translations = {
   en: {
-    title: "Global Sports Junior Academy",
+    title: "Global Sports Football Club Junior Academy",
     subtitle: "Where Future Champions Are Made!",
     agePrograms: "Age-Specific Programs",
     // Age Groups translations

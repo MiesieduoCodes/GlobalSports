@@ -1,253 +1,237 @@
 "use client";
 
-import { useContext } from "react";
-import { useLanguage } from "@/app/context/LanguageContext";
+import { useLanguage } from "@/app/context/LanguageContext"; // Import the language context
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useEffect, useRef } from "react";
 
-// Translation data
+gsap.registerPlugin(ScrollTrigger);
+
+// Translations JSON
 const translations = {
-    en: {
-      title: "Meet the Team",
-      description: "These are the brilliant minds behind Global Sports FC's success.",
-      teamMembers: [
-        {
-          name: "Marvin McKinney",
-          role: "Head Coach",
-          image: "https://pagedone.io/asset/uploads/1698649968.png",
-        },
-        {
-          name: "Kathryn Murphy",
-          role: "Assistant Coach",
-          image: "https://pagedone.io/asset/uploads/1698650000.png",
-        },
-        {
-          name: "Jerome Bell",
-          role: "Fitness Trainer",
-          image: "https://pagedone.io/asset/uploads/1698659360.png",
-        },
-        {
-          name: "Wade Warren",
-          role: "Tactical Analyst",
-          image: "https://pagedone.io/asset/uploads/1698650109.png",
-        },
-        {
-          name: "Leslie Alexander",
-          role: "Goalkeeping Coach",
-          image: "https://pagedone.io/asset/uploads/1698650146.png",
-        },
-        {
-          name: "Guy Hawkins",
-          role: "Youth Academy Manager",
-          image: "https://pagedone.io/asset/uploads/1698650184.png",
-        },
-        {
-          name: "Ronald Richards",
-          role: "Scouting Director",
-          image: "https://pagedone.io/asset/uploads/1698650213.png",
-        },
-        {
-          name: "Devon Lane",
-          role: "Sports Psychologist",
-          image: "https://pagedone.io/asset/uploads/1698650242.png",
-        },
-        {
-          name: "Dianne Russell",
-          role: "Nutritionist",
-          image: "https://pagedone.io/asset/uploads/1698650271.png",
-        },
-      ],
-    },
-    es: {
-      title: "Conoce al Equipo",
-      description: "Estas son las mentes brillantes detrás del éxito de Global Sports FC.",
-      teamMembers: [
-        {
-          name: "Marvin McKinney",
-          role: "Entrenador Principal",
-          image: "https://pagedone.io/asset/uploads/1698649968.png",
-        },
-        {
-          name: "Kathryn Murphy",
-          role: "Entrenador Asistente",
-          image: "https://pagedone.io/asset/uploads/1698650000.png",
-        },
-        {
-          name: "Jerome Bell",
-          role: "Entrenador de Fitness",
-          image: "https://pagedone.io/asset/uploads/1698659360.png",
-        },
-        {
-          name: "Wade Warren",
-          role: "Analista Táctico",
-          image: "https://pagedone.io/asset/uploads/1698650109.png",
-        },
-        {
-          name: "Leslie Alexander",
-          role: "Entrenador de Porteros",
-          image: "https://pagedone.io/asset/uploads/1698650146.png",
-        },
-        {
-          name: "Guy Hawkins",
-          role: "Gerente de la Academia Juvenil",
-          image: "https://pagedone.io/asset/uploads/1698650184.png",
-        },
-        {
-          name: "Ronald Richards",
-          role: "Director de Scouting",
-          image: "https://pagedone.io/asset/uploads/1698650213.png",
-        },
-        {
-          name: "Devon Lane",
-          role: "Psicólogo Deportivo",
-          image: "https://pagedone.io/asset/uploads/1698650242.png",
-        },
-        {
-          name: "Dianne Russell",
-          role: "Nutricionista",
-          image: "https://pagedone.io/asset/uploads/1698650271.png",
-        },
-      ],
-    },
-    ru: {
-      title: "Познакомьтесь с Командой",
-      description: "Это блестящие умы, стоящие за успехом Global Sports FC.",
-      teamMembers: [
-        {
-          name: "Марвин Макинни",
-          role: "Главный тренер",
-          image: "https://pagedone.io/asset/uploads/1698649968.png",
-        },
-        {
-          name: "Кэтрин Мерфи",
-          role: "Ассистент тренера",
-          image: "https://pagedone.io/asset/uploads/1698650000.png",
-        },
-        {
-          name: "Жером Белл",
-          role: "Тренер по фитнесу",
-          image: "https://pagedone.io/asset/uploads/1698659360.png",
-        },
-        {
-          name: "Уэйд Уоррен",
-          role: "Тактический аналитик",
-          image: "https://pagedone.io/asset/uploads/1698650109.png",
-        },
-        {
-          name: "Лесли Александер",
-          role: "Тренер вратарей",
-          image: "https://pagedone.io/asset/uploads/1698650146.png",
-        },
-        {
-          name: "Гай Хокинс",
-          role: "Менеджер молодежной академии",
-          image: "https://pagedone.io/asset/uploads/1698650184.png",
-        },
-        {
-          name: "Рональд Ричардс",
-          role: "Директор по скаутингу",
-          image: "https://pagedone.io/asset/uploads/1698650213.png",
-        },
-        {
-          name: "Девон Лейн",
-          role: "Спортивный психолог",
-          image: "https://pagedone.io/asset/uploads/1698650242.png",
-        },
-        {
-          name: "Дианна Рассел",
-          role: "Диетолог",
-          image: "https://pagedone.io/asset/uploads/1698650271.png",
-        },
-      ],
-    },
-    fr: {
-      title: "Rencontrez l'Équipe",
-      description: "Voici les esprits brillants derrière le succès de Global Sports FC.",
-      teamMembers: [
-        {
-          name: "Marvin McKinney",
-          role: "Entraîneur Principal",
-          image: "https://pagedone.io/asset/uploads/1698649968.png",
-        },
-        {
-          name: "Kathryn Murphy",
-          role: "Entraîneur Adjoint",
-          image: "https://pagedone.io/asset/uploads/1698650000.png",
-        },
-        {
-          name: "Jerome Bell",
-          role: "Entraîneur de Fitness",
-          image: "https://pagedone.io/asset/uploads/1698659360.png",
-        },
-        {
-          name: "Wade Warren",
-          role: "Analyste Tactique",
-          image: "https://pagedone.io/asset/uploads/1698650109.png",
-        },
-        {
-          name: "Leslie Alexander",
-          role: "Entraîneur des Gardiens",
-          image: "https://pagedone.io/asset/uploads/1698650146.png",
-        },
-        {
-          name: "Guy Hawkins",
-          role: "Responsable de l'Académie de Jeunes",
-          image: "https://pagedone.io/asset/uploads/1698650184.png",
-        },
-        {
-          name: "Ronald Richards",
-          role: "Directeur de Scouting",
-          image: "https://pagedone.io/asset/uploads/1698650213.png",
-        },
-        {
-          name: "Devon Lane",
-          role: "Psychologue du Sport",
-          image: "https://pagedone.io/asset/uploads/1698650242.png",
-        },
-        {
-          name: "Dianne Russell",
-          role: "Nutritionniste",
-          image: "https://pagedone.io/asset/uploads/1698650271.png",
-        },
-      ],
-    },
-  };
+  en: {
+    title: "Our Dedicated Leadership",
+    description: "Meet the heart and soul of GSFC:",
+    leadership: [
+      {
+        name: "Veria Lawrence Ebiks",
+        role: "Club Director",
+        image: "https://example.com/veria-ebiks.png", // Replace with actual image URL
+      },
+      {
+        name: "[Name Placeholder]",
+        role: "Head Coach",
+        image: "https://example.com/head-coach.png", // Replace with actual image URL
+      },
+      {
+        name: "[Name Placeholder]",
+        role: "Technical Director",
+        image: "https://example.com/technical-director.png", // Replace with actual image URL
+      },
+      {
+        name: "Audu Kaz Emmanuel",
+        role: "Management & Support Staff",
+        image: "https://example.com/audu-kaz.png", // Replace with actual image URL
+      },
+      {
+        name: "Otanwa Otanwa Luise",
+        role: "Management & Support Staff",
+        image: "https://example.com/otanwa-luise.png", // Replace with actual image URL
+      },
+      {
+        name: "Abubakar Aliyu Audu",
+        role: "Management & Support Staff",
+        image: "https://example.com/abubakar-audu.png", // Replace with actual image URL
+      },
+      {
+        name: "Sanusi Adekunle Bariy",
+        role: "Management & Support Staff",
+        image: "https://example.com/sanusi-bariy.png", // Replace with actual image URL
+      },
+    ],
+  },
+  ru: {
+    title: "Наше Преданное Руководство",
+    description: "Познакомьтесь с сердцем и душой GSFC:",
+    leadership: [
+      {
+        name: "Вериа Лоуренс Эбикс",
+        role: "Директор клуба",
+        image: "https://example.com/veria-ebiks.png", // Replace with actual image URL
+      },
+      {
+        name: "[Имя Заполнитель]",
+        role: "Главный тренер",
+        image: "https://example.com/head-coach.png", // Replace with actual image URL
+      },
+      {
+        name: "[Имя Заполнитель]",
+        role: "Технический директор",
+        image: "https://example.com/technical-director.png", // Replace with actual image URL
+      },
+      {
+        name: "Ауду Каз Эммануэль",
+        role: "Управление и вспомогательный персонал",
+        image: "https://example.com/audu-kaz.png", // Replace with actual image URL
+      },
+      {
+        name: "Отанва Отанва Луиза",
+        role: "Управление и вспомогательный персонал",
+        image: "https://example.com/otanwa-luise.png", // Replace with actual image URL
+      },
+      {
+        name: "Абубакар Алию Ауду",
+        role: "Управление и вспомогательный персонал",
+        image: "https://example.com/abubakar-audu.png", // Replace with actual image URL
+      },
+      {
+        name: "Сануси Адекунле Барий",
+        role: "Управление и вспомогательный персонал",
+        image: "https://example.com/sanusi-bariy.png", // Replace with actual image URL
+      },
+    ],
+  },
+  fr: {
+    title: "Notre Leadership Dévoué",
+    description: "Rencontrez le cœur et l'âme de GSFC :",
+    leadership: [
+      {
+        name: "Veria Lawrence Ebiks",
+        role: "Directeur du Club",
+        image: "https://example.com/veria-ebiks.png", // Replace with actual image URL
+      },
+      {
+        name: "[Nom Placeholder]",
+        role: "Entraîneur Principal",
+        image: "https://example.com/head-coach.png", // Replace with actual image URL
+      },
+      {
+        name: "[Nom Placeholder]",
+        role: "Directeur Technique",
+        image: "https://example.com/technical-director.png", // Replace with actual image URL
+      },
+      {
+        name: "Audu Kaz Emmanuel",
+        role: "Gestion et Personnel de Soutien",
+        image: "https://example.com/audu-kaz.png", // Replace with actual image URL
+      },
+      {
+        name: "Otanwa Otanwa Luise",
+        role: "Gestion et Personnel de Soutien",
+        image: "https://example.com/otanwa-luise.png", // Replace with actual image URL
+      },
+      {
+        name: "Abubakar Aliyu Audu",
+        role: "Gestion et Personnel de Soutien",
+        image: "https://example.com/abubakar-audu.png", // Replace with actual image URL
+      },
+      {
+        name: "Sanusi Adekunle Bariy",
+        role: "Gestion et Personnel de Soutien",
+        image: "https://example.com/sanusi-bariy.png", // Replace with actual image URL
+      },
+    ],
+  },
+  es: {
+    title: "Nuestro Liderazgo Dedicado",
+    description: "Conoce el corazón y el alma de GSFC:",
+    leadership: [
+      {
+        name: "Veria Lawrence Ebiks",
+        role: "Director del Club",
+        image: "https://example.com/veria-ebiks.png", // Replace with actual image URL
+      },
+      {
+        name: "[Nombre Placeholder]",
+        role: "Entrenador Principal",
+        image: "https://example.com/head-coach.png", // Replace with actual image URL
+      },
+      {
+        name: "[Nombre Placeholder]",
+        role: "Director Técnico",
+        image: "https://example.com/technical-director.png", // Replace with actual image URL
+      },
+      {
+        name: "Audu Kaz Emmanuel",
+        role: "Gestión y Personal de Apoyo",
+        image: "https://example.com/audu-kaz.png", // Replace with actual image URL
+      },
+      {
+        name: "Otanwa Otanwa Luise",
+        role: "Gestión y Personal de Apoyo",
+        image: "https://example.com/otanwa-luise.png", // Replace with actual image URL
+      },
+      {
+        name: "Abubakar Aliyu Audu",
+        role: "Gestión y Personal de Apoyo",
+        image: "https://example.com/abubakar-audu.png", // Replace with actual image URL
+      },
+      {
+        name: "Sanusi Adekunle Bariy",
+        role: "Gestión y Personal de Apoyo",
+        image: "https://example.com/sanusi-bariy.png", // Replace with actual image URL
+      },
+    ],
+  },
+};
 
 export default function TeamSection() {
-    const { language } = useLanguage(); // Get the current language from context
+  const { language } = useLanguage(); // Get current language from context
+  const content = translations[language] || translations.en; // Default to English
+  const sectionRef = useRef(null);
 
-    const { title, description, teamMembers } = translations[language] || translations.en; // Default to English if language not found
+  // GSAP Scroll Animations
+  useEffect(() => {
+    gsap.fromTo(
+      sectionRef.current,
+      { opacity: 0, y: 50 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 1,
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 80%",
+          toggleActions: "play none none reverse",
+        },
+      }
+    );
+  }, [language]); // Re-run animations when language changes
+
   return (
-    <section className="py-24 bg-white dark:bg-gray-900 transition-colors duration-300">
+    <section
+      ref={sectionRef}
+      className={`py-24 bg-white dark:bg-gray-900 transition-colors duration-300`}
+    >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Title and Description */}
         <div className="mb-12">
           <h2 className="text-5xl text-center font-bold text-gray-900 dark:text-white mb-6">
-            {title}
+            {content.title}
           </h2>
           <p className="text-lg text-gray-500 dark:text-gray-400 text-center">
-            {description}
+            {content.description}
           </p>
         </div>
 
-        {/* Team Members Grid */}
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
-          {teamMembers.map((member, index) => (
+        {/* Leadership Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          {content.leadership.map((member, index) => (
             <div
               key={index}
-              className="group block text-center"
+              className="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
             >
-              <div className="relative mb-5">
-                <img
-                  src={member.image}
-                  alt={member.name}
-                  className="w-28 h-28 rounded-2xl object-cover mx-auto transition-all duration-500 border-2 border-solid border-transparent group-hover:border-indigo-600"
-                />
-              </div>
-              <h4 className="text-xl text-gray-900 dark:text-white font-semibold text-center mb-2 transition-all duration-500 group-hover:text-indigo-600">
+              <img
+                src={member.image}
+                alt={member.name}
+                className="w-full h-48 object-cover rounded-lg mb-4"
+              />
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
                 {member.name}
-              </h4>
-              <span className="text-gray-500 dark:text-gray-400 text-center block transition-all duration-500 group-hover:text-gray-900 dark:group-hover:text-white">
-                {member.role}
-              </span>
+              </h3>
+              <p className="text-gray-500 dark:text-gray-400">
+                <strong>Role:</strong> {member.role}
+              </p>
             </div>
           ))}
         </div>

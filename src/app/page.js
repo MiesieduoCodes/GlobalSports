@@ -48,10 +48,10 @@ const Page = () => {
             <input
               type="text"
               name="email"
-              className="py-2.5 px-5 h-14 w-full md:max-w-md border border-gray-300 bg-indigo-500 dark:bg-gray-700 shadow-sm rounded-full text-lg text-white focus:outline-none placeholder:text-indigo-200 dark:placeholder-gray-400"
+              className="py-2.5 px-5 h-14 w-full md:max-w-md border border-gray-300 bg-indigo-500 dark:bg-gray-700 shadow-sm rounded-full text-lg text-white focus:outline-none outline-none placeholder:text-indigo-200 dark:placeholder-gray-400"
               placeholder={content.emailPlaceholder}
             />
-            <button className="h-14 py-3.5 px-7 bg-white shadow-sm rounded-full text-indigo-600 font-semibold dark:bg-gray-700 dark:text-white">
+            <button className="h-14 py-3.5 px-7 text-xl bg-white shadow-sm rounded-full text-indigo-600 font-bold dark:bg-yellow-400 dark:text-blue-600">
               {content.subscribeButton}
             </button>
           </div>
