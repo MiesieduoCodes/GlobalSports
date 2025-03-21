@@ -15,36 +15,56 @@ const translations = {
       "GSFC is home to Kazakhstan's most promising footballers, each a story of resilience and determination. They are living proof of the power of grassroots development and the embodiment of the GSFC spirit.",
     players: [
       {
-        name: "Alexey Ivanov",
-        position: "Forward",
-        nationality: "Kazakhstan",
+        name: "Davies Wilfred McCollin",
+        position: "Defender",
+        nationality: "Ghana",
         strengths: "Speed, Precision, Leadership",
         story:
           "Alexey grew up in a small village in Kazakhstan. Despite limited resources, his passion for football led him to GSFC, where he has become a key player.",
         image: "https://example.com/alexey-ivanov.png", // Replace with actual image URL
       },
       {
-        name: "Dmitry Petrov",
-        position: "Midfielder",
-        nationality: "Kazakhstan",
+        name: "Panford Dennis",
+        position: "Attacker",
+        nationality: "Ghana",
         strengths: "Vision, Passing, Stamina",
         story:
           "Dmitry joined GSFC at the age of 16. His ability to control the midfield has made him a vital part of the team.",
         image: "https://example.com/dmitry-petrov.png", // Replace with actual image URL
       },
       {
-        name: "Sergey Smirnov",
-        position: "Defender",
-        nationality: "Kazakhstan",
+        name: "McCarthy  Solomon Tetteh",
+        position: "Attacker",
+        nationality: "Ghana",
         strengths: "Strength, Tackling, Positioning",
         story:
           "Sergey's journey from a local academy to GSFC is a testament to his hard work and dedication to the sport.",
         image: "https://example.com/sergey-smirnov.png", // Replace with actual image URL
       },
       {
-        name: "Anastasia Kuznetsova",
-        position: "Goalkeeper",
-        nationality: "Kazakhstan",
+        name: "Musa Mustapha Ondaki",
+        position: "Defender",
+        nationality: "Nigeria",
+        strengths: "Reflexes, Communication, Agility",
+        story:
+          "Anastasia is one of the few female players in GSFC. Her exceptional goalkeeping skills have earned her a place in the team.",
+        image: "https://example.com/anastasia-kuznetsova.png", // Replace with actual image URL
+      },
+      ,
+      {
+        name: "George Belema Favour",
+        position: "Midfielder",
+        nationality: "Nigeria",
+        strengths: "Reflexes, Communication, Agility",
+        story:
+          "Anastasia is one of the few female players in GSFC. Her exceptional goalkeeping skills have earned her a place in the team.",
+        image: "https://example.com/anastasia-kuznetsova.png", // Replace with actual image URL
+      }, 
+      ,
+      {
+        name: "Nnamdi Felix Ikechukwu",
+        position: "Midfielder",
+        nationality: "Nigeria",
         strengths: "Reflexes, Communication, Agility",
         story:
           "Anastasia is one of the few female players in GSFC. Her exceptional goalkeeping skills have earned her a place in the team.",
