@@ -20,8 +20,8 @@ const translations = {
         nationality: "Ghana",
         strengths: "Speed, Precision, Leadership",
         story:
-          "Alexey grew up in a small village in Kazakhstan. Despite limited resources, his passion for football led him to GSFC, where he has become a key player.",
-        image: "https://example.com/alexey-ivanov.png", // Replace with actual image URL
+          "Davies joined GSFC from a local academy in Accra. His commanding presence in defense and ability to read the game have made him a fan favorite.",
+        image: "https://example.com/davies-mccollin.png",
       },
       {
         name: "Panford Dennis",
@@ -29,17 +29,17 @@ const translations = {
         nationality: "Ghana",
         strengths: "Vision, Passing, Stamina",
         story:
-          "Dmitry joined GSFC at the age of 16. His ability to control the midfield has made him a vital part of the team.",
-        image: "https://example.com/dmitry-petrov.png", // Replace with actual image URL
+          "Panford's explosive pace and clinical finishing earned him a spot at GSFC after impressing in regional tournaments.",
+        image: "https://example.com/panford-dennis.png",
       },
       {
-        name: "McCarthy  Solomon Tetteh",
+        name: "McCarthy Solomon Tetteh",
         position: "Attacker",
         nationality: "Ghana",
         strengths: "Strength, Tackling, Positioning",
         story:
-          "Sergey's journey from a local academy to GSFC is a testament to his hard work and dedication to the sport.",
-        image: "https://example.com/sergey-smirnov.png", // Replace with actual image URL
+          "McCarthy rose from street football in Kumasi to becoming a key striker for GSFC, known for his relentless work ethic.",
+        image: "https://example.com/mccarthy-tetteh.png",
       },
       {
         name: "Musa Mustapha Ondaki",
@@ -47,28 +47,26 @@ const translations = {
         nationality: "Nigeria",
         strengths: "Reflexes, Communication, Agility",
         story:
-          "Anastasia is one of the few female players in GSFC. Her exceptional goalkeeping skills have earned her a place in the team.",
-        image: "https://example.com/anastasia-kuznetsova.png", // Replace with actual image URL
+          "Musa, a former youth captain in Lagos, brings tactical intelligence and composure to GSFC's backline.",
+        image: "https://example.com/musa-ondaki.png",
       },
-      ,
       {
         name: "George Belema Favour",
         position: "Midfielder",
         nationality: "Nigeria",
-        strengths: "Reflexes, Communication, Agility",
+        strengths: "Dribbling, Creativity, Work Rate",
         story:
-          "Anastasia is one of the few female players in GSFC. Her exceptional goalkeeping skills have earned her a place in the team.",
-        image: "https://example.com/anastasia-kuznetsova.png", // Replace with actual image URL
-      }, 
-      ,
+          "George's flair and versatility in midfield caught GSFC's scouts' attention during a tournament in Abuja.",
+        image: "https://example.com/george-favour.png",
+      },
       {
         name: "Nnamdi Felix Ikechukwu",
         position: "Midfielder",
         nationality: "Nigeria",
-        strengths: "Reflexes, Communication, Agility",
+        strengths: "Passing, Vision, Set-Pieces",
         story:
-          "Anastasia is one of the few female players in GSFC. Her exceptional goalkeeping skills have earned her a place in the team.",
-        image: "https://example.com/anastasia-kuznetsova.png", // Replace with actual image URL
+          "Nnamdi, a free-kick specialist, joined GSFC after leading his university team to a national championship.",
+        image: "https://example.com/nnamdi-ikechukwu.png",
       },
     ],
   },
@@ -78,40 +76,58 @@ const translations = {
       "GSFC — дом для самых перспективных футболистов Казахстана, каждый из которых является примером стойкости и решимости. Они — живое доказательство силы развития на местах и воплощение духа GSFC.",
     players: [
       {
-        name: "Алексей Иванов",
-        position: "Нападающий",
-        nationality: "Казахстан",
+        name: "Дэвис Уилфред МакКоллин",
+        position: "Защитник",
+        nationality: "Гана",
         strengths: "Скорость, Точность, Лидерство",
         story:
-          "Алексей вырос в маленькой деревне в Казахстане. Несмотря на ограниченные ресурсы, его страсть к футболу привела его в GSFC, где он стал ключевым игроком.",
-        image: "https://example.com/alexey-ivanov.png", // Replace with actual image URL
+          "Дэвис присоединился к GSFC из местной академии в Аккре. Его уверенная игра в защите и умение читать игру сделали его любимцем болельщиков.",
+        image: "https://example.com/davies-mccollin.png",
       },
       {
-        name: "Дмитрий Петров",
-        position: "Полузащитник",
-        nationality: "Казахстан",
+        name: "Пэнфорд Деннис",
+        position: "Нападающий",
+        nationality: "Гана",
         strengths: "Видение, Передачи, Выносливость",
         story:
-          "Дмитрий присоединился к GSFC в возрасте 16 лет. Его способность контролировать середину поля сделала его важной частью команды.",
-        image: "https://example.com/dmitry-petrov.png", // Replace with actual image URL
+          "Взрывная скорость и точность ударов Пэнфорда привлекли внимание GSFC после его выступлений на региональных турнирах.",
+        image: "https://example.com/panford-dennis.png",
       },
       {
-        name: "Сергей Смирнов",
-        position: "Защитник",
-        nationality: "Казахстан",
+        name: "МакКарти Соломон Тетте",
+        position: "Нападающий",
+        nationality: "Гана",
         strengths: "Сила, Отбор, Позиционирование",
         story:
-          "Путь Сергея из местной академии в GSFC — это свидетельство его упорного труда и преданности спорту.",
-        image: "https://example.com/sergey-smirnov.png", // Replace with actual image URL
+          "МакКарти прошел путь от уличного футбола в Кумаси до ключевого нападающего GSFC, известного своей неутомимой работой на поле.",
+        image: "https://example.com/mccarthy-tetteh.png",
       },
       {
-        name: "Анастасия Кузнецова",
-        position: "Вратарь",
-        nationality: "Казахстан",
+        name: "Муса Мустафа Ондаки",
+        position: "Защитник",
+        nationality: "Нигерия",
         strengths: "Рефлексы, Коммуникация, Ловкость",
         story:
-          "Анастасия — одна из немногих женщин-игроков в GSFC. Ее исключительные навыки вратаря заслужили ей место в команде.",
-        image: "https://example.com/anastasia-kuznetsova.png", // Replace with actual image URL
+          "Муса, бывший капитан молодежной команды в Лагосе, привносит тактический интеллект и хладнокровие в защиту GSFC.",
+        image: "https://example.com/musa-ondaki.png",
+      },
+      {
+        name: "Джордж Белема Фэйвор",
+        position: "Полузащитник",
+        nationality: "Нигерия",
+        strengths: "Дриблинг, Креативность, Работоспособность",
+        story:
+          "Талант и универсальность Джорджа в полузащите привлекли скаутов GSFC во время турнира в Абудже.",
+        image: "https://example.com/george-favour.png",
+      },
+      {
+        name: "Ннамди Феликс Икечукву",
+        position: "Полузащитник",
+        nationality: "Нигерия",
+        strengths: "Передачи, Видение, Стандарты",
+        story:
+          "Ннамди, специалист по штрафным ударам, присоединился к GSFC после победы с университетской командой в национальном чемпионате.",
+        image: "https://example.com/nnamdi-ikechukwu.png",
       },
     ],
   },
@@ -121,40 +137,58 @@ const translations = {
       "GSFC abrite les footballeurs les plus prometteurs du Kazakhstan, chacun étant une histoire de résilience et de détermination. Ils sont la preuve vivante de la puissance du développement local et de l'esprit de GSFC.",
     players: [
       {
-        name: "Alexey Ivanov",
-        position: "Attaquant",
-        nationality: "Kazakhstan",
+        name: "Davies Wilfred McCollin",
+        position: "Défenseur",
+        nationality: "Ghana",
         strengths: "Vitesse, Précision, Leadership",
         story:
-          "Alexey a grandi dans un petit village au Kazakhstan. Malgré des ressources limitées, sa passion pour le football l'a conduit à GSFC, où il est devenu un joueur clé.",
-        image: "https://example.com/alexey-ivanov.png", // Replace with actual image URL
+          "Davies a rejoint GSFC depuis une académie locale à Accra. Sa présence rassurante en défense et sa lecture du jeu en ont fait un favori des fans.",
+        image: "https://example.com/davies-mccollin.png",
       },
       {
-        name: "Dmitry Petrov",
-        position: "Milieu de terrain",
-        nationality: "Kazakhstan",
+        name: "Panford Dennis",
+        position: "Attaquant",
+        nationality: "Ghana",
         strengths: "Vision, Passe, Endurance",
         story:
-          "Dmitry a rejoint GSFC à l'âge de 16 ans. Sa capacité à contrôler le milieu de terrain en a fait un élément vital de l'équipe.",
-        image: "https://example.com/dmitry-petrov.png", // Replace with actual image URL
+          "La vitesse explosive et la finition précise de Panford lui ont valu une place à GSFC après des performances remarquées en tournois régionaux.",
+        image: "https://example.com/panford-dennis.png",
       },
       {
-        name: "Sergey Smirnov",
-        position: "Défenseur",
-        nationality: "Kazakhstan",
+        name: "McCarthy Solomon Tetteh",
+        position: "Attaquant",
+        nationality: "Ghana",
         strengths: "Force, Tacle, Positionnement",
         story:
-          "Le parcours de Sergey, d'une académie locale à GSFC, témoigne de son travail acharné et de son dévouement au sport.",
-        image: "https://example.com/sergey-smirnov.png", // Replace with actual image URL
+          "McCarthy est passé du football de rue à Kumasi pour devenir un attaquant clé de GSFC, connu pour son éthique de travail inébranlable.",
+        image: "https://example.com/mccarthy-tetteh.png",
       },
       {
-        name: "Anastasia Kuznetsova",
-        position: "Gardien de but",
-        nationality: "Kazakhstan",
+        name: "Musa Mustapha Ondaki",
+        position: "Défenseur",
+        nationality: "Nigeria",
         strengths: "Réflexes, Communication, Agilité",
         story:
-          "Anastasia est l'une des rares femmes joueuses de GSFC. Ses compétences exceptionnelles de gardienne de but lui ont valu une place dans l'équipe.",
-        image: "https://example.com/anastasia-kuznetsova.png", // Replace with actual image URL
+          "Musa, ancien capitaine des jeunes à Lagos, apporte son intelligence tactique et sa sérénité à la défense de GSFC.",
+        image: "https://example.com/musa-ondaki.png",
+      },
+      {
+        name: "George Belema Favour",
+        position: "Milieu de terrain",
+        nationality: "Nigeria",
+        strengths: "Dribble, Créativité, Rythme de travail",
+        story:
+          "Le talent et la polyvalence de George au milieu de terrain ont attiré l'attention des recruteurs de GSFC lors d'un tournoi à Abuja.",
+        image: "https://example.com/george-favour.png",
+      },
+      {
+        name: "Nnamdi Felix Ikechukwu",
+        position: "Milieu de terrain",
+        nationality: "Nigeria",
+        strengths: "Passe, Vision, Coups arrêtés",
+        story:
+          "Nnamdi, spécialiste des coups francs, a rejoint GSFC après avoir mené son équipe universitaire à un titre national.",
+        image: "https://example.com/nnamdi-ikechukwu.png",
       },
     ],
   },
@@ -164,40 +198,58 @@ const translations = {
       "GSFC es el hogar de los futbolistas más prometedores de Kazajstán, cada uno con una historia de resiliencia y determinación. Son la prueba viviente del poder del desarrollo local y la encarnación del espíritu de GSFC.",
     players: [
       {
-        name: "Alexey Ivanov",
-        position: "Delantero",
-        nationality: "Kazajstán",
+        name: "Davies Wilfred McCollin",
+        position: "Defensor",
+        nationality: "Ghana",
         strengths: "Velocidad, Precisión, Liderazgo",
         story:
-          "Alexey creció en un pequeño pueblo de Kazajstán. A pesar de los recursos limitados, su pasión por el fútbol lo llevó a GSFC, donde se ha convertido en un jugador clave.",
-        image: "https://example.com/alexey-ivanov.png", // Replace with actual image URL
+          "Davies llegó a GSFC desde una academia local en Accra. Su presencia en la defensa y su capacidad para leer el juego lo han convertido en un favorito de los aficionados.",
+        image: "https://example.com/davies-mccollin.png",
       },
       {
-        name: "Dmitry Petrov",
-        position: "Centrocampista",
-        nationality: "Kazajstán",
+        name: "Panford Dennis",
+        position: "Delantero",
+        nationality: "Ghana",
         strengths: "Visión, Pases, Resistencia",
         story:
-          "Dmitry se unió a GSFC a los 16 años. Su capacidad para controlar el mediocampo lo ha convertido en una parte vital del equipo.",
-        image: "https://example.com/dmitry-petrov.png", // Replace with actual image URL
+          "El ritmo explosivo y la definición clínica de Panford le valieron un lugar en GSFC después de destacar en torneos regionales.",
+        image: "https://example.com/panford-dennis.png",
       },
       {
-        name: "Sergey Smirnov",
-        position: "Defensor",
-        nationality: "Kazajstán",
+        name: "McCarthy Solomon Tetteh",
+        position: "Delantero",
+        nationality: "Ghana",
         strengths: "Fuerza, Entradas, Posicionamiento",
         story:
-          "El viaje de Sergey desde una academia local hasta GSFC es un testimonio de su arduo trabajo y dedicación al deporte.",
-        image: "https://example.com/sergey-smirnov.png", // Replace with actual image URL
+          "McCarthy pasó del fútbol callejero en Kumasi a ser un delantero clave en GSFC, conocido por su incansable ética de trabajo.",
+        image: "https://example.com/mccarthy-tetteh.png",
       },
       {
-        name: "Anastasia Kuznetsova",
-        position: "Portera",
-        nationality: "Kazajstán",
+        name: "Musa Mustapha Ondaki",
+        position: "Defensor",
+        nationality: "Nigeria",
         strengths: "Reflejos, Comunicación, Agilidad",
         story:
-          "Anastasia es una de las pocas jugadoras de GSFC. Sus excepcionales habilidades como portera le han valido un lugar en el equipo.",
-        image: "https://example.com/anastasia-kuznetsova.png", // Replace with actual image URL
+          "Musa, ex capitán juvenil en Lagos, aporta inteligencia táctica y serenidad a la defensa de GSFC.",
+        image: "https://example.com/musa-ondaki.png",
+      },
+      {
+        name: "George Belema Favour",
+        position: "Centrocampista",
+        nationality: "Nigeria",
+        strengths: "Regate, Creatividad, Ritmo de trabajo",
+        story:
+          "El talento y versatilidad de George en el mediocampo llamaron la atención de los ojeadores de GSFC durante un torneo en Abuja.",
+        image: "https://example.com/george-favour.png",
+      },
+      {
+        name: "Nnamdi Felix Ikechukwu",
+        position: "Centrocampista",
+        nationality: "Nigeria",
+        strengths: "Pases, Visión, Tiros libres",
+        story:
+          "Nnamdi, especialista en tiros libres, se unió a GSFC después de liderar a su equipo universitario hacia un campeonato nacional.",
+        image: "https://example.com/nnamdi-ikechukwu.png",
       },
     ],
   },
