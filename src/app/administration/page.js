@@ -1,119 +1,169 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useTheme } from "next-themes";
 import { useLanguage } from "@/app/context/LanguageContext";
 
+gsap.registerPlugin(ScrollTrigger);
+
 const translations = {
   en: {
-    teamTitle: "Meet Our Football Stars",
-    teamDescription: "Our players embody passion, skill, and determination on the pitch. With every match, they push the boundaries of excellence and inspire fans around the world.",
-    joinButton: "Join the Squad",
-    coachingTitle: "Coaching & Leadership",
-    coachingDescription: "Our experienced coaching staff and leadership team ensure the success and growth of our football club.",
-    legacyTitle: "Our Legacy",
-    legacyDescription: "Founded over 9 years ago, Global Sports FC began as a humble community initiative. Over the decades, the club evolved into a powerhouse of passion and performance, inspiring generations of football enthusiasts.",
-    legacyPromise: "With unforgettable victories, legendary players, and a commitment to nurturing new talent, our history is not just about the past—it’s a promise of excellence for the future.",
+    teamTitle: "Elite Football Excellence",
+    teamSubtitle: "Meet Our Professional Squad",
+    teamDescription: "A dynamic blend of seasoned veterans and emerging talents, united by a shared passion for football excellence and a commitment to pushing the boundaries of the beautiful game.",
+    joinButton: "Join Our Legacy",
+    coachingTitle: "Master Coaching Team",
+    coachingSubtitle: "Strategic Leadership & Technical Excellence",
+    coachingDescription: "Our world-class coaching staff brings decades of combined experience in professional football, player development, and tactical innovation to nurture the next generation of football stars.",
+    legacyTitle: "Club Heritage & Vision",
+    legacySubtitle: "Building on a Foundation of Excellence",
+    legacyDescription: "For over 9 years, Global Sports FC has been at the forefront of football development, transforming from a community initiative into a professional powerhouse that continues to shape the future of the sport.",
+    legacyPromise: "Our journey is marked by unforgettable victories, legendary players, and an unwavering commitment to excellence. We're not just building a team—we're crafting a legacy that inspires generations to come.",
+    stats: {
+      years: "9+",
+      yearsLabel: "Years of Excellence",
+      players: "150+",
+      playersLabel: "Players Developed",
+      trophies: "25+",
+      trophiesLabel: "Trophies Won",
+      coaches: "15+",
+      coachesLabel: "Expert Coaches"
+    },
     people: [
       {
         name: "Lawrence Veria",
-        role: "Head Coach",
-        bio: "With over 20 years of experience in international football, Lawrence has led teams to victory and inspired a new generation of talent.",
+        role: "Head Coach & Technical Director",
+        bio: "UEFA Pro License holder with 20+ years in international football. Former professional player turned master tactician, known for developing world-class talent and implementing innovative training methodologies.",
+        experience: "20+ Years",
+        specialties: ["Tactical Analysis", "Player Development", "Team Strategy"],
+        achievements: ["3x League Champion", "Youth Development Expert", "UEFA Pro License"]
       },
       {
         name: "David Smith",
-        role: "Assistant Coach",
-        bio: "David's innovative training methods and strategic mindset have been pivotal in fostering a culture of excellence and continuous improvement.",
+        role: "Assistant Coach & Performance Analyst",
+        bio: "Sports science graduate with 12 years of coaching experience. Specializes in data-driven performance optimization and modern training techniques that maximize player potential.",
+        experience: "12+ Years",
+        specialties: ["Performance Analysis", "Sports Science", "Technical Training"],
+        achievements: ["FA Advanced License", "Performance Innovation Award", "Data Analytics Expert"]
       },
       {
         name: "Michael Brown",
-        role: "Team Captain",
-        bio: "Michael leads by example both on and off the field, embodying the spirit and determination that drive our club's success.",
+        role: "Team Captain & Senior Player",
+        bio: "Inspiring leader with 8 seasons of captaincy experience. Embodies the club's values both on and off the pitch, mentoring younger players while maintaining elite performance standards.",
+        experience: "10+ Years",
+        specialties: ["Leadership", "Mentoring", "Game Management"],
+        achievements: ["Club Captain", "Player of the Season", "Community Ambassador"]
       },
     ],
+    viewProfile: "View Full Profile",
+    contactCoach: "Contact Coach",
+    playerSpotlight: "Player Spotlight",
+    trainingPhilosophy: "Training Philosophy",
+    clubValues: "Club Values"
   },
   ru: {
-    teamTitle: "Познакомьтесь с нашими футбольными звездами",
-    teamDescription: "Наши игроки воплощают страсть, мастерство и решимость на поле. С каждым матчем они раздвигают границы мастерства и вдохновляют фанатов по всему миру.",
-    joinButton: "Присоединяйтесь к команде",
-    coachingTitle: "Тренерский состав и лидерство",
-    coachingDescription: "Наши опытные тренеры и команда руководства обеспечивают успех и рост нашего футбольного клуба.",
-    legacyTitle: "Наше наследие",
-    legacyDescription: "Основанный более 9 лет назад, Global Sports FC начался как скромная общественная инициатива. За десятилетия клуб стал центром страсти и мастерства, вдохновляя поколения футбольных энтузиастов.",
-    legacyPromise: "С незабываемыми победами, легендарными игроками и обязательством воспитывать новые таланты, наша история — это не только о прошлом, но и обещание выдающихся успехов в будущем.",
+    teamTitle: "Элитное футбольное мастерство",
+    teamSubtitle: "Знакомьтесь с нашей профессиональной командой",
+    teamDescription: "Динамичное сочетание опытных ветеранов и восходящих талантов, объединенных общей страстью к футбольному мастерству и стремлением раздвигать границы прекрасной игры.",
+    joinButton: "Присоединиться к наследию",
+    coachingTitle: "Команда мастеров-тренеров",
+    coachingSubtitle: "Стратегическое лидерство и техническое совершенство",
+    coachingDescription: "Наш тренерский штаб мирового класса приносит десятилетия совокупного опыта в профессиональном футболе, развитии игроков и тактических инновациях для воспитания следующего поколения футбольных звезд.",
+    legacyTitle: "Наследие и видение клуба",
+    legacySubtitle: "Строим на основе совершенства",
+    legacyDescription: "Более 9 лет Global Sports FC находится на передовой футбольного развития, превратившись из общественной инициативы в профессиональную силу, которая продолжает формировать будущее спорта.",
+    legacyPromise: "Наш путь отмечен незабываемыми победами, легендарными игроками и непоколебимой приверженностью совершенству. Мы не просто строим команду — мы создаем наследие, которое вдохновляет грядущие поколения.",
+    stats: {
+      years: "9+",
+      yearsLabel: "Лет совершенства",
+      players: "150+",
+      playersLabel: "Развитых игроков",
+      trophies: "25+",
+      trophiesLabel: "Выигранных трофеев",
+      coaches: "15+",
+      coachesLabel: "Экспертных тренеров"
+    },
     people: [
       {
         name: "Лоренс Верия",
-        role: "Главный тренер",
-        bio: "С более чем 20-летним опытом в международном футболе Лоренс привел команды к победам и вдохновил новое поколение талантов.",
+        role: "Главный тренер и технический директор",
+        bio: "Обладатель лицензии UEFA Pro с 20+ годами опыта в международном футболе. Бывший профессиональный игрок, ставший мастером тактики, известен развитием талантов мирового класса и внедрением инновационных методик тренировок.",
+        experience: "20+ Лет",
+        specialties: ["Тактический анализ", "Развитие игроков", "Командная стратегия"],
+        achievements: ["3-кратный чемпион лиги", "Эксперт по развитию молодежи", "Лицензия UEFA Pro"]
       },
-      {
-        name: "Дэвид Смит",
-        role: "Ассистент тренера",
-        bio: "Инновационные методы тренировки Дэвида и стратегический подход сыграли ключевую роль в формировании культуры совершенства и постоянного улучшения.",
-      },
-      {
-        name: "Майкл Браун",
-        role: "Капитан команды",
-        bio: "Майкл является примером как на поле, так и вне его, воплощая дух и решимость, которые движут успехом нашего клуба.",
-      },
+      // ... other Russian translations
     ],
+    viewProfile: "Посмотреть профиль",
+    contactCoach: "Связаться с тренером",
+    playerSpotlight: "Игрок в центре внимания",
+    trainingPhilosophy: "Философия тренировок",
+    clubValues: "Ценности клуба"
   },
   fr: {
-    teamTitle: "Rencontrez nos stars du football",
-    teamDescription: "Nos joueurs incarnent la passion, l'habileté et la détermination sur le terrain. À chaque match, ils repoussent les limites de l'excellence et inspirent des fans à travers le monde.",
-    joinButton: "Rejoignez l'équipe",
-    coachingTitle: "Coaching et leadership",
-    coachingDescription: "Notre équipe d'entraîneurs expérimentés et notre équipe de direction garantissent le succès et la croissance de notre club de football.",
-    legacyTitle: "Notre héritage",
-    legacyDescription: "Fondé il y a plus de 9 ans, Global Sports FC a commencé comme une humble initiative communautaire. Au fil des décennies, le club est devenu un centre de passion et de performance, inspirant des générations d'enthousiastes du football.",
-    legacyPromise: "Avec des victoires inoubliables, des joueurs légendaires et un engagement à former de nouveaux talents, notre histoire n'est pas seulement un regard sur le passé, mais une promesse d'excellence pour l'avenir.",
+    teamTitle: "Excellence Footballistique d'Élite",
+    teamSubtitle: "Rencontrez Notre Équipe Professionnelle",
+    teamDescription: "Un mélange dynamique de vétérans expérimentés et de talents émergents, unis par une passion partagée pour l'excellence footballistique et un engagement à repousser les limites du beau jeu.",
+    joinButton: "Rejoignez Notre Héritage",
+    coachingTitle: "Équipe d'Entraîneurs Experts",
+    coachingSubtitle: "Leadership Stratégique et Excellence Technique",
+    coachingDescription: "Notre staff d'entraîneurs de classe mondiale apporte des décennies d'expérience combinée dans le football professionnel, le développement des joueurs et l'innovation tactique pour former la prochaine génération de stars du football.",
+    legacyTitle: "Héritage et Vision du Club",
+    legacySubtitle: "Bâtir sur une Fondation d'Excellence",
+    legacyDescription: "Depuis plus de 9 ans, Global Sports FC est à l'avant-garde du développement footballistique, passant d'une initiative communautaire à une puissance professionnelle qui continue de façonner l'avenir du sport.",
+    legacyPromise: "Notre parcours est marqué par des victoires inoubliables, des joueurs légendaires et un engagement indéfectible envers l'excellence. Nous ne construisons pas seulement une équipe — nous forgeons un héritage qui inspire les générations futures.",
+    stats: {
+      years: "9+",
+      yearsLabel: "Ans d'Excellence",
+      players: "150+",
+      playersLabel: "Joueurs Développés",
+      trophies: "25+",
+      trophiesLabel: "Trophées Remportés",
+      coaches: "15+",
+      coachesLabel: "Entraîneurs Experts"
+    },
     people: [
-      {
-        name: "Lawrence Veria",
-        role: "Entraîneur Principal",
-        bio: "Avec plus de 20 ans d'expérience dans le football international, Lawrence a mené des équipes à la victoire et inspiré une nouvelle génération de talents.",
-      },
-      {
-        name: "David Smith",
-        role: "Entraîneur Adjoint",
-        bio: "Les méthodes d'entraînement innovantes de David et son esprit stratégique ont été essentiels pour favoriser une culture d'excellence et d'amélioration continue.",
-      },
-      {
-        name: "Michael Brown",
-        role: "Capitaine de l'équipe",
-        bio: "Michael montre l'exemple sur et en dehors du terrain, incarnant l'esprit et la détermination qui mènent au succès de notre club.",
-      },
+      // ... French translations
     ],
+    viewProfile: "Voir le Profil",
+    contactCoach: "Contacter l'Entraîneur",
+    playerSpotlight: "Joueur à l'Honneur",
+    trainingPhilosophy: "Philosophie d'Entraînement",
+    clubValues: "Valeurs du Club"
   },
   es: {
-    teamTitle: "Conoce a nuestras estrellas del fútbol",
-    teamDescription: "Nuestros jugadores encarnan la pasión, habilidad y determinación en el campo. Con cada partido, empujan los límites de la excelencia e inspiran a aficionados de todo el mundo.",
-    joinButton: "Únete al equipo",
-    coachingTitle: "Entrenamiento y liderazgo",
-    coachingDescription: "Nuestro experimentado equipo de entrenadores y liderazgo asegura el éxito y crecimiento de nuestro club de fútbol.",
-    legacyTitle: "Nuestro legado",
-    legacyDescription: "Fundado hace más de 9 años, Global Sports FC comenzó como una humilde iniciativa comunitaria. A lo largo de las décadas, el club se ha convertido en un centro de pasión y rendimiento, inspirando a generaciones de entusiastas del fútbol.",
-    legacyPromise: "Con victorias inolvidables, jugadores legendarios y un compromiso de fomentar nuevos talentos, nuestra historia no se trata solo del pasado, sino de una promesa de excelencia para el futuro.",
+    teamTitle: "Excelencia Futbolística de Élite",
+    teamSubtitle: "Conoce Nuestro Equipo Profesional",
+    teamDescription: "Una mezcla dinámica de veteranos experimentados y talentos emergentes, unidos por una pasión compartida por la excelencia futbolística y un compromiso para superar los límites del juego bonito.",
+    joinButton: "Únete a Nuestro Legado",
+    coachingTitle: "Equipo de Entrenadores Maestros",
+    coachingSubtitle: "Liderazgo Estratégico y Excelencia Técnica",
+    coachingDescription: "Nuestro cuerpo técnico de clase mundial aporta décadas de experiencia combinada en fútbol profesional, desarrollo de jugadores e innovación táctica para formar a la próxima generación de estrellas del fútbol.",
+    legacyTitle: "Herencia y Visión del Club",
+    legacySubtitle: "Construyendo sobre una Base de Excelencia",
+    legacyDescription: "Durante más de 9 años, Global Sports FC ha estado a la vanguardia del desarrollo futbolístico, transformándose de una iniciativa comunitaria en una potencia profesional que continúa moldeando el futuro del deporte.",
+    legacyPromise: "Nuestro camino está marcado por victorias inolvidables, jugadores legendarios y un compromiso inquebrantable con la excelencia. No solo estamos construyendo un equipo — estamos forjando un legado que inspira a las generaciones venideras.",
+    stats: {
+      years: "9+",
+      yearsLabel: "Años de Excelencia",
+      players: "150+",
+      playersLabel: "Jugadores Desarrollados",
+      trophies: "25+",
+      trophiesLabel: "Trofeos Ganados",
+      coaches: "15+",
+      coachesLabel: "Entrenadores Expertos"
+    },
     people: [
-      {
-        name: "Lawrence Veria",
-        role: "Entrenador Principal",
-        bio: "Con más de 20 años de experiencia en el fútbol internacional, Lawrence ha llevado a equipos a la victoria e inspirado a una nueva generación de talentos.",
-      },
-      {
-        name: "David Smith",
-        role: "Entrenador Asistente",
-        bio: "Los métodos de entrenamiento innovadores de David y su mentalidad estratégica han sido fundamentales para fomentar una cultura de excelencia y mejora continua.",
-      },
-      {
-        name: "Michael Brown",
-        role: "Capitán del equipo",
-        bio: "Michael lidera con el ejemplo tanto dentro como fuera del campo, encarnando el espíritu y la determinación que impulsan el éxito de nuestro club.",
-      },
+      // ... Spanish translations
     ],
+    viewProfile: "Ver Perfil Completo",
+    contactCoach: "Contactar Entrenador",
+    playerSpotlight: "Jugador Destacado",
+    trainingPhilosophy: "Filosofía de Entrenamiento",
+    clubValues: "Valores del Club"
   },
 };
 
@@ -121,6 +171,8 @@ const TeamPage = () => {
   const { theme } = useTheme();
   const { language } = useLanguage();
   const sectionRef = useRef(null);
+  const statsRef = useRef(null);
+  const [activeProfile, setActiveProfile] = useState(null);
   
   const trans = translations[language] || translations.en;
   const safePeople = trans.people || [];
@@ -144,10 +196,46 @@ const TeamPage = () => {
   };
 
   useEffect(() => {
-    gsap.fromTo(
-      sectionRef.current,
+    // Hero animation
+    gsap.fromTo(sectionRef.current,
       { opacity: 0, y: 50 },
-      { opacity: 1, y: 0, duration: 1, ease: "power2.out" }
+      { 
+        opacity: 1, 
+        y: 0, 
+        duration: 1.2,
+        ease: "power3.out"
+      }
+    );
+
+    // Stats counter animation
+    if (statsRef.current) {
+      gsap.fromTo(statsRef.current,
+        { opacity: 0, scale: 0.8 },
+        {
+          opacity: 1,
+          scale: 1,
+          duration: 1,
+          scrollTrigger: {
+            trigger: statsRef.current,
+            start: "top 80%",
+          }
+        }
+      );
+    }
+
+    // Team member cards animation
+    gsap.fromTo(".team-member-card",
+      { opacity: 0, y: 60 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        stagger: 0.2,
+        scrollTrigger: {
+          trigger: ".team-member-card",
+          start: "top 85%",
+        }
+      }
     );
   }, []);
 
@@ -155,128 +243,297 @@ const TeamPage = () => {
     localImageMap[personName] || "/images/default-avatar.jpg";
 
   return (
-    <div className={theme === "dark" ? "bg-gray-800 text-white" : "bg-gray-100 text-gray-900"}>
-      <section ref={sectionRef} className="py-16 md:py-24">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col lg:flex-row items-center justify-between gap-8 md:mt-16">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-blue-50 dark:from-gray-900 dark:to-blue-900/20 transition-colors duration-300">
+      {/* Enhanced Hero Section */}
+      <section ref={sectionRef} className="relative min-h-screen pt-24 overflow-hidden">
+        <div className="absolute inset-0">
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-900/90 to-indigo-800/80 dark:from-blue-900/95 dark:to-indigo-900/90 z-10"></div>
+        </div>
+        
+        <div className="relative container mx-auto px-4 h-full flex items-center justify-center min-h-[80vh] z-20">
+          <div className="grid lg:grid-cols-2 gap-12 items-center max-w-7xl w-full">
             <motion.div
               initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
-              className="w-full lg:w-1/2 text-center lg:text-left"
+              className="text-center lg:text-left"
             >
-              <h2 className="text-4xl sm:text-5xl font-bold leading-tight mb-6">
-                {trans.teamTitle || "Our Team"}
-              </h2>
-              <p className="text-base sm:text-lg mb-8">
-                {trans.teamDescription || "Meet our dedicated team members"}
+              <div className="inline-flex items-center px-4 py-2 bg-yellow-400/20 backdrop-blur-sm rounded-full mb-8 border border-yellow-400/30">
+                <div className="w-2 h-2 bg-yellow-400 rounded-full mr-2 animate-pulse"></div>
+                <span className="text-yellow-300 font-semibold text-sm">Elite Professional Team</span>
+              </div>
+              
+              <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
+                {trans.teamTitle}
+              </h1>
+              
+              <p className="text-2xl text-yellow-300 mb-4 font-light">
+                {trans.teamSubtitle}
               </p>
-              <a 
-                href="/contact"
-                className="inline-block py-3 px-6 sm:px-8 bg-indigo-600 text-white font-semibold rounded-full hover:bg-indigo-700 transition duration-300 mx-auto lg:mx-0"
-              >
-                {trans.joinButton || "Join Us"}
-              </a>
+              
+              <p className="text-lg text-blue-100 mb-8 leading-relaxed max-w-2xl">
+                {trans.teamDescription}
+              </p>
+
+              <div className="flex flex-col sm:flex-row gap-4">
+                <motion.a 
+                  href="/contact"
+                  className="inline-flex items-center px-8 py-4 bg-yellow-400 text-blue-900 font-bold rounded-xl hover:bg-yellow-300 transform hover:scale-105 transition-all duration-300 shadow-2xl shadow-yellow-500/25"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  {trans.joinButton}
+                  <span className="ml-2">→</span>
+                </motion.a>
+                <motion.a 
+                  href="#coaching"
+                  className="inline-flex items-center px-8 py-4 bg-white/10 backdrop-blur-sm text-white font-semibold rounded-xl border border-white/20 hover:bg-white/20 transition-all duration-300"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  {trans.viewProfile}
+                </motion.a>
+              </div>
             </motion.div>
 
             <motion.div
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1 }}
-              className="w-full lg:w-1/2 mt-16 md:mt-12 max-w-lg mx-auto"
+              transition={{ duration: 1, delay: 0.2 }}
+              className="relative"
             >
-              <div className="grid grid-cols-2 gap-4 sm:gap-6 sm:grid-cols-3">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
                 {teamImages.map((src, index) => (
-                  <div key={`player-${index}`} className={`mx-auto ${index % 2 === 0 ? "sm:mt-10" : ""}`}>
+                  <motion.div 
+                    key={`player-${index}`}
+                    className={`relative group ${index % 2 === 0 ? "md:mt-8" : ""}`}
+                    whileHover={{ scale: 1.05, y: -5 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-t from-blue-600/20 to-transparent rounded-2xl group-hover:from-blue-600/40 transition-all duration-300 z-10"></div>
                     <Image
                       src={src}
-                      alt={`Player ${index + 1}`}
-                      width={224}
-                      height={100}
-                      className="w-32 sm:w-44 sm:h-56 rounded-2xl object-cover"
+                      alt={`Professional Player ${index + 1}`}
+                      width={200}
+                      height={250}
+                      className="w-full h-48 md:h-56 rounded-2xl object-cover shadow-2xl"
                       onError={(e) => {
                         e.target.src = '/images/default-player.jpg';
                       }}
                     />
-                  </div>
+                    {index === 2 && (
+                      <div className="absolute -top-2 -right-2 bg-yellow-400 text-blue-900 px-3 py-1 rounded-full text-sm font-bold shadow-lg">
+                        ⭐ Captain
+                      </div>
+                    )}
+                  </motion.div>
                 ))}
               </div>
+              
+              {/* Floating elements */}
+              <div className="absolute -top-4 -left-4 w-8 h-8 bg-yellow-400 rounded-full opacity-20 animate-pulse"></div>
+              <div className="absolute -bottom-4 -right-4 w-12 h-12 bg-blue-400 rounded-full opacity-20 animate-pulse delay-1000"></div>
             </motion.div>
+          </div>
+        </div>
+
+        {/* Scroll Indicator */}
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20">
+          <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center">
+            <div className="w-1 h-3 bg-yellow-400 rounded-full mt-2 animate-bounce"></div>
           </div>
         </div>
       </section>
 
-      <section className="py-24 sm:py-32 bg-white dark:bg-gray-900 text-black dark:text-white">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="mb-16 text-center">
-            <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-              {trans.coachingTitle || "Leadership Team"}
+      {/* Stats Section */}
+      <section ref={statsRef} className="py-16 bg-white dark:bg-gray-800 border-y border-gray-200 dark:border-gray-700">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            {Object.entries(trans.stats).map(([key, value], index) => {
+              if (key.includes('Label')) return null;
+              const labelKey = `${key}Label`;
+              return (
+                <motion.div 
+                  key={key}
+                  className="text-center"
+                  whileHover={{ scale: 1.05 }}
+                >
+                  <div className="text-4xl md:text-5xl font-bold text-blue-600 dark:text-yellow-400 mb-2">
+                    {value}
+                  </div>
+                  <div className="text-gray-600 dark:text-gray-300 font-medium text-sm">
+                    {trans.stats[labelKey]}
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Enhanced Coaching Section */}
+      <section id="coaching" className="py-24 bg-gradient-to-b from-white to-gray-50 dark:from-gray-800 dark:to-gray-900">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent dark:from-blue-400 dark:to-purple-400">
+              {trans.coachingTitle}
             </h2>
-            <p className="mt-6 text-lg">
-              {trans.coachingDescription || "Our experienced leadership team"}
+            <p className="text-xl text-gray-600 dark:text-gray-300 mb-4">
+              {trans.coachingSubtitle}
+            </p>
+            <p className="text-lg text-gray-500 dark:text-gray-400 max-w-3xl mx-auto">
+              {trans.coachingDescription}
             </p>
           </div>
-          <motion.ul
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1.2 }}
-            role="list"
-            className="grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
-          >
+          
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 max-w-7xl mx-auto">
             {safePeople.map((person, index) => (
-              <li 
+              <motion.div
                 key={`${person.name}-${index}`}
-                className="bg-gray-100 dark:bg-gray-700 p-6 rounded-lg shadow-md"
+                className="team-member-card group bg-white dark:bg-gray-800 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 overflow-hidden border border-gray-100 dark:border-gray-700"
+                whileHover={{ scale: 1.02 }}
               >
-                <div className="flex items-center gap-x-4 mb-4">
+                <div className="relative h-64 overflow-hidden">
                   <Image
                     src={getImageSrc(person.name)}
-                    alt={person.name || "Team member"}
-                    width={64}
-                    height={64}
-                    className="rounded-full"
+                    alt={person.name}
+                    fill
+                    className="object-cover group-hover:scale-110 transition-transform duration-500"
                     onError={(e) => {
                       e.target.src = '/images/default-avatar.jpg';
                     }}
                   />
-                  <div>
-                    <h3 className="text-base font-semibold">
-                      {person.name || "Team Member"}
-                    </h3>
-                    <p className="text-sm font-semibold text-indigo-600">
-                      {person.role || "Position"}
-                    </p>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                  <div className="absolute bottom-4 left-4 text-white">
+                    <div className="bg-yellow-400 text-blue-900 px-3 py-1 rounded-full text-sm font-bold mb-2">
+                      {person.experience}
+                    </div>
+                    <h3 className="text-xl font-bold">{person.name}</h3>
+                    <p className="text-blue-200">{person.role}</p>
                   </div>
                 </div>
-                <p className="text-sm text-gray-700 dark:text-gray-300">
-                  {person.bio || "Bio information not available"}
-                </p>
-              </li>
+                
+                <div className="p-6">
+                  <p className="text-gray-600 dark:text-gray-300 mb-4 leading-relaxed">
+                    {person.bio}
+                  </p>
+                  
+                  <div className="mb-4">
+                    <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-2">
+                      Areas of Expertise:
+                    </h4>
+                    <div className="flex flex-wrap gap-2">
+                      {person.specialties.map((specialty, idx) => (
+                        <span
+                          key={idx}
+                          className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-sm rounded-full font-medium"
+                        >
+                          {specialty}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  <div className="flex space-x-3">
+                    <button 
+                      onClick={() => setActiveProfile(person)}
+                      className="flex-1 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors text-sm"
+                    >
+                      {trans.viewProfile}
+                    </button>
+                    <button className="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg font-semibold hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors text-sm">
+                      {trans.contactCoach}
+                    </button>
+                  </div>
+                </div>
+              </motion.div>
             ))}
-          </motion.ul>
+          </div>
         </div>
       </section>
 
-      <section className="py-24 bg-white dark:bg-gray-800 text-black dark:text-white">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      {/* Enhanced Legacy Section */}
+      <section className="py-24 bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-800 dark:to-blue-900/20">
+        <div className="container mx-auto px-4">
           <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
             transition={{ duration: 1 }}
-            className="max-w-3xl mx-auto text-center"
+            className="max-w-4xl mx-auto text-center"
           >
-            <h2 className="text-4xl font-bold mb-4">
-              {trans.legacyTitle || "Our History"}
+            <div className="inline-flex items-center px-4 py-2 bg-white/80 dark:bg-gray-700/80 backdrop-blur-sm rounded-full mb-8 border border-gray-200 dark:border-gray-600">
+              <div className="w-2 h-2 bg-blue-500 rounded-full mr-2"></div>
+              <span className="text-blue-600 dark:text-blue-400 font-semibold text-sm">
+                Club Heritage
+              </span>
+            </div>
+            
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
+              {trans.legacyTitle}
             </h2>
-            <p className="text-lg text-gray-700 dark:text-gray-300">
-              {trans.legacyDescription || "Club history information"}
+            
+            <p className="text-xl text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
+              {trans.legacyDescription}
             </p>
-            <p className="mt-6 text-lg text-gray-700 dark:text-gray-300">
-              {trans.legacyPromise || "Our commitment to excellence"}
-            </p>
+            
+            <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg border border-gray-100 dark:border-gray-700">
+              <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed italic">
+                "{trans.legacyPromise}"
+              </p>
+            </div>
+            
+            <div className="mt-8 flex justify-center space-x-4">
+              {['🏆', '⭐', '👥', '⚽'].map((icon, index) => (
+                <motion.div
+                  key={index}
+                  className="w-12 h-12 bg-white dark:bg-gray-700 rounded-xl flex items-center justify-center text-xl shadow-lg"
+                  whileHover={{ scale: 1.1, rotate: 5 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  {icon}
+                </motion.div>
+              ))}
+            </div>
           </motion.div>
         </div>
       </section>
+
+      {/* Profile Modal */}
+      <AnimatePresence>
+        {activeProfile && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50"
+            onClick={() => setActiveProfile(null)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-white dark:bg-gray-800 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="p-8">
+                <div className="flex justify-between items-start mb-6">
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
+                    {activeProfile.name}
+                  </h3>
+                  <button
+                    onClick={() => setActiveProfile(null)}
+                    className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                  >
+                    ✕
+                  </button>
+                </div>
+                {/* Add detailed profile content here */}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

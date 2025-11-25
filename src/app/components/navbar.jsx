@@ -24,7 +24,8 @@ const translations = {
     theTeam: "The Team",
     squad: "Squad",
     coaches: "Coaches",
-    matches: "Matches"
+    matches: "Matches",
+    admin: "Admin"
   },
   ru: {
     about: "О нас",
@@ -41,7 +42,8 @@ const translations = {
     theTeam: "Команда",
     squad: "Состав",
     coaches: "Тренеры",
-    matches: "Матчи"
+    matches: "Матчи",
+    admin: "Админ"
   },
   fr: {
     about: "À propos",
@@ -58,7 +60,8 @@ const translations = {
     theTeam: "L'équipe",
     squad: "Équipe",
     coaches: "Entraîneurs",
-    matches: "Matchs"
+    matches: "Matchs",
+    admin: "Admin"
   },
   es: {
     about: "Acerca de",
@@ -75,7 +78,8 @@ const translations = {
     theTeam: "El equipo",
     squad: "Plantilla",
     coaches: "Entrenadores",
-    matches: "Partidos"
+    matches: "Partidos",
+    admin: "Admin"
   }
 };
 
@@ -107,6 +111,7 @@ const Navdata = {
     },
     { titleKey: "news", url: "/news" },
     { titleKey: "contact", url: "/contact" },
+    { titleKey: "admin", url: "/admin" },
   ],
 };
 

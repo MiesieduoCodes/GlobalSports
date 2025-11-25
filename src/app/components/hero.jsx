@@ -1,8 +1,10 @@
 "use client";
 import { useState, useEffect, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import Link from 'next/link';
 import { useLanguage } from "@/app/context/LanguageContext";
+import { Button } from "./ui/button";
+import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const translations = {
   en: [
@@ -89,118 +91,220 @@ const translations = {
 
 const Hero = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
   const { language } = useLanguage();
-  const slides = translations[language];
-
-  const images = [
-    "/images/IMG-20250219-WA0107.jpg",
-    "/images/IMG-20250219-WA0125.jpg",
-    "/videos/IMG-20250227-WA0017.jpg",
+  const slides = translations[language] || translations.en;
+  
+  // Original hero images
+  const heroImages = [
+    "/images/IMG-20250219-WA0123.jpg",
+    "/images/IMG-20250219-WA0127.jpg",
+    "/images/IMG-20250219-WA0107.jpg"
   ];
 
   const nextSlide = useCallback(() => {
-    setCurrentSlide((prev) => (prev + 1) % slides.length);
+    setCurrentSlide((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
+  }, [slides.length]);
+
+  const prevSlide = useCallback(() => {
+    setCurrentSlide((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
   }, [slides.length]);
 
   useEffect(() => {
-    const timer = setInterval(nextSlide, 5000);
-    return () => clearInterval(timer);
-  }, [nextSlide]);
+    if (!isHovered) {
+      const timer = setInterval(() => {
+        nextSlide();
+      }, 8000);
+      return () => clearInterval(timer);
+    }
+  }, [nextSlide, isHovered]);
 
-  const variants = {
-    enter: { x: "100%" },
-    center: { x: 0 },
-    exit: { x: "-100%" },
+  const slideVariants = {
+    enter: (direction) => ({
+      x: direction > 0 ? '100%' : '-100%',
+      opacity: 0,
+      scale: 0.95,
+    }),
+    center: {
+      x: 0,
+      opacity: 1,
+      scale: 1,
+      transition: {
+        x: { type: 'spring', stiffness: 300, damping: 30 },
+        opacity: { duration: 0.5 },
+        scale: { duration: 0.5 },
+      },
+    },
+    exit: (direction) => ({
+      x: direction < 0 ? '100%' : '-100%',
+      opacity: 0,
+      scale: 0.95,
+    }),
+  };
+
+  const textVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: (i) => ({
+      opacity: 1,
+      y: 0,
+      transition: {
+        delay: 0.1 * i,
+        duration: 0.6,
+        ease: 'easeOut',
+      },
+    }),
   };
 
   return (
-    <section className="relative flex justify-center items-center min-h-screen overflow-hidden">
-      <AnimatePresence>
-        <motion.div
-          key={currentSlide}
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url(${images[currentSlide]})` }}
-          variants={variants}
-          initial="enter"
-          animate="center"
-          exit="exit"
-          transition={{ duration: 0.5, ease: "easeInOut" }}
-        >
-          <div className="absolute inset-0 bg-black bg-opacity-50" />
-          <div className="relative z-10 h-full flex flex-col justify-center items-start text-left px-4 lg:px-16">
+    <section 
+      className="relative w-full h-screen max-h-[90vh] overflow-hidden bg-gradient-to-br from-blue-900 via-blue-800 to-blue-900"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent z-0" />
+      
+      <AnimatePresence mode="wait" initial={false} custom={currentSlide}>
+        {slides.map((slide, index) => 
+          index === currentSlide && (
             <motion.div
-              className="max-w-2xl w-full"
-              initial={{ y: 50, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ y: -50, opacity: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
+              key={slide.id}
+              custom={currentSlide}
+              variants={slideVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              className="absolute inset-0 flex items-center justify-center p-4 md:p-8 lg:p-12"
             >
-              <h1 className="text-3xl md:text-4xl font-bold text-white mb-6 leading-tight drop-shadow-xl">
-                {slides[currentSlide].title}
-              </h1>
-
-              <motion.p
-                className="text-xl md:text-2xl text-gray-200 mb-8 drop-shadow-md"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.4 }}
-              >
-                {slides[currentSlide].text}
-              </motion.p>
-
-               <motion.div
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="text-white font-bold text-lg md:text-xl cursor-pointer"
-          >
-            <Link 
-              href={`/news?id=${slides[currentSlide].id}`}
-              className="relative flex items-center justify-evenly w-44 h-10 uppercase tracking-wide border-none bg-transparent transition-all duration-200 ease-[cubic-bezier(0.19,1,0.22,1)] opacity-60 hover:opacity-100 hover:tracking-wider group"
-            >
-              {slides[currentSlide].buttonText}
-              <span className="absolute top-0 left-1 h-full w-0 border-b-2 border-dashed border-yellow-300 opacity-70 transition-all duration-200 group-hover:w-[90%]"></span>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="white"
-                viewBox="0 0 24 24"
-                height="15px"
-                width="15px"
-                className="transition-transform duration-200 group-hover:translate-x-2 animate-bounce"
-              >
-                <path
-                  strokeLinejoin="round"
-                  strokeLinecap="round"
-                  strokeMiterlimit="10"
-                  strokeWidth="1.5"
-                  className="bg-white"
-                  stroke="#292D32"
-                  d="M8.91016 19.9201L15.4302 13.4001C16.2002 12.6301 16.2002 11.3701 15.4302 10.6001L8.91016 4.08008"
-                ></path>
-              </svg>
-            </Link>
-               </motion.div>
-
+              <div 
+                className="absolute inset-0 bg-cover bg-center"
+                style={{ 
+                  backgroundImage: `url(${heroImages[index % heroImages.length]})`,
+                  filter: 'brightness(0.7)'
+                }} 
+              />
+              
+              <div className="relative z-10 max-w-6xl w-full mx-auto text-center px-4">
+                <motion.div 
+                  className="inline-block mb-4 px-4 py-1 bg-blue-600 text-white text-sm font-semibold rounded-full"
+                  custom={0}
+                  initial="hidden"
+                  animate="visible"
+                  variants={textVariants}
+                >
+                  {language === 'en' ? 'Latest News' : language === 'ru' ? 'Последние новости' : 'Dernières nouvelles'}
+                </motion.div>
+                
+                <motion.h1 
+                  className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 text-white leading-tight"
+                  custom={1}
+                  initial="hidden"
+                  animate="visible"
+                  variants={textVariants}
+                >
+                  {slide.title}
+                </motion.h1>
+                
+                <motion.p 
+                  className="text-lg md:text-xl lg:text-2xl text-gray-100 mb-8 max-w-3xl mx-auto leading-relaxed"
+                  custom={2}
+                  initial="hidden"
+                  animate="visible"
+                  variants={textVariants}
+                >
+                  {slide.text}
+                </motion.p>
+                
+                <motion.div
+                  custom={3}
+                  initial="hidden"
+                  animate="visible"
+                  variants={textVariants}
+                >
+                  <Link href="/news">
+                    <Button size="lg" className="group">
+                      {slide.buttonText}
+                      <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                    </Button>
+                  </Link>
+                </motion.div>
+              </div>
             </motion.div>
-
-            <div className="absolute bottom-44 flex space-x-2 z-10">
-              {slides.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => setCurrentSlide(index)}
-                  className={`w-14 h-2 transition-colors ${
-                    currentSlide === index
-                      ? "bg-yellow-400"
-                      : "bg-yellow-400/50"
-                  }`}
-                  aria-label={`Go to slide ${index + 1}`}
-                />
-              ))}
-            </div>
-          </div>
-        </motion.div>
+          )
+        )}
       </AnimatePresence>
+
+      {/* Navigation Arrows */}
+      <button
+        onClick={prevSlide}
+        className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white p-3 rounded-full z-10 transition-all duration-300 hover:scale-110 backdrop-blur-sm"
+        aria-label="Previous slide"
+      >
+        <ChevronLeft className="h-6 w-6" />
+      </button>
+      
+      <button
+        onClick={nextSlide}
+        className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white p-3 rounded-full z-10 transition-all duration-300 hover:scale-110 backdrop-blur-sm"
+        aria-label="Next slide"
+      >
+        <ChevronRight className="h-6 w-6" />
+      </button>
+
+      {/* Pagination Dots */}
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+        {slides.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => setCurrentSlide(index)}
+            className={`h-2 rounded-full transition-all duration-300 ${
+              index === currentSlide 
+                ? 'w-8 bg-white' 
+                : 'w-3 bg-white/50 hover:bg-white/75'
+            }`}
+            aria-label={`Go to slide ${index + 1}`}
+          />
+        ))}
+      </div>
+
+      {/* Scroll indicator */}
+      <motion.div 
+        className="absolute bottom-4 left-1/2 -translate-x-1/2 flex flex-col items-center text-white/60 text-sm z-10"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1.5 }}
+      >
+        <span className="mb-2">Scroll Down</span>
+        <motion.div 
+          animate={{ y: [0, 10, 0] }}
+          transition={{ 
+            repeat: Infinity, 
+            duration: 1.5,
+            ease: "easeInOut"
+          }}
+        >
+          <ChevronDown className="h-6 w-6" />
+        </motion.div>
+      </motion.div>
     </section>
   );
 };
+
+// Add missing import for ChevronDown
+const ChevronDown = (props) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    <path d="m6 9 6 6 6-6" />
+  </svg>
+);
 
 export default Hero;
