@@ -502,9 +502,10 @@ export default function HistorySection() {
                         className="text-center"
                       >
                         <div className={`w-20 h-20 bg-gradient-to-r ${content.features[activeYear]?.color || 'from-blue-500 to-blue-600'} rounded-2xl flex items-center justify-center text-white text-2xl mx-auto mb-6`}>
-                          {content.features[activeYear]?.icon && (
-                            <content.features[activeYear].icon className="w-10 h-10" />
-                          )}
+                          {(() => {
+                            const ActiveIcon = content.features[activeYear]?.icon;
+                            return ActiveIcon ? <ActiveIcon className="w-10 h-10" /> : null;
+                          })()}
                         </div>
                         <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
                           {content.features[activeYear]?.year || "2018"}
