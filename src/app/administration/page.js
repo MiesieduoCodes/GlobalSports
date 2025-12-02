@@ -1,449 +1,400 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useTheme } from "next-themes";
-import { useLanguage } from "@/app/context/LanguageContext";
 
-gsap.registerPlugin(ScrollTrigger);
+import React from "react";
+import { motion } from "framer-motion";
+import { useLanguage } from "@/app/context/LanguageContext";
+import Image from "next/image";
 
 const translations = {
   en: {
-    teamTitle: "Elite Football Excellence",
-    teamSubtitle: "Meet Our Professional Squad",
-    teamDescription: "A dynamic blend of seasoned veterans and emerging talents, united by a shared passion for football excellence and a commitment to pushing the boundaries of the beautiful game.",
-    joinButton: "Join Our Legacy",
-    coachingTitle: "Master Coaching Team",
-    coachingSubtitle: "Strategic Leadership & Technical Excellence",
-    coachingDescription: "Our world-class coaching staff brings decades of combined experience in professional football, player development, and tactical innovation to nurture the next generation of football stars.",
-    legacyTitle: "Club Heritage & Vision",
-    legacySubtitle: "Building on a Foundation of Excellence",
-    legacyDescription: "For over 9 years, Global Sports FC has been at the forefront of football development, transforming from a community initiative into a professional powerhouse that continues to shape the future of the sport.",
-    legacyPromise: "Our journey is marked by unforgettable victories, legendary players, and an unwavering commitment to excellence. We're not just building a team—we're crafting a legacy that inspires generations to come.",
-    stats: {
-      years: "9+",
-      yearsLabel: "Years of Excellence",
-      players: "150+",
-      playersLabel: "Players Developed",
-      trophies: "25+",
-      trophiesLabel: "Trophies Won",
-      coaches: "15+",
-      coachesLabel: "Expert Coaches"
+    title: "Club Administration",
+    subtitle: "Leadership & Governance",
+    description: "Meet the dedicated team behind Global Sports FC. Our administration ensures the club operates with excellence, integrity, and a commitment to our community.",
+    board: {
+      title: "Board of Directors",
+      members: [
+        {
+          name: "Veria Lawrence Ebiks",
+          role: "Club Director & Founder",
+          image: "/images/team/director.jpg",
+          bio: "Former professional footballer who founded GSFC in 2018 with a vision to develop world-class talent.",
+          linkedin: "#"
+        },
+        {
+          name: "Dr. Sarah Mitchell",
+          role: "Chairperson",
+          image: "/images/team/chair.jpg",
+          bio: "Sports management expert with 20+ years of experience in football administration.",
+          linkedin: "#"
+        },
+        {
+          name: "James Okonkwo",
+          role: "Finance Director",
+          image: "/images/team/finance.jpg",
+          bio: "Certified accountant specializing in sports organizations financial management.",
+          linkedin: "#"
+        },
+        {
+          name: "Elena Rodriguez",
+          role: "Operations Director",
+          image: "/images/team/operations.jpg",
+          bio: "Former sports event coordinator with expertise in club operations and logistics.",
+          linkedin: "#"
+        }
+      ]
     },
-    people: [
-      {
-        name: "Lawrence Veria",
-        role: "Head Coach & Technical Director",
-        bio: "UEFA Pro License holder with 20+ years in international football. Former professional player turned master tactician, known for developing world-class talent and implementing innovative training methodologies.",
-        experience: "20+ Years",
-        specialties: ["Tactical Analysis", "Player Development", "Team Strategy"],
-        achievements: ["3x League Champion", "Youth Development Expert", "UEFA Pro License"]
-      },
-      {
-        name: "David Smith",
-        role: "Assistant Coach & Performance Analyst",
-        bio: "Sports science graduate with 12 years of coaching experience. Specializes in data-driven performance optimization and modern training techniques that maximize player potential.",
-        experience: "12+ Years",
-        specialties: ["Performance Analysis", "Sports Science", "Technical Training"],
-        achievements: ["FA Advanced License", "Performance Innovation Award", "Data Analytics Expert"]
-      },
-      {
-        name: "Michael Brown",
-        role: "Team Captain & Senior Player",
-        bio: "Inspiring leader with 8 seasons of captaincy experience. Embodies the club's values both on and off the pitch, mentoring younger players while maintaining elite performance standards.",
-        experience: "10+ Years",
-        specialties: ["Leadership", "Mentoring", "Game Management"],
-        achievements: ["Club Captain", "Player of the Season", "Community Ambassador"]
-      },
-    ],
-    viewProfile: "View Full Profile",
-    contactCoach: "Contact Coach",
-    playerSpotlight: "Player Spotlight",
-    trainingPhilosophy: "Training Philosophy",
-    clubValues: "Club Values"
+    management: {
+      title: "Management Team",
+      members: [
+        { name: "Michael Chen", role: "Academy Director", department: "Youth Development" },
+        { name: "Grace Adeyemi", role: "Marketing Manager", department: "Communications" },
+        { name: "Dmitri Volkov", role: "Facilities Manager", department: "Operations" },
+        { name: "Isabella Santos", role: "Community Manager", department: "Outreach" },
+        { name: "Robert Johnson", role: "HR Manager", department: "Human Resources" },
+        { name: "Fatima Al-Hassan", role: "Sponsorship Manager", department: "Commercial" }
+      ]
+    },
+    values: {
+      title: "Our Governance Principles",
+      items: [
+        { icon: "⚖️", title: "Transparency", description: "Open and honest communication in all our dealings" },
+        { icon: "🎯", title: "Accountability", description: "Taking responsibility for our decisions and actions" },
+        { icon: "🤝", title: "Integrity", description: "Upholding the highest ethical standards" },
+        { icon: "🌍", title: "Inclusivity", description: "Welcoming diverse perspectives and voices" }
+      ]
+    },
+    contact: {
+      title: "Contact Administration",
+      description: "Have questions about our club governance or want to get involved? Reach out to our administration team.",
+      button: "Contact Us"
+    }
   },
   ru: {
-    teamTitle: "Элитное футбольное мастерство",
-    teamSubtitle: "Знакомьтесь с нашей профессиональной командой",
-    teamDescription: "Динамичное сочетание опытных ветеранов и восходящих талантов, объединенных общей страстью к футбольному мастерству и стремлением раздвигать границы прекрасной игры.",
-    joinButton: "Присоединиться к наследию",
-    coachingTitle: "Команда мастеров-тренеров",
-    coachingSubtitle: "Стратегическое лидерство и техническое совершенство",
-    coachingDescription: "Наш тренерский штаб мирового класса приносит десятилетия совокупного опыта в профессиональном футболе, развитии игроков и тактических инновациях для воспитания следующего поколения футбольных звезд.",
-    legacyTitle: "Наследие и видение клуба",
-    legacySubtitle: "Строим на основе совершенства",
-    legacyDescription: "Более 9 лет Global Sports FC находится на передовой футбольного развития, превратившись из общественной инициативы в профессиональную силу, которая продолжает формировать будущее спорта.",
-    legacyPromise: "Наш путь отмечен незабываемыми победами, легендарными игроками и непоколебимой приверженностью совершенству. Мы не просто строим команду — мы создаем наследие, которое вдохновляет грядущие поколения.",
-    stats: {
-      years: "9+",
-      yearsLabel: "Лет совершенства",
-      players: "150+",
-      playersLabel: "Развитых игроков",
-      trophies: "25+",
-      trophiesLabel: "Выигранных трофеев",
-      coaches: "15+",
-      coachesLabel: "Экспертных тренеров"
+    title: "Администрация Клуба",
+    subtitle: "Руководство и Управление",
+    description: "Познакомьтесь с преданной командой Global Sports FC. Наша администрация обеспечивает работу клуба с превосходством и честностью.",
+    board: {
+      title: "Совет Директоров",
+      members: [
+        {
+          name: "Вериа Лоуренс Эбикс",
+          role: "Директор и Основатель Клуба",
+          image: "/images/team/director.jpg",
+          bio: "Бывший профессиональный футболист, основавший GSFC в 2018 году.",
+          linkedin: "#"
+        },
+        {
+          name: "Др. Сара Митчелл",
+          role: "Председатель",
+          image: "/images/team/chair.jpg",
+          bio: "Эксперт по спортивному менеджменту с 20-летним опытом.",
+          linkedin: "#"
+        },
+        {
+          name: "Джеймс Оконкво",
+          role: "Финансовый Директор",
+          image: "/images/team/finance.jpg",
+          bio: "Сертифицированный бухгалтер, специализирующийся на спортивных организациях.",
+          linkedin: "#"
+        },
+        {
+          name: "Елена Родригес",
+          role: "Операционный Директор",
+          image: "/images/team/operations.jpg",
+          bio: "Бывший координатор спортивных мероприятий.",
+          linkedin: "#"
+        }
+      ]
     },
-    people: [
-      {
-        name: "Лоренс Верия",
-        role: "Главный тренер и технический директор",
-        bio: "Обладатель лицензии UEFA Pro с 20+ годами опыта в международном футболе. Бывший профессиональный игрок, ставший мастером тактики, известен развитием талантов мирового класса и внедрением инновационных методик тренировок.",
-        experience: "20+ Лет",
-        specialties: ["Тактический анализ", "Развитие игроков", "Командная стратегия"],
-        achievements: ["3-кратный чемпион лиги", "Эксперт по развитию молодежи", "Лицензия UEFA Pro"]
-      },
-      // ... other Russian translations
-    ],
-    viewProfile: "Посмотреть профиль",
-    contactCoach: "Связаться с тренером",
-    playerSpotlight: "Игрок в центре внимания",
-    trainingPhilosophy: "Философия тренировок",
-    clubValues: "Ценности клуба"
+    management: {
+      title: "Команда Управления",
+      members: [
+        { name: "Михаил Чен", role: "Директор Академии", department: "Развитие Молодежи" },
+        { name: "Грейс Адейеми", role: "Менеджер по Маркетингу", department: "Коммуникации" },
+        { name: "Дмитрий Волков", role: "Менеджер Объектов", department: "Операции" },
+        { name: "Изабелла Сантос", role: "Менеджер Сообщества", department: "Работа с Сообществом" },
+        { name: "Роберт Джонсон", role: "HR Менеджер", department: "Кадры" },
+        { name: "Фатима Аль-Хассан", role: "Менеджер по Спонсорству", department: "Коммерческий" }
+      ]
+    },
+    values: {
+      title: "Принципы Управления",
+      items: [
+        { icon: "⚖️", title: "Прозрачность", description: "Открытое и честное общение во всех делах" },
+        { icon: "🎯", title: "Ответственность", description: "Принятие ответственности за решения" },
+        { icon: "🤝", title: "Честность", description: "Соблюдение высших этических стандартов" },
+        { icon: "🌍", title: "Инклюзивность", description: "Приветствие разнообразных взглядов" }
+      ]
+    },
+    contact: {
+      title: "Связаться с Администрацией",
+      description: "Есть вопросы об управлении клубом? Свяжитесь с нашей командой.",
+      button: "Связаться"
+    }
   },
   fr: {
-    teamTitle: "Excellence Footballistique d'Élite",
-    teamSubtitle: "Rencontrez Notre Équipe Professionnelle",
-    teamDescription: "Un mélange dynamique de vétérans expérimentés et de talents émergents, unis par une passion partagée pour l'excellence footballistique et un engagement à repousser les limites du beau jeu.",
-    joinButton: "Rejoignez Notre Héritage",
-    coachingTitle: "Équipe d'Entraîneurs Experts",
-    coachingSubtitle: "Leadership Stratégique et Excellence Technique",
-    coachingDescription: "Notre staff d'entraîneurs de classe mondiale apporte des décennies d'expérience combinée dans le football professionnel, le développement des joueurs et l'innovation tactique pour former la prochaine génération de stars du football.",
-    legacyTitle: "Héritage et Vision du Club",
-    legacySubtitle: "Bâtir sur une Fondation d'Excellence",
-    legacyDescription: "Depuis plus de 9 ans, Global Sports FC est à l'avant-garde du développement footballistique, passant d'une initiative communautaire à une puissance professionnelle qui continue de façonner l'avenir du sport.",
-    legacyPromise: "Notre parcours est marqué par des victoires inoubliables, des joueurs légendaires et un engagement indéfectible envers l'excellence. Nous ne construisons pas seulement une équipe — nous forgeons un héritage qui inspire les générations futures.",
-    stats: {
-      years: "9+",
-      yearsLabel: "Ans d'Excellence",
-      players: "150+",
-      playersLabel: "Joueurs Développés",
-      trophies: "25+",
-      trophiesLabel: "Trophées Remportés",
-      coaches: "15+",
-      coachesLabel: "Entraîneurs Experts"
+    title: "Administration du Club",
+    subtitle: "Leadership et Gouvernance",
+    description: "Rencontrez l'équipe dévouée derrière Global Sports FC.",
+    board: {
+      title: "Conseil d'Administration",
+      members: [
+        {
+          name: "Veria Lawrence Ebiks",
+          role: "Directeur du Club & Fondateur",
+          image: "/images/team/director.jpg",
+          bio: "Ancien footballeur professionnel ayant fondé GSFC en 2018.",
+          linkedin: "#"
+        },
+        {
+          name: "Dr. Sarah Mitchell",
+          role: "Présidente",
+          image: "/images/team/chair.jpg",
+          bio: "Experte en gestion sportive avec 20+ ans d'expérience.",
+          linkedin: "#"
+        },
+        {
+          name: "James Okonkwo",
+          role: "Directeur Financier",
+          image: "/images/team/finance.jpg",
+          bio: "Comptable certifié spécialisé dans les organisations sportives.",
+          linkedin: "#"
+        },
+        {
+          name: "Elena Rodriguez",
+          role: "Directrice des Opérations",
+          image: "/images/team/operations.jpg",
+          bio: "Ancienne coordinatrice d'événements sportifs.",
+          linkedin: "#"
+        }
+      ]
     },
-    people: [
-      // ... French translations
-    ],
-    viewProfile: "Voir le Profil",
-    contactCoach: "Contacter l'Entraîneur",
-    playerSpotlight: "Joueur à l'Honneur",
-    trainingPhilosophy: "Philosophie d'Entraînement",
-    clubValues: "Valeurs du Club"
+    management: {
+      title: "Équipe de Direction",
+      members: [
+        { name: "Michael Chen", role: "Directeur de l'Académie", department: "Développement Jeunesse" },
+        { name: "Grace Adeyemi", role: "Responsable Marketing", department: "Communications" },
+        { name: "Dmitri Volkov", role: "Responsable des Installations", department: "Opérations" },
+        { name: "Isabella Santos", role: "Responsable Communauté", department: "Sensibilisation" },
+        { name: "Robert Johnson", role: "Responsable RH", department: "Ressources Humaines" },
+        { name: "Fatima Al-Hassan", role: "Responsable Sponsoring", department: "Commercial" }
+      ]
+    },
+    values: {
+      title: "Nos Principes de Gouvernance",
+      items: [
+        { icon: "⚖️", title: "Transparence", description: "Communication ouverte et honnête" },
+        { icon: "🎯", title: "Responsabilité", description: "Assumer nos décisions" },
+        { icon: "🤝", title: "Intégrité", description: "Maintenir les normes éthiques les plus élevées" },
+        { icon: "🌍", title: "Inclusivité", description: "Accueillir diverses perspectives" }
+      ]
+    },
+    contact: {
+      title: "Contacter l'Administration",
+      description: "Des questions sur la gouvernance du club? Contactez notre équipe.",
+      button: "Nous Contacter"
+    }
   },
   es: {
-    teamTitle: "Excelencia Futbolística de Élite",
-    teamSubtitle: "Conoce Nuestro Equipo Profesional",
-    teamDescription: "Una mezcla dinámica de veteranos experimentados y talentos emergentes, unidos por una pasión compartida por la excelencia futbolística y un compromiso para superar los límites del juego bonito.",
-    joinButton: "Únete a Nuestro Legado",
-    coachingTitle: "Equipo de Entrenadores Maestros",
-    coachingSubtitle: "Liderazgo Estratégico y Excelencia Técnica",
-    coachingDescription: "Nuestro cuerpo técnico de clase mundial aporta décadas de experiencia combinada en fútbol profesional, desarrollo de jugadores e innovación táctica para formar a la próxima generación de estrellas del fútbol.",
-    legacyTitle: "Herencia y Visión del Club",
-    legacySubtitle: "Construyendo sobre una Base de Excelencia",
-    legacyDescription: "Durante más de 9 años, Global Sports FC ha estado a la vanguardia del desarrollo futbolístico, transformándose de una iniciativa comunitaria en una potencia profesional que continúa moldeando el futuro del deporte.",
-    legacyPromise: "Nuestro camino está marcado por victorias inolvidables, jugadores legendarios y un compromiso inquebrantable con la excelencia. No solo estamos construyendo un equipo — estamos forjando un legado que inspira a las generaciones venideras.",
-    stats: {
-      years: "9+",
-      yearsLabel: "Años de Excelencia",
-      players: "150+",
-      playersLabel: "Jugadores Desarrollados",
-      trophies: "25+",
-      trophiesLabel: "Trofeos Ganados",
-      coaches: "15+",
-      coachesLabel: "Entrenadores Expertos"
+    title: "Administración del Club",
+    subtitle: "Liderazgo y Gobernanza",
+    description: "Conozca al equipo dedicado detrás de Global Sports FC.",
+    board: {
+      title: "Junta Directiva",
+      members: [
+        {
+          name: "Veria Lawrence Ebiks",
+          role: "Director del Club y Fundador",
+          image: "/images/team/director.jpg",
+          bio: "Ex futbolista profesional que fundó GSFC en 2018.",
+          linkedin: "#"
+        },
+        {
+          name: "Dra. Sarah Mitchell",
+          role: "Presidenta",
+          image: "/images/team/chair.jpg",
+          bio: "Experta en gestión deportiva con 20+ años de experiencia.",
+          linkedin: "#"
+        },
+        {
+          name: "James Okonkwo",
+          role: "Director Financiero",
+          image: "/images/team/finance.jpg",
+          bio: "Contador certificado especializado en organizaciones deportivas.",
+          linkedin: "#"
+        },
+        {
+          name: "Elena Rodriguez",
+          role: "Directora de Operaciones",
+          image: "/images/team/operations.jpg",
+          bio: "Ex coordinadora de eventos deportivos.",
+          linkedin: "#"
+        }
+      ]
     },
-    people: [
-      // ... Spanish translations
-    ],
-    viewProfile: "Ver Perfil Completo",
-    contactCoach: "Contactar Entrenador",
-    playerSpotlight: "Jugador Destacado",
-    trainingPhilosophy: "Filosofía de Entrenamiento",
-    clubValues: "Valores del Club"
-  },
+    management: {
+      title: "Equipo de Gestión",
+      members: [
+        { name: "Michael Chen", role: "Director de Academia", department: "Desarrollo Juvenil" },
+        { name: "Grace Adeyemi", role: "Gerente de Marketing", department: "Comunicaciones" },
+        { name: "Dmitri Volkov", role: "Gerente de Instalaciones", department: "Operaciones" },
+        { name: "Isabella Santos", role: "Gerente Comunitario", department: "Alcance" },
+        { name: "Robert Johnson", role: "Gerente de RRHH", department: "Recursos Humanos" },
+        { name: "Fatima Al-Hassan", role: "Gerente de Patrocinio", department: "Comercial" }
+      ]
+    },
+    values: {
+      title: "Nuestros Principios de Gobernanza",
+      items: [
+        { icon: "⚖️", title: "Transparencia", description: "Comunicación abierta y honesta" },
+        { icon: "🎯", title: "Responsabilidad", description: "Asumir nuestras decisiones" },
+        { icon: "🤝", title: "Integridad", description: "Mantener los más altos estándares éticos" },
+        { icon: "🌍", title: "Inclusividad", description: "Acoger diversas perspectivas" }
+      ]
+    },
+    contact: {
+      title: "Contactar Administración",
+      description: "¿Preguntas sobre la gobernanza del club? Contacte a nuestro equipo.",
+      button: "Contáctenos"
+    }
+  }
 };
 
-const TeamPage = () => {
-  const { theme } = useTheme();
+export default function AdministrationPage() {
   const { language } = useLanguage();
-  const sectionRef = useRef(null);
-  const statsRef = useRef(null);
-  const [activeProfile, setActiveProfile] = useState(null);
-  
-  const trans = translations[language] || translations.en;
-  const safePeople = trans.people || [];
-
-  const teamImages = [
-    "/images/PlayerOne.jpg",
-    "/images/FREEIMAGE.jpg",
-    "/images/kneelingimage.jpg",
-    "/images/Immages.jpg",
-    "/images/Handsake.jpg",
-    "/images/IMG-20250219-WA0125.jpg",
-  ];
-
-  const localImageMap = {
-    "Lawrence Veria": "/images/IMG-20250211-WA0166.jpg",
-    "David Smith": "/images/assistant_coach.jpg",
-    "Michael Brown": "/images/captain.jpg",
-    "Лоренс Верия": "/images/IMG-20250211-WA0166.jpg",
-    "Дэвид Смит": "/images/assistant_coach.jpg",
-    "Майкл Браун": "/images/captain.jpg",
-  };
-
-  useEffect(() => {
-    // Hero animation
-    gsap.fromTo(sectionRef.current,
-      { opacity: 0, y: 50 },
-      { 
-        opacity: 1, 
-        y: 0, 
-        duration: 1.2,
-        ease: "power3.out"
-      }
-    );
-
-    // Stats counter animation
-    if (statsRef.current) {
-      gsap.fromTo(statsRef.current,
-        { opacity: 0, scale: 0.8 },
-        {
-          opacity: 1,
-          scale: 1,
-          duration: 1,
-          scrollTrigger: {
-            trigger: statsRef.current,
-            start: "top 80%",
-          }
-        }
-      );
-    }
-
-    // Team member cards animation
-    gsap.fromTo(".team-member-card",
-      { opacity: 0, y: 60 },
-      {
-        opacity: 1,
-        y: 0,
-        duration: 0.8,
-        stagger: 0.2,
-        scrollTrigger: {
-          trigger: ".team-member-card",
-          start: "top 85%",
-        }
-      }
-    );
-  }, []);
-
-  const getImageSrc = (personName) => 
-    localImageMap[personName] || "/images/default-avatar.jpg";
+  const content = translations[language] || translations.en;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-blue-50 dark:from-gray-900 dark:to-blue-900/20 transition-colors duration-300">
-      {/* Enhanced Hero Section */}
-      <section ref={sectionRef} className="relative min-h-screen pt-24 overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 dark:from-gray-900 dark:to-blue-900/20 transition-colors duration-300">
+      {/* Hero Section */}
+      <section className="relative py-24 bg-gradient-to-br from-slate-800 via-slate-700 to-slate-900 text-white overflow-hidden">
         <div className="absolute inset-0">
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-900/90 to-indigo-800/80 dark:from-blue-900/95 dark:to-indigo-900/90 z-10"></div>
+          <div className="absolute top-20 left-10 w-40 h-40 bg-blue-500/10 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-10 right-20 w-32 h-32 bg-yellow-400/10 rounded-full blur-3xl"></div>
         </div>
         
-        <div className="relative container mx-auto px-4 h-full flex items-center justify-center min-h-[80vh] z-20">
-          <div className="grid lg:grid-cols-2 gap-12 items-center max-w-7xl w-full">
-            <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
-              className="text-center lg:text-left"
-            >
-              <div className="inline-flex items-center px-4 py-2 bg-yellow-400/20 backdrop-blur-sm rounded-full mb-8 border border-yellow-400/30">
-                <div className="w-2 h-2 bg-yellow-400 rounded-full mr-2 animate-pulse"></div>
-                <span className="text-yellow-300 font-semibold text-sm">Elite Professional Team</span>
-              </div>
-              
-              <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
-                {trans.teamTitle}
-              </h1>
-              
-              <p className="text-2xl text-yellow-300 mb-4 font-light">
-                {trans.teamSubtitle}
-              </p>
-              
-              <p className="text-lg text-blue-100 mb-8 leading-relaxed max-w-2xl">
-                {trans.teamDescription}
-              </p>
-
-              <div className="flex flex-col sm:flex-row gap-4">
-                <motion.a 
-                  href="/contact"
-                  className="inline-flex items-center px-8 py-4 bg-yellow-400 text-blue-900 font-bold rounded-xl hover:bg-yellow-300 transform hover:scale-105 transition-all duration-300 shadow-2xl shadow-yellow-500/25"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  {trans.joinButton}
-                  <span className="ml-2">→</span>
-                </motion.a>
-                <motion.a 
-                  href="#coaching"
-                  className="inline-flex items-center px-8 py-4 bg-white/10 backdrop-blur-sm text-white font-semibold rounded-xl border border-white/20 hover:bg-white/20 transition-all duration-300"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  {trans.viewProfile}
-                </motion.a>
-              </div>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 0.2 }}
-              className="relative"
-            >
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
-                {teamImages.map((src, index) => (
-                  <motion.div 
-                    key={`player-${index}`}
-                    className={`relative group ${index % 2 === 0 ? "md:mt-8" : ""}`}
-                    whileHover={{ scale: 1.05, y: -5 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <div className="absolute inset-0 bg-gradient-to-t from-blue-600/20 to-transparent rounded-2xl group-hover:from-blue-600/40 transition-all duration-300 z-10"></div>
-                    <Image
-                      src={src}
-                      alt={`Professional Player ${index + 1}`}
-                      width={200}
-                      height={250}
-                      className="w-full h-48 md:h-56 rounded-2xl object-cover shadow-2xl"
-                      onError={(e) => {
-                        e.target.src = '/images/default-player.jpg';
-                      }}
-                    />
-                    {index === 2 && (
-                      <div className="absolute -top-2 -right-2 bg-yellow-400 text-blue-900 px-3 py-1 rounded-full text-sm font-bold shadow-lg">
-                        ⭐ Captain
-                      </div>
-                    )}
-                  </motion.div>
-                ))}
-              </div>
-              
-              {/* Floating elements */}
-              <div className="absolute -top-4 -left-4 w-8 h-8 bg-yellow-400 rounded-full opacity-20 animate-pulse"></div>
-              <div className="absolute -bottom-4 -right-4 w-12 h-12 bg-blue-400 rounded-full opacity-20 animate-pulse delay-1000"></div>
-            </motion.div>
-          </div>
-        </div>
-
-        {/* Scroll Indicator */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20">
-          <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center">
-            <div className="w-1 h-3 bg-yellow-400 rounded-full mt-2 animate-bounce"></div>
-          </div>
+        <div className="container mx-auto px-4 relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-center max-w-4xl mx-auto"
+          >
+            <div className="inline-flex items-center px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full mb-6 border border-white/20">
+              <span className="text-sm font-medium">{content.subtitle}</span>
+            </div>
+            
+            <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
+              {content.title}
+            </h1>
+            
+            <p className="text-lg text-slate-300 max-w-3xl mx-auto leading-relaxed">
+              {content.description}
+            </p>
+          </motion.div>
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section ref={statsRef} className="py-16 bg-white dark:bg-gray-800 border-y border-gray-200 dark:border-gray-700">
+      {/* Governance Principles */}
+      <section className="py-16 bg-white dark:bg-gray-800">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            {Object.entries(trans.stats).map(([key, value], index) => {
-              if (key.includes('Label')) return null;
-              const labelKey = `${key}Label`;
-              return (
-                <motion.div 
-                  key={key}
-                  className="text-center"
-                  whileHover={{ scale: 1.05 }}
-                >
-                  <div className="text-4xl md:text-5xl font-bold text-blue-600 dark:text-yellow-400 mb-2">
-                    {value}
-                  </div>
-                  <div className="text-gray-600 dark:text-gray-300 font-medium text-sm">
-                    {trans.stats[labelKey]}
-                  </div>
-                </motion.div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* Enhanced Coaching Section */}
-      <section id="coaching" className="py-24 bg-gradient-to-b from-white to-gray-50 dark:from-gray-800 dark:to-gray-900">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent dark:from-blue-400 dark:to-purple-400">
-              {trans.coachingTitle}
-            </h2>
-            <p className="text-xl text-gray-600 dark:text-gray-300 mb-4">
-              {trans.coachingSubtitle}
-            </p>
-            <p className="text-lg text-gray-500 dark:text-gray-400 max-w-3xl mx-auto">
-              {trans.coachingDescription}
-            </p>
-          </div>
-          
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 max-w-7xl mx-auto">
-            {safePeople.map((person, index) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+            {content.values.items.map((value, index) => (
               <motion.div
-                key={`${person.name}-${index}`}
-                className="team-member-card group bg-white dark:bg-gray-800 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 overflow-hidden border border-gray-100 dark:border-gray-700"
-                whileHover={{ scale: 1.02 }}
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                className="text-center p-6 bg-gray-50 dark:bg-gray-700 rounded-2xl"
               >
-                <div className="relative h-64 overflow-hidden">
-                  <Image
-                    src={getImageSrc(person.name)}
-                    alt={person.name}
-                    fill
-                    className="object-cover group-hover:scale-110 transition-transform duration-500"
-                    onError={(e) => {
-                      e.target.src = '/images/default-avatar.jpg';
-                    }}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                  <div className="absolute bottom-4 left-4 text-white">
-                    <div className="bg-yellow-400 text-blue-900 px-3 py-1 rounded-full text-sm font-bold mb-2">
-                      {person.experience}
-                    </div>
-                    <h3 className="text-xl font-bold">{person.name}</h3>
-                    <p className="text-blue-200">{person.role}</p>
+                <div className="text-4xl mb-4">{value.icon}</div>
+                <h3 className="font-bold text-gray-900 dark:text-white mb-2">{value.title}</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-300">{value.description}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Board of Directors */}
+      <section className="py-20">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+              {content.board.title}
+            </h2>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
+            {content.board.members.map((member, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                className="bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 group"
+              >
+                <div className="aspect-square bg-gradient-to-br from-slate-200 to-slate-300 dark:from-slate-600 dark:to-slate-700 flex items-center justify-center">
+                  <div className="w-24 h-24 bg-slate-400 dark:bg-slate-500 rounded-full flex items-center justify-center text-white text-3xl font-bold">
+                    {member.name.split(" ").map(n => n[0]).join("").slice(0, 2)}
                   </div>
                 </div>
-                
                 <div className="p-6">
-                  <p className="text-gray-600 dark:text-gray-300 mb-4 leading-relaxed">
-                    {person.bio}
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1">
+                    {member.name}
+                  </h3>
+                  <p className="text-blue-600 dark:text-blue-400 text-sm font-medium mb-3">
+                    {member.role}
                   </p>
-                  
-                  <div className="mb-4">
-                    <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-2">
-                      Areas of Expertise:
-                    </h4>
-                    <div className="flex flex-wrap gap-2">
-                      {person.specialties.map((specialty, idx) => (
-                        <span
-                          key={idx}
-                          className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-sm rounded-full font-medium"
-                        >
-                          {specialty}
-                        </span>
-                      ))}
-                    </div>
+                  <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
+                    {member.bio}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Management Team */}
+      <section className="py-20 bg-gray-50 dark:bg-gray-800">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+              {content.management.title}
+            </h2>
+          </motion.div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+            {content.management.members.map((member, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.05 }}
+                className="bg-white dark:bg-gray-700 rounded-xl p-6 shadow hover:shadow-lg transition-shadow duration-300"
+              >
+                <div className="flex items-center space-x-4">
+                  <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-white font-bold">
+                    {member.name.split(" ").map(n => n[0]).join("").slice(0, 2)}
                   </div>
-                  
-                  <div className="flex space-x-3">
-                    <button 
-                      onClick={() => setActiveProfile(person)}
-                      className="flex-1 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors text-sm"
-                    >
-                      {trans.viewProfile}
-                    </button>
-                    <button className="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg font-semibold hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors text-sm">
-                      {trans.contactCoach}
-                    </button>
+                  <div>
+                    <h3 className="font-bold text-gray-900 dark:text-white">{member.name}</h3>
+                    <p className="text-sm text-blue-600 dark:text-blue-400">{member.role}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">{member.department}</p>
                   </div>
                 </div>
               </motion.div>
@@ -452,90 +403,33 @@ const TeamPage = () => {
         </div>
       </section>
 
-      {/* Enhanced Legacy Section */}
-      <section className="py-24 bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-800 dark:to-blue-900/20">
+      {/* Contact CTA */}
+      <section className="py-20 bg-gradient-to-r from-slate-700 to-slate-800">
         <div className="container mx-auto px-4">
           <motion.div
-            initial={{ opacity: 0, y: 50 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 1 }}
-            className="max-w-4xl mx-auto text-center"
+            className="text-center max-w-3xl mx-auto text-white"
           >
-            <div className="inline-flex items-center px-4 py-2 bg-white/80 dark:bg-gray-700/80 backdrop-blur-sm rounded-full mb-8 border border-gray-200 dark:border-gray-600">
-              <div className="w-2 h-2 bg-blue-500 rounded-full mr-2"></div>
-              <span className="text-blue-600 dark:text-blue-400 font-semibold text-sm">
-                Club Heritage
-              </span>
-            </div>
-            
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
-              {trans.legacyTitle}
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              {content.contact.title}
             </h2>
-            
-            <p className="text-xl text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
-              {trans.legacyDescription}
+            <p className="text-lg text-slate-300 mb-8">
+              {content.contact.description}
             </p>
-            
-            <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg border border-gray-100 dark:border-gray-700">
-              <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed italic">
-                "{trans.legacyPromise}"
-              </p>
-            </div>
-            
-            <div className="mt-8 flex justify-center space-x-4">
-              {['🏆', '⭐', '👥', '⚽'].map((icon, index) => (
-                <motion.div
-                  key={index}
-                  className="w-12 h-12 bg-white dark:bg-gray-700 rounded-xl flex items-center justify-center text-xl shadow-lg"
-                  whileHover={{ scale: 1.1, rotate: 5 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  {icon}
-                </motion.div>
-              ))}
-            </div>
+            <a
+              href="/contact"
+              className="inline-flex items-center px-8 py-4 bg-yellow-400 text-slate-900 font-bold rounded-xl hover:bg-yellow-300 transform hover:scale-105 transition-all duration-300 shadow-lg"
+            >
+              {content.contact.button}
+              <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </a>
           </motion.div>
         </div>
       </section>
-
-      {/* Profile Modal */}
-      <AnimatePresence>
-        {activeProfile && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50"
-            onClick={() => setActiveProfile(null)}
-          >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-white dark:bg-gray-800 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="p-8">
-                <div className="flex justify-between items-start mb-6">
-                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
-                    {activeProfile.name}
-                  </h3>
-                  <button
-                    onClick={() => setActiveProfile(null)}
-                    className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-                  >
-                    ✕
-                  </button>
-                </div>
-                {/* Add detailed profile content here */}
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </div>
   );
-};
-
-export default TeamPage;
+}

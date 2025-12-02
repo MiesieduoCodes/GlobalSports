@@ -210,10 +210,10 @@ const Footer = () => {
 
     try {
       const response = await emailjs.send(
-        "service_mofzwum",
-        "template_ormpbz2",
+        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || "",
+        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || "",
         { user_email: email },
-        "a1NybmXRcYdkYXTu6"
+        process.env.NEXT_PUBLIC_EMAILJS_USER_ID || ""
       );
 
       if (response.status === 200) {

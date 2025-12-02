@@ -15,9 +15,6 @@ import "swiper/css/navigation";
 import "swiper/css/effect-coverflow";
 import "swiper/css/pagination";
 
-// Import the news data
-import newsData from "@/app/components/constants/news.json" with { type: "json" };
-
 
 
 // Translations for the News section
@@ -104,7 +101,7 @@ export default function News() {
   const { language } = useLanguage();
   const content = translations[language] || translations.en;
 
-  const [items, setItems] = useState(newsData.news);
+  const [items, setItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -122,14 +119,9 @@ export default function News() {
           if (isMounted) {
             setItems(docs);
           }
-        } else if (isMounted) {
-          setItems(newsData.news);
         }
       } catch (error) {
         console.error("Failed to load news from Firestore", error);
-        if (isMounted) {
-          setItems(newsData.news);
-        }
       } finally {
         if (isMounted) {
           setIsLoading(false);

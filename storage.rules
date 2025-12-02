@@ -1,0 +1,39 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Public images folder - anyone can read, only authenticated admins can write
+    match /images/{allPaths=**} {
+      allow read: if true; // Public read access for images
+      allow write: if request.auth != null && 
+                     request.auth.token.admin == true; // Only admins can upload
+    }
+    
+    // Videos folder - public read, admin write
+    match /videos/{allPaths=**} {
+      allow read: if true;
+      allow write: if request.auth != null && 
+                     request.auth.token.admin == true;
+    }
+    
+    // Private admin folder - only admins can access
+    match /admin/{allPaths=**} {
+      allow read, write: if request.auth != null && 
+                            request.auth.token.admin == true;
+    }
+    
+    // User uploads folder - users can upload their own files
+    match /uploads/{userId}/{allPaths=**} {
+      allow read: if true; // Public read
+      allow write: if request.auth != null && 
+                     request.auth.uid == userId; // Users can only write to their own folder
+    }
+    
+    // Default deny for any other paths
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}
+
+
+

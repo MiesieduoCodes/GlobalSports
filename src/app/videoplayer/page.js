@@ -5,7 +5,8 @@
 import React, { useRef, useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import PropTypes from 'prop-types';
-import videosdata from "@/app/components/constants/videos.json";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 import { useLanguage } from "@/app/context/LanguageContext";
 import LoadingSpinner from "@/app/components/LoadingSpinner";
 
@@ -177,10 +178,40 @@ const VideoContent = () => {
   const [videoDetails, setVideoDetails] = useState(null);
 
   useEffect(() => {
-    if (src) {
-      const details = videosdata.find(video => video.src === src);
-      setVideoDetails(details || null);
+    async function loadVideoDetails() {
+      if (!src) return;
+      
+      try {
+        const videosRef = collection(db, "videos");
+        const q = query(videosRef, where("src", "==", src));
+        const snapshot = await getDocs(q);
+        
+        if (!snapshot.empty) {
+          const doc = snapshot.docs[0];
+          setVideoDetails({
+            id: doc.id,
+            ...doc.data()
+          });
+        } else {
+          // If not found by src, try to find by link or just use src
+          setVideoDetails({
+            src: src,
+            title: { en: "Video" },
+            description: { en: "" }
+          });
+        }
+      } catch (error) {
+        console.error("Error loading video details:", error);
+        // Fallback: use src directly
+        setVideoDetails({
+          src: src,
+          title: { en: "Video" },
+          description: { en: "" }
+        });
+      }
     }
+    
+    loadVideoDetails();
   }, [src]);
 
   if (!src) {

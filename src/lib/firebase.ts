@@ -3,20 +3,27 @@ import { getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBLZvWASx1Bv1jQGLktQ8YQsnLKkGCWWNM",
-  authDomain: "sportsfc-ddcec.firebaseapp.com",
-  projectId: "sportsfc-ddcec",
-  storageBucket: "sportsfc-ddcec.firebasestorage.app",
-  messagingSenderId: "429557761438",
-  appId: "1:429557761438:web:44a1f839da704c238dc28f",
-  measurementId: "G-G9HFY2B01K"
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || "",
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || "",
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || "",
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || "",
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || "",
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID || "",
+  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID || "",
 };
 
-// Initialize Firebase only in browser environment
-const isClient = typeof window !== 'undefined';
-
-if (!isClient) {
-  console.warn('Firebase is being initialized on the server. Some features might not work as expected.');
+// Validate required Firebase config
+if (typeof window !== 'undefined') {
+  const requiredFields = ['apiKey', 'authDomain', 'projectId', 'storageBucket', 'messagingSenderId', 'appId'];
+  const missingFields = requiredFields.filter(field => !firebaseConfig[field as keyof typeof firebaseConfig]);
+  
+  if (missingFields.length > 0) {
+    console.error('Firebase configuration error: Missing required environment variables:', missingFields);
+    console.error('Please set the following environment variables:');
+    missingFields.forEach(field => {
+      console.error(`  NEXT_PUBLIC_FIREBASE_${field.toUpperCase().replace(/([A-Z])/g, '_$1')}`);
+    });
+  }
 }
 
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();

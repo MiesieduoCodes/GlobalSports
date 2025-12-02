@@ -9,10 +9,10 @@ import { useLanguage } from "@/app/context/LanguageContext";
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Hardcoded EmailJS Credentials
-const SERVICE_ID = "service_mofzwum";
-const TEMPLATE_ID = "template_ormpbz2";
-const USER_ID = "a1NybmXRcYdkYXTu6";
+// EmailJS Credentials from environment variables
+const SERVICE_ID = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || "";
+const TEMPLATE_ID = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || "";
+const USER_ID = process.env.NEXT_PUBLIC_EMAILJS_USER_ID || "";
 
 const translations = {
   en: {

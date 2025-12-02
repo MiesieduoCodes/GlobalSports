@@ -39,3 +39,12 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# firebase
+/backup-json-files
+serviceAccount*.json
+*-firebase-adminsdk-*.json
+
+# firebase rules (optional - you may want to commit these)
+# firestore.rules
+# storage.rules

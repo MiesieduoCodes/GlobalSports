@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "seed:firebase": "node scripts/seed-firebase.js"
+    "seed:firebase": "node scripts/seed-firebase.js",
+    "firebase:deploy-rules": "firebase deploy --only firestore:rules,storage:rules",
+    "firebase:deploy-all": "firebase deploy"
   },
   "dependencies": {
     "@fortawesome/free-brands-svg-icons": "^6.7.2",
