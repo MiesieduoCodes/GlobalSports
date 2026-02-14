@@ -1,5 +1,7 @@
 "use client";
 
+export const dynamic = "force-dynamic";
+
 import { useEffect, useState } from "react";
 import type React from "react";
 import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from "firebase/firestore";
@@ -178,55 +180,98 @@ function AdminShell() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 dark:from-gray-900 dark:to-blue-900/20 text-gray-900 dark:text-white">
-      {/* Header */}
-      <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700 sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg">
+      <div className="mx-auto flex min-h-screen w-full max-w-[1440px]">
+        <aside className="hidden w-72 shrink-0 border-r border-gray-200/80 dark:border-gray-800 bg-white/70 dark:bg-gray-900/40 backdrop-blur-sm lg:flex lg:flex-col">
+          <div className="px-6 py-6">
+            <div className="flex items-center space-x-3">
+              <div className="w-11 h-11 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg">
                 <span className="text-white font-bold text-sm">GS</span>
               </div>
               <div>
-                <h1 className="text-xl font-bold text-gray-900 dark:text-white">Admin Dashboard</h1>
-                <p className="text-xs text-gray-500 dark:text-gray-400">Manage your content</p>
+                <h1 className="text-base font-bold text-gray-900 dark:text-white leading-tight">Admin Dashboard</h1>
+                <p className="text-xs text-gray-500 dark:text-gray-400">Global Sports FC</p>
               </div>
             </div>
+          </div>
+
+          <div className="px-4 pb-6">
+            <nav className="space-y-1">
+              {tabs.map((tab) => (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-semibold transition-all ${
+                    activeTab === tab.id
+                      ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg"
+                      : "text-gray-700 dark:text-gray-300 hover:bg-gray-100/80 dark:hover:bg-gray-800/60"
+                  }`}
+                >
+                  <span className="text-base">{tab.icon}</span>
+                  <span>{tab.label.split(" ")[1]}</span>
+                </button>
+              ))}
+            </nav>
+          </div>
+
+          <div className="mt-auto p-4">
             <button
               type="button"
               onClick={() => signOut(auth)}
-              className="px-4 py-2 text-sm rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors font-medium"
+              className="w-full px-4 py-3 text-sm rounded-2xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors font-semibold"
             >
               Sign out
             </button>
           </div>
-        </div>
-      </header>
+        </aside>
 
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        {/* Tab Navigation */}
-        <div className="flex flex-wrap gap-2 mb-8 bg-white dark:bg-gray-800 p-2 rounded-2xl shadow-sm">
-          {tabs.map((tab) => (
-            <button
-              key={tab.id}
-              type="button"
-              onClick={() => setActiveTab(tab.id)}
-              className={`flex-1 min-w-[120px] px-6 py-3 rounded-xl text-sm font-semibold transition-all ${
-                activeTab === tab.id
-                  ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg"
-                  : "bg-transparent text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700"
-              }`}
-            >
-              <span className="mr-2">{tab.icon}</span>
-              {tab.label.split(" ")[1]}
-            </button>
-          ))}
-        </div>
+        <div className="flex min-w-0 flex-1 flex-col">
+          <header className="sticky top-0 z-40 border-b border-gray-200/80 dark:border-gray-800 bg-white/70 dark:bg-gray-900/40 backdrop-blur-sm">
+            <div className="px-4 py-4 sm:px-6">
+              <div className="flex items-center justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  <div className="lg:hidden w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg">
+                    <span className="text-white font-bold text-sm">GS</span>
+                  </div>
+                  <div className="min-w-0">
+                    <h2 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white truncate">Admin Dashboard</h2>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">Manage your content</p>
+                  </div>
+                </div>
 
-        {/* Content Sections */}
-        {activeTab === "news" && <NewsAdminSection />}
-        {activeTab === "matches" && <MatchesAdminSection />}
-        {activeTab === "videos" && <VideosAdminSection />}
-        {activeTab === "players" && <PlayersAdminSection />}
+                <div className="flex items-center gap-2 lg:hidden">
+                  <select
+                    value={activeTab}
+                    onChange={(e) => setActiveTab(e.target.value as TabId)}
+                    className="h-10 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 px-3 text-sm font-semibold"
+                  >
+                    {tabs.map((tab) => (
+                      <option key={tab.id} value={tab.id}>
+                        {tab.label}
+                      </option>
+                    ))}
+                  </select>
+                  <button
+                    type="button"
+                    onClick={() => signOut(auth)}
+                    className="h-10 px-4 text-sm rounded-xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors font-semibold"
+                  >
+                    Sign out
+                  </button>
+                </div>
+              </div>
+            </div>
+          </header>
+
+          <main className="min-w-0 flex-1 px-4 py-8 sm:px-6">
+            <div className="mx-auto w-full max-w-7xl">
+              {activeTab === "news" && <NewsAdminSection />}
+              {activeTab === "matches" && <MatchesAdminSection />}
+              {activeTab === "videos" && <VideosAdminSection />}
+              {activeTab === "players" && <PlayersAdminSection />}
+            </div>
+          </main>
+        </div>
       </div>
     </div>
   );
@@ -240,6 +285,8 @@ function NewsAdminSection() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [form, setForm] = useState<Partial<NewsItem>>({ title: "", description: "", image: "", link: "" });
+  const [query, setQuery] = useState("");
+  const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
 
   useEffect(() => {
     load();
@@ -262,10 +309,12 @@ function NewsAdminSection() {
 
   function startCreate() {
     setForm({ title: "", description: "", image: "", link: "" });
+    setPendingDeleteId(null);
   }
 
   function startEdit(item: NewsItem) {
     setForm({ ...item });
+    setPendingDeleteId(null);
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -292,15 +341,27 @@ function NewsAdminSection() {
   }
 
   async function handleDelete(id: string) {
-    if (!confirm("Are you sure you want to delete this item?")) return;
     setSaving(true);
     try {
       await deleteDoc(doc(db, "news", id));
       await load();
+      if (form.id === id) {
+        startCreate();
+      }
     } finally {
       setSaving(false);
+      setPendingDeleteId(null);
     }
   }
+
+  const filteredItems = items.filter((item) => {
+    const q = query.trim().toLowerCase();
+    if (!q) return true;
+    return (
+      (item.title ?? "").toLowerCase().includes(q) ||
+      (item.description ?? "").toLowerCase().includes(q)
+    );
+  });
 
   return (
     <div className="space-y-6">
@@ -380,19 +441,47 @@ function NewsAdminSection() {
 
       {/* Items List */}
       <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-100 dark:border-gray-700">
-        <h3 className="text-lg font-semibold mb-4">Existing News ({items.length})</h3>
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-4">
+          <h3 className="text-lg font-semibold">Existing News ({filteredItems.length})</h3>
+          <div className="flex items-center gap-2">
+            <input
+              type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              className="h-10 w-full sm:w-72 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 px-4 text-sm focus:ring-2 focus:ring-blue-500"
+              placeholder="Search by title or description"
+            />
+            <button
+              type="button"
+              onClick={() => setQuery("")}
+              className="h-10 px-4 rounded-xl bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm font-semibold hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+            >
+              Clear
+            </button>
+          </div>
+        </div>
         {loading ? (
           <div className="text-center py-8">
             <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
           </div>
-        ) : items.length === 0 ? (
-          <p className="text-center text-gray-500 py-8">No news items yet. Create your first one!</p>
+        ) : filteredItems.length === 0 ? (
+          <div className="text-center py-12">
+            <div className="mx-auto mb-3 h-12 w-12 rounded-2xl bg-gray-100 dark:bg-gray-700 flex items-center justify-center text-xl">
+              📰
+            </div>
+            <p className="text-gray-500 dark:text-gray-400">No results found.</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400">Try a different search term or clear the filter.</p>
+          </div>
         ) : (
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {items.map((item) => (
+            {filteredItems.map((item) => (
               <div
                 key={item.id}
-                className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 border border-gray-200 dark:border-gray-600 hover:shadow-md transition-shadow"
+                className={`bg-gray-50 dark:bg-gray-700 rounded-xl p-4 border transition-all ${
+                  form.id === item.id
+                    ? "border-blue-400/60 dark:border-blue-400/40 ring-2 ring-blue-200/60 dark:ring-blue-900/30"
+                    : "border-gray-200 dark:border-gray-600 hover:shadow-md"
+                }`}
               >
                 {item.image && (
                   <img src={item.image} alt={item.title} className="w-full h-32 object-cover rounded-lg mb-3" />
@@ -407,13 +496,35 @@ function NewsAdminSection() {
                   >
                     Edit
                   </button>
-                  <button
-                    type="button"
-                    onClick={() => handleDelete(item.id)}
-                    className="px-3 py-2 text-xs rounded-lg bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 font-medium hover:bg-red-200 dark:hover:bg-red-900/50"
-                  >
-                    Delete
-                  </button>
+                  {pendingDeleteId === item.id ? (
+                    <>
+                      <button
+                        type="button"
+                        disabled={saving}
+                        onClick={() => handleDelete(item.id)}
+                        className="px-3 py-2 text-xs rounded-lg bg-red-600 text-white font-semibold hover:bg-red-700 disabled:opacity-60"
+                      >
+                        Confirm
+                      </button>
+                      <button
+                        type="button"
+                        disabled={saving}
+                        onClick={() => setPendingDeleteId(null)}
+                        className="px-3 py-2 text-xs rounded-lg bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-100 font-semibold hover:bg-gray-300 dark:hover:bg-gray-500 disabled:opacity-60"
+                      >
+                        Cancel
+                      </button>
+                    </>
+                  ) : (
+                    <button
+                      type="button"
+                      disabled={saving}
+                      onClick={() => setPendingDeleteId(item.id)}
+                      className="px-3 py-2 text-xs rounded-lg bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 font-medium hover:bg-red-200 dark:hover:bg-red-900/50 disabled:opacity-60"
+                    >
+                      Delete
+                    </button>
+                  )}
                 </div>
               </div>
             ))}
@@ -434,6 +545,8 @@ function MatchesAdminSection() {
   const [form, setForm] = useState<Partial<MatchItem> & { date?: string; time?: string; venue?: string }>({
     team1: "", team1Logo: "", team2: "", team2Logo: "", date: "", time: "", venue: ""
   });
+  const [query, setQuery] = useState("");
+  const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
 
   useEffect(() => {
     load();
@@ -456,10 +569,12 @@ function MatchesAdminSection() {
 
   function startCreate() {
     setForm({ team1: "", team1Logo: "", team2: "", team2Logo: "", date: "", time: "", venue: "" });
+    setPendingDeleteId(null);
   }
 
   function startEdit(item: any) {
     setForm({ ...item });
+    setPendingDeleteId(null);
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -489,15 +604,25 @@ function MatchesAdminSection() {
   }
 
   async function handleDelete(id: string) {
-    if (!confirm("Are you sure you want to delete this match?")) return;
     setSaving(true);
     try {
       await deleteDoc(doc(db, "matches", id));
       await load();
+      if (form.id === id) {
+        startCreate();
+      }
     } finally {
       setSaving(false);
+      setPendingDeleteId(null);
     }
   }
+
+  const filteredItems = (items as any[]).filter((item) => {
+    const q = query.trim().toLowerCase();
+    if (!q) return true;
+    const haystack = `${item.team1 ?? ""} ${item.team2 ?? ""} ${item.venue ?? ""} ${item.date ?? ""} ${item.time ?? ""}`.toLowerCase();
+    return haystack.includes(q);
+  });
 
   return (
     <div className="space-y-6">
@@ -604,50 +729,123 @@ function MatchesAdminSection() {
       </div>
 
       <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-100 dark:border-gray-700">
-        <h3 className="text-lg font-semibold mb-4">Scheduled Matches ({items.length})</h3>
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-4">
+          <h3 className="text-lg font-semibold">Scheduled Matches ({filteredItems.length})</h3>
+          <div className="flex items-center gap-2">
+            <input
+              type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              className="h-10 w-full sm:w-72 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 px-4 text-sm focus:ring-2 focus:ring-blue-500"
+              placeholder="Search matches (team, date, venue)"
+            />
+            <button
+              type="button"
+              onClick={() => setQuery("")}
+              className="h-10 px-4 rounded-xl bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm font-semibold hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+            >
+              Clear
+            </button>
+          </div>
+        </div>
         {loading ? (
           <div className="text-center py-8">
             <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
           </div>
-        ) : items.length === 0 ? (
-          <p className="text-center text-gray-500 py-8">No matches scheduled. Add your first one!</p>
+        ) : filteredItems.length === 0 ? (
+          <div className="text-center py-12">
+            <div className="mx-auto mb-3 h-12 w-12 rounded-2xl bg-gray-100 dark:bg-gray-700 flex items-center justify-center text-xl">
+              ⚽
+            </div>
+            <p className="text-gray-500 dark:text-gray-400">No matches found.</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400">Try a different search term or clear the filter.</p>
+          </div>
         ) : (
-          <div className="grid gap-4 md:grid-cols-2">
-            {items.map((item: any) => (
-              <div
-                key={item.id}
-                className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 border border-gray-200 dark:border-gray-600"
-              >
-                <div className="flex items-center justify-between mb-3">
-                  <span className="font-bold">{item.team1}</span>
-                  <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full text-xs font-semibold">VS</span>
-                  <span className="font-bold">{item.team2}</span>
-                </div>
-                {(item.date || item.venue) && (
-                  <div className="text-xs text-gray-500 dark:text-gray-400 mb-3">
-                    {item.date && <span>📅 {item.date}</span>}
-                    {item.time && <span className="ml-2">⏰ {item.time}</span>}
-                    {item.venue && <div>📍 {item.venue}</div>}
-                  </div>
-                )}
-                <div className="flex gap-2">
-                  <button
-                    type="button"
-                    onClick={() => startEdit(item)}
-                    className="flex-1 px-3 py-2 text-xs rounded-lg bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 font-medium"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleDelete(item.id)}
-                    className="px-3 py-2 text-xs rounded-lg bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 font-medium"
-                  >
-                    Delete
-                  </button>
-                </div>
-              </div>
-            ))}
+          <div className="overflow-hidden rounded-2xl border border-gray-200 dark:border-gray-700">
+            <div className="overflow-x-auto">
+              <table className="min-w-full text-sm">
+                <thead className="bg-gray-50 dark:bg-gray-900/30 text-gray-600 dark:text-gray-300">
+                  <tr>
+                    <th className="px-4 py-3 text-left font-semibold">Date</th>
+                    <th className="px-4 py-3 text-left font-semibold">Time</th>
+                    <th className="px-4 py-3 text-left font-semibold">Match</th>
+                    <th className="px-4 py-3 text-left font-semibold">Venue</th>
+                    <th className="px-4 py-3 text-right font-semibold">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+                  {filteredItems.map((item: any) => (
+                    <tr
+                      key={item.id}
+                      className={
+                        form.id === item.id
+                          ? "bg-blue-50/60 dark:bg-blue-900/20"
+                          : "bg-white dark:bg-gray-800"
+                      }
+                    >
+                      <td className="px-4 py-3 whitespace-nowrap text-gray-700 dark:text-gray-200">
+                        {item.date || "—"}
+                      </td>
+                      <td className="px-4 py-3 whitespace-nowrap text-gray-700 dark:text-gray-200">
+                        {item.time || "—"}
+                      </td>
+                      <td className="px-4 py-3 min-w-[220px]">
+                        <div className="flex items-center gap-2">
+                          <span className="font-semibold text-gray-900 dark:text-white">{item.team1 || "—"}</span>
+                          <span className="px-2 py-0.5 rounded-full text-xs font-bold bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300">
+                            VS
+                          </span>
+                          <span className="font-semibold text-gray-900 dark:text-white">{item.team2 || "—"}</span>
+                        </div>
+                      </td>
+                      <td className="px-4 py-3 text-gray-700 dark:text-gray-200 min-w-[220px]">
+                        {item.venue || "—"}
+                      </td>
+                      <td className="px-4 py-3 whitespace-nowrap">
+                        <div className="flex justify-end gap-2">
+                          <button
+                            type="button"
+                            onClick={() => startEdit(item)}
+                            className="px-3 py-2 text-xs rounded-xl bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 font-semibold hover:bg-blue-200 dark:hover:bg-blue-900/50"
+                          >
+                            Edit
+                          </button>
+                          {pendingDeleteId === item.id ? (
+                            <>
+                              <button
+                                type="button"
+                                disabled={saving}
+                                onClick={() => handleDelete(item.id)}
+                                className="px-3 py-2 text-xs rounded-xl bg-red-600 text-white font-semibold hover:bg-red-700 disabled:opacity-60"
+                              >
+                                Confirm
+                              </button>
+                              <button
+                                type="button"
+                                disabled={saving}
+                                onClick={() => setPendingDeleteId(null)}
+                                className="px-3 py-2 text-xs rounded-xl bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-100 font-semibold hover:bg-gray-300 dark:hover:bg-gray-600 disabled:opacity-60"
+                              >
+                                Cancel
+                              </button>
+                            </>
+                          ) : (
+                            <button
+                              type="button"
+                              disabled={saving}
+                              onClick={() => setPendingDeleteId(item.id)}
+                              className="px-3 py-2 text-xs rounded-xl bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 font-semibold hover:bg-red-200 dark:hover:bg-red-900/50 disabled:opacity-60"
+                            >
+                              Delete
+                            </button>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         )}
       </div>
@@ -945,6 +1143,8 @@ function PlayersAdminSection() {
     assists: 0,
     cleanSheets: 0,
   });
+  const [query, setQuery] = useState("");
+  const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
 
   useEffect(() => {
     load();
@@ -983,10 +1183,12 @@ function PlayersAdminSection() {
       assists: 0,
       cleanSheets: 0,
     });
+    setPendingDeleteId(null);
   }
 
   function startEdit(item: PlayerItem) {
     setForm({ ...item });
+    setPendingDeleteId(null);
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -1021,15 +1223,25 @@ function PlayersAdminSection() {
   }
 
   async function handleDelete(id: string) {
-    if (!confirm("Are you sure you want to delete this player?")) return;
     setSaving(true);
     try {
       await deleteDoc(doc(db, "players", id));
       await load();
+      if (form.id === id) {
+        startCreate();
+      }
     } finally {
       setSaving(false);
+      setPendingDeleteId(null);
     }
   }
+
+  const filteredItems = items.filter((item) => {
+    const q = query.trim().toLowerCase();
+    if (!q) return true;
+    const haystack = `${item.name ?? ""} ${item.position ?? ""} ${item.nationality ?? ""} ${item.jerseyNumber ?? ""}`.toLowerCase();
+    return haystack.includes(q);
+  });
 
   const positions = ["Goalkeeper", "Defender", "Midfielder", "Attacker"];
 
@@ -1192,62 +1404,131 @@ function PlayersAdminSection() {
       </div>
 
       <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-100 dark:border-gray-700">
-        <h3 className="text-lg font-semibold mb-4">Squad Roster ({items.length})</h3>
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mb-4">
+          <h3 className="text-lg font-semibold">Squad Roster ({filteredItems.length})</h3>
+          <div className="flex items-center gap-2">
+            <input
+              type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              className="h-10 w-full sm:w-72 rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 px-4 text-sm focus:ring-2 focus:ring-blue-500"
+              placeholder="Search players (name, position, #)"
+            />
+            <button
+              type="button"
+              onClick={() => setQuery("")}
+              className="h-10 px-4 rounded-xl bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm font-semibold hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+            >
+              Clear
+            </button>
+          </div>
+        </div>
         {loading ? (
           <div className="text-center py-8">
             <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
           </div>
-        ) : items.length === 0 ? (
-          <p className="text-center text-gray-500 py-8">No players yet. Add your first player!</p>
+        ) : filteredItems.length === 0 ? (
+          <div className="text-center py-12">
+            <div className="mx-auto mb-3 h-12 w-12 rounded-2xl bg-gray-100 dark:bg-gray-700 flex items-center justify-center text-xl">
+              👥
+            </div>
+            <p className="text-gray-500 dark:text-gray-400">No players found.</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400">Try a different search term or clear the filter.</p>
+          </div>
         ) : (
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {items.map((item) => (
-              <div
-                key={item.id}
-                className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 border border-gray-200 dark:border-gray-600"
-              >
-                <div className="flex items-start gap-4 mb-3">
-                  <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-lg">
-                    {item.jerseyNumber || "?"}
-                  </div>
-                  <div className="flex-1">
-                    <h4 className="font-bold text-sm">{item.name}</h4>
-                    <p className="text-xs text-blue-600 dark:text-blue-400">{item.position}</p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">{item.nationality}</p>
-                  </div>
-                </div>
-                <div className="grid grid-cols-3 gap-2 text-center text-xs mb-3">
-                  <div className="bg-white dark:bg-gray-600 rounded-lg p-2">
-                    <div className="font-bold text-gray-900 dark:text-white">{item.appearances}</div>
-                    <div className="text-gray-500 dark:text-gray-400">Apps</div>
-                  </div>
-                  <div className="bg-white dark:bg-gray-600 rounded-lg p-2">
-                    <div className="font-bold text-green-600">{item.goals}</div>
-                    <div className="text-gray-500 dark:text-gray-400">Goals</div>
-                  </div>
-                  <div className="bg-white dark:bg-gray-600 rounded-lg p-2">
-                    <div className="font-bold text-blue-600">{item.assists}</div>
-                    <div className="text-gray-500 dark:text-gray-400">Assists</div>
-                  </div>
-                </div>
-                <div className="flex gap-2">
-                  <button
-                    type="button"
-                    onClick={() => startEdit(item)}
-                    className="flex-1 px-3 py-2 text-xs rounded-lg bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 font-medium"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleDelete(item.id)}
-                    className="px-3 py-2 text-xs rounded-lg bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 font-medium"
-                  >
-                    Delete
-                  </button>
-                </div>
-              </div>
-            ))}
+          <div className="overflow-hidden rounded-2xl border border-gray-200 dark:border-gray-700">
+            <div className="overflow-x-auto">
+              <table className="min-w-full text-sm">
+                <thead className="bg-gray-50 dark:bg-gray-900/30 text-gray-600 dark:text-gray-300">
+                  <tr>
+                    <th className="px-4 py-3 text-left font-semibold">#</th>
+                    <th className="px-4 py-3 text-left font-semibold">Player</th>
+                    <th className="px-4 py-3 text-left font-semibold">Position</th>
+                    <th className="px-4 py-3 text-left font-semibold">Nationality</th>
+                    <th className="px-4 py-3 text-left font-semibold">Apps</th>
+                    <th className="px-4 py-3 text-left font-semibold">Goals</th>
+                    <th className="px-4 py-3 text-left font-semibold">Assists</th>
+                    <th className="px-4 py-3 text-right font-semibold">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+                  {filteredItems.map((item) => (
+                    <tr
+                      key={item.id}
+                      className={
+                        form.id === item.id
+                          ? "bg-blue-50/60 dark:bg-blue-900/20"
+                          : "bg-white dark:bg-gray-800"
+                      }
+                    >
+                      <td className="px-4 py-3 whitespace-nowrap">
+                        <div className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-blue-600 to-indigo-600 text-white font-bold">
+                          {item.jerseyNumber || "?"}
+                        </div>
+                      </td>
+                      <td className="px-4 py-3 min-w-[220px]">
+                        <div className="font-semibold text-gray-900 dark:text-white">{item.name}</div>
+                      </td>
+                      <td className="px-4 py-3 whitespace-nowrap text-gray-700 dark:text-gray-200">
+                        {item.position}
+                      </td>
+                      <td className="px-4 py-3 whitespace-nowrap text-gray-700 dark:text-gray-200">
+                        {item.nationality || "—"}
+                      </td>
+                      <td className="px-4 py-3 whitespace-nowrap text-gray-700 dark:text-gray-200">
+                        {item.appearances ?? 0}
+                      </td>
+                      <td className="px-4 py-3 whitespace-nowrap font-semibold text-green-700 dark:text-green-400">
+                        {item.goals ?? 0}
+                      </td>
+                      <td className="px-4 py-3 whitespace-nowrap font-semibold text-blue-700 dark:text-blue-300">
+                        {item.assists ?? 0}
+                      </td>
+                      <td className="px-4 py-3 whitespace-nowrap">
+                        <div className="flex justify-end gap-2">
+                          <button
+                            type="button"
+                            onClick={() => startEdit(item)}
+                            className="px-3 py-2 text-xs rounded-xl bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 font-semibold hover:bg-blue-200 dark:hover:bg-blue-900/50"
+                          >
+                            Edit
+                          </button>
+                          {pendingDeleteId === item.id ? (
+                            <>
+                              <button
+                                type="button"
+                                disabled={saving}
+                                onClick={() => handleDelete(item.id)}
+                                className="px-3 py-2 text-xs rounded-xl bg-red-600 text-white font-semibold hover:bg-red-700 disabled:opacity-60"
+                              >
+                                Confirm
+                              </button>
+                              <button
+                                type="button"
+                                disabled={saving}
+                                onClick={() => setPendingDeleteId(null)}
+                                className="px-3 py-2 text-xs rounded-xl bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-100 font-semibold hover:bg-gray-300 dark:hover:bg-gray-600 disabled:opacity-60"
+                              >
+                                Cancel
+                              </button>
+                            </>
+                          ) : (
+                            <button
+                              type="button"
+                              disabled={saving}
+                              onClick={() => setPendingDeleteId(item.id)}
+                              className="px-3 py-2 text-xs rounded-xl bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 font-semibold hover:bg-red-200 dark:hover:bg-red-900/50 disabled:opacity-60"
+                            >
+                              Delete
+                            </button>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         )}
       </div>
