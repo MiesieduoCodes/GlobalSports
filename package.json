@@ -27,7 +27,11 @@
     "gsap": "^3.12.7",
     "init": "^0.1.2",
     "lucide-react": "^0.475.0",
+<<<<<<< HEAD
     "next": "15.1.11",
+=======
+    "next": "15.5.12",
+>>>>>>> 891ed10 (Yeah...)
     "next-themes": "^0.4.4",
     "prop-types": "^15.8.1",
     "react": "^19.0.0",
@@ -47,7 +51,7 @@
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
     "eslint": "^9",
-    "eslint-config-next": "15.1.7",
+    "eslint-config-next": "15.5.12",
     "postcss": "^8",
     "tailwindcss": "^3.4.17",
     "typescript": "^5.9.3",
