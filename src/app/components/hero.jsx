@@ -76,9 +76,31 @@ const Hero = () => {
             {t.btnSecondary}
           </button>
         </div>
+
+        {/* Live Result Card (Mobile/Tablet) */}
+        <div className="mt-12 lg:hidden hero-animate-in" style={{ animationDelay: '0.4s' }}>
+          <div className="bg-[rgba(23,32,56,0.95)] border border-[rgba(0,174,239,0.2)] backdrop-blur-xl rounded-[16px] p-6 shadow-2xl">
+            <div className="flex items-center gap-2 font-barlow-condensed text-[10px] font-bold tracking-[2px] uppercase text-vsky mb-4">
+              <div className="w-[8px] h-[8px] bg-red-500 rounded-full live-dot-pulse" />
+              {t.liveLabel}
+            </div>
+            <div className="flex items-center justify-between gap-4">
+              <span className="font-barlow-condensed font-bold text-xs text-vwhite text-center flex-1 line-clamp-1">Veria FC</span>
+              <div className="flex items-center gap-2 scale-90">
+                <span className="font-bebas text-4xl text-vgold leading-none">3</span>
+                <span className="font-bebas text-xl text-vmuted">—</span>
+                <span className="font-bebas text-4xl text-vgold leading-none">0</span>
+              </div>
+              <span className="font-barlow-condensed font-bold text-xs text-vwhite text-center flex-1 line-clamp-1">FC Kairat</span>
+            </div>
+            <div className="mt-4 pt-3 border-t border-[rgba(255,255,255,0.06)] font-barlow-condensed text-[10px] text-vmuted text-center tracking-[1px]">
+              {t.liveMeta}
+            </div>
+          </div>
+        </div>
       </div>
 
-      {/* Live Result Card */}
+      {/* Live Result Card (Desktop Hover) */}
       <div className="absolute right-6 md:right-[60px] top-[40%] -translate-y-1/2 z-10 hidden lg:block hero-animate-in" style={{ animationDelay: '0.5s' }}>
         <div className="bg-[rgba(23,32,56,0.95)] border border-[rgba(0,174,239,0.2)] backdrop-blur-xl rounded-[16px] p-7 min-w-[300px] shadow-2xl">
           <div className="flex items-center gap-2 font-barlow-condensed text-[10px] font-bold tracking-[2px] uppercase text-vsky mb-4">
@@ -104,7 +126,10 @@ const Hero = () => {
       <div className="absolute bottom-[40px] left-6 right-6 md:left-[60px] md:right-[60px] z-10 flex border-t border-transparent hero-animate-up" style={{ animationDelay: '0.6s' }}>
         <div className="grid grid-cols-2 md:grid-cols-5 w-full bg-[rgba(15,21,37,0.85)] border border-white/5 backdrop-blur-md rounded-[12px] overflow-hidden shadow-2xl translate-y-[-20px]">
           {t.stats.map((s, idx) => (
-            <div key={idx} className="p-5 border-r border-[rgba(255,255,255,0.06)] last:border-r-0 border-t md:border-t-0 border-[rgba(255,255,255,0.06)] first:border-t-2 first:border-vgold hover:border-l-2 hover:border-vsky transition-all group cursor-default">
+            <div
+              key={idx}
+              className={`p-5 border-r border-[rgba(255,255,255,0.06)] last:border-r-0 border-t md:border-t-0 border-[rgba(255,255,255,0.06)] first:border-t-2 first:border-vgold hover:border-l-2 hover:border-vsky transition-all group cursor-default ${idx === 4 ? 'col-span-2 md:col-span-1' : ''}`}
+            >
               <span className={`block font-bebas text-[34px] leading-none mb-1 transition-colors ${s.color || 'text-vgold'} group-hover:text-vwhite`}>{s.val}</span>
               <span className="block font-barlow-condensed font-semibold text-[9px] tracking-[2px] uppercase text-vmuted group-hover:text-vsky transition-colors">{s.label}</span>
             </div>

@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useLanguage } from "@/app/context/LanguageContext";
+import { Menu, X } from "lucide-react";
 
 const translations = {
   en: {
@@ -29,6 +30,7 @@ const Navbar = () => {
   const { language } = useLanguage();
   const t = translations[language] || translations.en;
   const [scrolled, setScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -80,15 +82,53 @@ const Navbar = () => {
           })}
         </div>
 
-        {/* CTA */}
-        <Link
-          href="/contact"
-          className="bg-vgold text-vnavy px-5 py-2.5 rounded-[6px] font-barlow-condensed font-bold text-[12px] tracking-[2px] uppercase hover:bg-vgold-light transition-colors hidden sm:block"
-        >
-          {t.cta}
-        </Link>
+        {/* CTA & Mobile Toggle */}
+        <div className="flex items-center gap-4">
+          <Link
+            href="/contact"
+            className="bg-vgold text-vnavy px-5 py-2.5 rounded-[6px] font-barlow-condensed font-bold text-[12px] tracking-[2px] uppercase hover:bg-vgold-light transition-colors hidden sm:block"
+          >
+            {t.cta}
+          </Link>
+
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="md:hidden text-vwhite hover:text-vgold transition-colors p-1"
+          >
+            {mobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+          </button>
+        </div>
 
       </nav>
+
+      {/* Mobile Menu Drawer */}
+      <div
+        className={`fixed inset-0 z-[998] bg-vnavy transition-all duration-500 ease-in-out md:hidden ${mobileMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+      >
+        <div className={`flex flex-col items-center justify-center h-full gap-8 px-6 transition-transform duration-500 ${mobileMenuOpen ? 'translate-y-0' : 'translate-y-10'}`}>
+          {navLinks.map((link) => {
+            const isActive = pathname === link.path;
+            return (
+              <Link
+                key={link.path}
+                href={link.path}
+                onClick={() => setMobileMenuOpen(false)}
+                className={`font-bebas text-4xl tracking-[4px] uppercase transition-all ${isActive ? 'text-vgold scale-110' : 'text-vwhite/60 hover:text-vwhite'}`}
+              >
+                {link.name}
+              </Link>
+            );
+          })}
+
+          <Link
+            href="/contact"
+            onClick={() => setMobileMenuOpen(false)}
+            className="mt-8 bg-vgold text-vnavy px-10 py-4 rounded-[12px] font-barlow-condensed font-bold text-[16px] tracking-[3px] uppercase hover:bg-vgold-light transition-colors"
+          >
+            {t.cta}
+          </Link>
+        </div>
+      </div>
 
       {/* Kazakh Flag Strip */}
       <div className="flag-strip">

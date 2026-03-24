@@ -105,7 +105,7 @@ export default function News() {
                 )}
                 <div className="absolute inset-0 bg-gradient-to-t from-vnavy via-transparent to-transparent z-10" />
               </div>
-              <div className="p-8 relative z-20 flex-1 flex flex-col justify-end">
+              <div className="p-6 md:p-8 relative z-20 flex-1 flex flex-col justify-end">
                 <span className="inline-block self-start px-2.5 py-1 bg-vsky text-vnavy rounded font-barlow-condensed font-bold text-[10px] tracking-[1.5px] uppercase mb-4">
                   {featured.category || t.featuredTag}
                 </span>
@@ -125,8 +125,8 @@ export default function News() {
           {/* News List */}
           <div className="flex flex-col gap-4">
             {list.map((item) => (
-              <Link key={item.id} href={`/news/${item.id}`} className="bg-vnavy-card border border-white/5 rounded-[12px] overflow-hidden flex group cursor-pointer hover:border-vgold/20 hover:translate-x-1 transition-all min-h-[110px]">
-                <div className="w-[120px] bg-vnavy-mid shrink-0 overflow-hidden">
+              <Link key={item.id} href={`/news/${item.id}`} className="bg-vnavy-card border border-white/5 rounded-[12px] overflow-hidden flex flex-col sm:flex-row group cursor-pointer hover:border-vgold/20 hover:translate-x-1 transition-all">
+                <div className="w-full sm:w-[120px] aspect-video sm:aspect-square bg-vnavy-mid shrink-0 overflow-hidden">
                   {item.imageUrl ? (
                     <img src={item.imageUrl} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="" />
                   ) : (

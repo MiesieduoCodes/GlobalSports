@@ -106,7 +106,7 @@ export default function AboutPage() {
         <div className="kz-grid opacity-[0.025]" />
         <div className="absolute right-[-20px] top-1/2 -translate-y-1/2 font-bebas text-[200px] text-vwhite/[0.02] tracking-[10px] pointer-events-none hidden lg:block">ABOUT</div>
 
-        <div className="max-w-[1440px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 items-center relative z-10">
+        <div className="max-w-[1440px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center relative z-10">
           <div>
             <span className="section-eyebrow">{t.heroEyebrow}</span>
             <h1 className="section-heading mb-6">{t.heroTitle}<span className="text-vgold">{t.heroTitleAccent}</span></h1>
@@ -117,16 +117,18 @@ export default function AboutPage() {
             </div>
           </div>
           <div className="flex justify-center">
-            <div className="w-[300px] h-[300px] rounded-full bg-vsky/[0.05] border border-vsky/10 flex items-center justify-center relative">
+            <div className="w-64 h-64 md:w-[300px] md:h-[300px] rounded-full bg-vsky/[0.05] border border-vsky/10 flex items-center justify-center relative">
               <div className="absolute inset-4 rounded-full border border-dashed border-vgold/15" />
-              <svg width="200" height="200" viewBox="0 0 90 90" fill="none">
-                <path d="M45 5 L78 18 L78 52 Q78 72 45 85 Q12 72 12 52 L12 18 Z" fill="#172038" stroke="#C8A84B" strokeWidth="2.5" />
-                <path d="M45 10 L72 21 L72 50 Q72 68 45 79 Q18 68 18 50 L18 21 Z" fill="none" stroke="rgba(0,174,239,0.15)" strokeWidth="1" />
-                <text x="45" y="34" fontFamily="Bebas Neue, sans-serif" fontSize="13" fill="#C8A84B" textAnchor="middle" letterSpacing="1.5">VERIA</text>
-                <text x="45" y="56" fontFamily="Bebas Neue, sans-serif" fontSize="26" fill="#F0EEE8" textAnchor="middle" letterSpacing="1">FC</text>
-                <line x1="30" y1="62" x2="60" y2="62" stroke="#C8A84B" strokeWidth="1" opacity="0.4" />
-                <text x="45" y="74" fontFamily="Bebas Neue, sans-serif" fontSize="10" fill="#00AEEF" textAnchor="middle" letterSpacing="2">ALMATY</text>
-              </svg>
+              <div className="scale-75 md:scale-100">
+                <svg width="200" height="200" viewBox="0 0 90 90" fill="none">
+                  <path d="M45 5 L78 18 L78 52 Q78 72 45 85 Q12 72 12 52 L12 18 Z" fill="#172038" stroke="#C8A84B" strokeWidth="2.5" />
+                  <path d="M45 10 L72 21 L72 50 Q72 68 45 79 Q18 68 18 50 L18 21 Z" fill="none" stroke="rgba(0,174,239,0.15)" strokeWidth="1" />
+                  <text x="45" y="34" fontFamily="Bebas Neue, sans-serif" fontSize="13" fill="#C8A84B" textAnchor="middle" letterSpacing="1.5">VERIA</text>
+                  <text x="45" y="56" fontFamily="Bebas Neue, sans-serif" fontSize="26" fill="#F0EEE8" textAnchor="middle" letterSpacing="1">FC</text>
+                  <line x1="30" y1="62" x2="60" y2="62" stroke="#C8A84B" strokeWidth="1" opacity="0.4" />
+                  <text x="45" y="74" fontFamily="Bebas Neue, sans-serif" fontSize="10" fill="#00AEEF" textAnchor="middle" letterSpacing="2">ALMATY</text>
+                </svg>
+              </div>
             </div>
           </div>
         </div>
