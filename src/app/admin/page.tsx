@@ -33,6 +33,12 @@ type PlayerItem = {
   goals: number;
   assists: number;
   cleanSheets: number;
+  translations?: {
+    [key: string]: {
+      story?: string;
+      strengths?: string;
+    };
+  };
 };
 
 function isNonEmptyString(value: unknown): value is string {
@@ -105,10 +111,10 @@ function AdminAuthScreen() {
           <div className="w-20 h-20 bg-yellow-400 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
             <span className="text-blue-900 font-bold text-2xl">GS</span>
           </div>
-          <h1 className="text-3xl font-bold text-white mb-2">Global Sports FC</h1>
+          <h1 className="text-3xl font-bold text-white mb-2">VeriaFC</h1>
           <p className="text-blue-200">Admin Dashboard</p>
         </div>
-        
+
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8">
           <h2 className="text-2xl font-bold mb-2 text-gray-900 dark:text-white">
             {mode === "login" ? "Welcome Back" : "Create Account"}
@@ -116,13 +122,13 @@ function AdminAuthScreen() {
           <p className="text-sm text-gray-600 dark:text-gray-300 mb-6">
             {mode === "login" ? "Sign in to manage your content" : "Register to get started"}
           </p>
-          
+
           {error && (
             <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
               <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
             </div>
           )}
-          
+
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">Email</label>
@@ -131,7 +137,7 @@ function AdminAuthScreen() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                placeholder="admin@globalsportsfc.com"
+                placeholder="admin@veriafc.com"
               />
             </div>
             <div>
@@ -159,7 +165,7 @@ function AdminAuthScreen() {
               )}
             </button>
           </form>
-          
+
           <div className="mt-6 text-center">
             <button
               type="button"
@@ -189,7 +195,7 @@ function AdminShell() {
               </div>
               <div>
                 <h1 className="text-base font-bold text-gray-900 dark:text-white leading-tight">Admin Dashboard</h1>
-                <p className="text-xs text-gray-500 dark:text-gray-400">Global Sports FC</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">VeriaFC</p>
               </div>
             </div>
           </div>
@@ -201,11 +207,10 @@ function AdminShell() {
                   key={tab.id}
                   type="button"
                   onClick={() => setActiveTab(tab.id)}
-                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-semibold transition-all ${
-                    activeTab === tab.id
-                      ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg"
-                      : "text-gray-700 dark:text-gray-300 hover:bg-gray-100/80 dark:hover:bg-gray-800/60"
-                  }`}
+                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-semibold transition-all ${activeTab === tab.id
+                    ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg"
+                    : "text-gray-700 dark:text-gray-300 hover:bg-gray-100/80 dark:hover:bg-gray-800/60"
+                    }`}
                 >
                   <span className="text-base">{tab.icon}</span>
                   <span>{tab.label.split(" ")[1]}</span>
@@ -307,8 +312,21 @@ function NewsAdminSection() {
     setForm((prev) => ({ ...prev, [field]: value }));
   }
 
+  function handleTranslationChange(lang: string, field: string, value: string) {
+    setForm((prev) => ({
+      ...prev,
+      translations: {
+        ...prev.translations,
+        [lang]: {
+          ...(prev.translations?.[lang] || {}),
+          [field]: value,
+        },
+      },
+    } as any));
+  }
+
   function startCreate() {
-    setForm({ title: "", description: "", image: "", link: "" });
+    setForm({ title: "", description: "", image: "", link: "", category: "Club News", date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) });
     setPendingDeleteId(null);
   }
 
@@ -327,6 +345,9 @@ function NewsAdminSection() {
         description: form.description,
         image: form.image ?? "",
         link: form.link ?? "",
+        translations: (form as any).translations || {},
+        category: form.category || "Club News",
+        date: form.date || new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }),
       };
       if (form.id) {
         await updateDoc(doc(db, "news", form.id), payload);
@@ -382,22 +403,41 @@ function NewsAdminSection() {
 
         <form onSubmit={handleSubmit} className="grid gap-4 md:grid-cols-2">
           <div className="md:col-span-2">
-            <label className="block text-sm font-medium mb-2">Title *</label>
+            <label className="block text-sm font-medium mb-2">Title (English) *</label>
             <input
               type="text"
               value={form.title ?? ""}
               onChange={(e) => handleChange("title", e.target.value)}
               className="w-full rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500"
-              placeholder="Enter news title"
+              placeholder="Enter English title"
             />
           </div>
           <div className="md:col-span-2">
-            <label className="block text-sm font-medium mb-2">Description *</label>
+            <label className="block text-sm font-medium mb-2">Title (Russian)</label>
+            <input
+              type="text"
+              value={(form as any).translations?.ru?.title ?? ""}
+              onChange={(e) => handleTranslationChange("ru", "title", e.target.value)}
+              className="w-full rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500"
+              placeholder="Введите заголовок на русском"
+            />
+          </div>
+          <div className="md:col-span-2">
+            <label className="block text-sm font-medium mb-2">Description (English) *</label>
             <textarea
               value={form.description ?? ""}
               onChange={(e) => handleChange("description", e.target.value)}
               className="w-full rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 px-4 py-3 text-sm min-h-[100px] focus:ring-2 focus:ring-blue-500"
-              placeholder="Enter news description"
+              placeholder="Enter English description"
+            />
+          </div>
+          <div className="md:col-span-2">
+            <label className="block text-sm font-medium mb-2">Description (Russian)</label>
+            <textarea
+              value={(form as any).translations?.ru?.description ?? ""}
+              onChange={(e) => handleTranslationChange("ru", "description", e.target.value)}
+              className="w-full rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 px-4 py-3 text-sm min-h-[100px] focus:ring-2 focus:ring-blue-500"
+              placeholder="Введите описание на русском"
             />
           </div>
           <div>
@@ -411,13 +451,33 @@ function NewsAdminSection() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium mb-2">Link</label>
+            <label className="block text-sm font-medium mb-2">Category</label>
+            <input
+              type="text"
+              value={form.category ?? ""}
+              onChange={(e) => handleChange("category", e.target.value)}
+              className="w-full rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500"
+              placeholder="Match Report / Transfer"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-2">Manual Date</label>
+            <input
+              type="text"
+              value={form.date ?? ""}
+              onChange={(e) => handleChange("date", e.target.value)}
+              className="w-full rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500"
+              placeholder="Mar 18, 2026"
+            />
+          </div>
+          <div className="md:col-span-2">
+            <label className="block text-sm font-medium mb-2">Link Slug (Optional)</label>
             <input
               type="text"
               value={form.link ?? ""}
               onChange={(e) => handleChange("link", e.target.value)}
               className="w-full rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500"
-              placeholder="/news/article-slug"
+              placeholder="article-slug"
             />
           </div>
           <div className="md:col-span-2 flex justify-end gap-3 mt-4">
@@ -477,11 +537,10 @@ function NewsAdminSection() {
             {filteredItems.map((item) => (
               <div
                 key={item.id}
-                className={`bg-gray-50 dark:bg-gray-700 rounded-xl p-4 border transition-all ${
-                  form.id === item.id
-                    ? "border-blue-400/60 dark:border-blue-400/40 ring-2 ring-blue-200/60 dark:ring-blue-900/30"
-                    : "border-gray-200 dark:border-gray-600 hover:shadow-md"
-                }`}
+                className={`bg-gray-50 dark:bg-gray-700 rounded-xl p-4 border transition-all ${form.id === item.id
+                  ? "border-blue-400/60 dark:border-blue-400/40 ring-2 ring-blue-200/60 dark:ring-blue-900/30"
+                  : "border-gray-200 dark:border-gray-600 hover:shadow-md"
+                  }`}
               >
                 {item.image && (
                   <img src={item.image} alt={item.title} className="w-full h-32 object-cover rounded-lg mb-3" />
@@ -542,8 +601,17 @@ function MatchesAdminSection() {
   const [items, setItems] = useState<MatchItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [form, setForm] = useState<Partial<MatchItem> & { date?: string; time?: string; venue?: string }>({
-    team1: "", team1Logo: "", team2: "", team2Logo: "", date: "", time: "", venue: ""
+  const [form, setForm] = useState<Partial<MatchItem>>({
+    team1: "",
+    team2: "",
+    team1Logo: "",
+    team2Logo: "",
+    date: "",
+    time: "",
+    venue: "",
+    competition: "PREMIER LEAGUE",
+    homeScore: 0,
+    awayScore: 0,
   });
   const [query, setQuery] = useState("");
   const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
@@ -568,7 +636,18 @@ function MatchesAdminSection() {
   }
 
   function startCreate() {
-    setForm({ team1: "", team1Logo: "", team2: "", team2Logo: "", date: "", time: "", venue: "" });
+    setForm({
+      team1: "",
+      team1Logo: "",
+      team2: "",
+      team2Logo: "",
+      date: "",
+      time: "",
+      venue: "",
+      competition: "PREMIER LEAGUE",
+      homeScore: 0,
+      awayScore: 0,
+    });
     setPendingDeleteId(null);
   }
 
@@ -583,13 +662,16 @@ function MatchesAdminSection() {
     setSaving(true);
     try {
       const payload = {
-        team1: form.team1,
-        team1Logo: form.team1Logo ?? "",
-        team2: form.team2,
-        team2Logo: form.team2Logo ?? "",
-        date: form.date ?? "",
-        time: form.time ?? "",
-        venue: form.venue ?? "",
+        team1: form.team1 || "",
+        team2: form.team2 || "",
+        team1Logo: form.team1Logo || "",
+        team2Logo: form.team2Logo || "",
+        date: form.date || "",
+        time: form.time || "",
+        venue: form.venue || "",
+        competition: form.competition || "PREMIER LEAGUE",
+        homeScore: Number(form.homeScore) || 0,
+        awayScore: Number(form.awayScore) || 0,
       };
       if (form.id) {
         await updateDoc(doc(db, "matches", form.id), payload);
@@ -648,7 +730,7 @@ function MatchesAdminSection() {
               value={form.team1 ?? ""}
               onChange={(e) => handleChange("team1", e.target.value)}
               className="w-full rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500"
-              placeholder="Global Sports FC"
+              placeholder="VeriaFC"
             />
           </div>
           <div>
@@ -696,6 +778,33 @@ function MatchesAdminSection() {
               type="time"
               value={form.time ?? ""}
               onChange={(e) => handleChange("time", e.target.value)}
+              className="w-full rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+          <div className="md:col-span-2">
+            <label className="block text-sm font-medium mb-2">Competition</label>
+            <input
+              type="text"
+              value={form.competition ?? "PREMIER LEAGUE"}
+              onChange={(e) => handleChange("competition", e.target.value)}
+              className="w-full rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-2">Home Score (Results Only)</label>
+            <input
+              type="number"
+              value={form.homeScore ?? 0}
+              onChange={(e) => setForm(prev => ({ ...prev, homeScore: Number(e.target.value) }))}
+              className="w-full rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-2">Away Score (Results Only)</label>
+            <input
+              type="number"
+              value={form.awayScore ?? 0}
+              onChange={(e) => setForm(prev => ({ ...prev, awayScore: Number(e.target.value) }))}
               className="w-full rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500"
             />
           </div>
@@ -1168,6 +1277,19 @@ function PlayersAdminSection() {
     setForm((prev) => ({ ...prev, [field]: value }));
   }
 
+  function handleTranslationChange(lang: string, field: string, value: string) {
+    setForm((prev) => ({
+      ...prev,
+      translations: {
+        ...prev.translations,
+        [lang]: {
+          ...(prev.translations?.[lang] || {}),
+          [field]: value,
+        },
+      },
+    } as any));
+  }
+
   function startCreate() {
     setForm({
       name: "",
@@ -1209,6 +1331,7 @@ function PlayersAdminSection() {
         goals: Number(form.goals) || 0,
         assists: Number(form.assists) || 0,
         cleanSheets: Number(form.cleanSheets) || 0,
+        translations: (form as any).translations || {},
       };
       if (form.id) {
         await updateDoc(doc(db, "players", form.id), payload);
@@ -1366,7 +1489,7 @@ function PlayersAdminSection() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium mb-2">Strengths</label>
+            <label className="block text-sm font-medium mb-2">Strengths (English)</label>
             <input
               type="text"
               value={form.strengths ?? ""}
@@ -1375,13 +1498,32 @@ function PlayersAdminSection() {
               placeholder="Speed, Dribbling, Vision"
             />
           </div>
+          <div>
+            <label className="block text-sm font-medium mb-2">Strengths (Russian)</label>
+            <input
+              type="text"
+              value={(form as any).translations?.ru?.strengths ?? ""}
+              onChange={(e) => handleTranslationChange("ru", "strengths", e.target.value)}
+              className="w-full rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 px-4 py-3 text-sm"
+              placeholder="Скорость, Дриблинг"
+            />
+          </div>
           <div className="lg:col-span-3 md:col-span-2">
-            <label className="block text-sm font-medium mb-2">Player Story/Bio</label>
+            <label className="block text-sm font-medium mb-2">Player Story/Bio (English)</label>
             <textarea
               value={form.story ?? ""}
               onChange={(e) => handleChange("story", e.target.value)}
               className="w-full rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 px-4 py-3 text-sm min-h-[100px]"
               placeholder="Brief biography about the player..."
+            />
+          </div>
+          <div className="lg:col-span-3 md:col-span-2">
+            <label className="block text-sm font-medium mb-2">Player Story/Bio (Russian)</label>
+            <textarea
+              value={(form as any).translations?.ru?.story ?? ""}
+              onChange={(e) => handleTranslationChange("ru", "story", e.target.value)}
+              className="w-full rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 px-4 py-3 text-sm min-h-[100px]"
+              placeholder="Биография игрока на русском..."
             />
           </div>
           <div className="lg:col-span-3 md:col-span-2 flex justify-end gap-3 mt-4">

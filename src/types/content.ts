@@ -4,6 +4,14 @@ export type NewsItem = {
   description: string;
   image: string;
   link: string;
+  date?: string;
+  category?: string;
+  translations?: {
+    [key: string]: {
+      title?: string;
+      description?: string;
+    };
+  };
 };
 
 export type MatchItem = {
@@ -12,6 +20,12 @@ export type MatchItem = {
   team1Logo: string;
   team2: string;
   team2Logo: string;
+  date?: string;
+  time?: string;
+  venue?: string;
+  competition?: string;
+  homeScore?: number;
+  awayScore?: number;
 };
 
 export type LocalizedText = {

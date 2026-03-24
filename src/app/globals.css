@@ -1,132 +1,373 @@
-@import url('https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Barlow:ital,wght@0,300;0,400;0,500;1,300&display=swap');
 
-/* Tailwind Base, Components, and Utilities */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Footer Styling */
-.foot {
-  font-family: "Quicksand", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  font-weight: 600;
-  font-style: normal;
+:root {
+  --gold: #C8A84B;
+  --gold-light: #E8C96A;
+  --gold-dark: #9A7C2E;
+  --sky: #00AEEF;
+  --sky-dark: #0081B0;
+  --navy: #080C18;
+  --navy-mid: #0F1525;
+  --navy-light: #172038;
+  --navy-card: #1C2644;
+  --white: #F0EEE8;
+  --muted: #7A8099;
+  --divider: rgba(255, 255, 255, 0.06);
+
+  /* Shadcn UI Default mappings (adapted for dark theme) */
+  --background: 225 50% 6%;
+  --foreground: 45 20% 94%;
+  --card: 225 41% 18%;
+  --card-foreground: 45 20% 94%;
+  --popover: 225 50% 6%;
+  --popover-foreground: 45 20% 94%;
+  --primary: 45 54% 54%;
+  --primary-foreground: 225 50% 6%;
+  --secondary: 196 100% 47%;
+  --secondary-foreground: 45 20% 94%;
+  --muted: 226 42% 10%;
+  --muted-foreground: 228 11% 54%;
+  --accent: 196 100% 47%;
+  --accent-foreground: 45 20% 94%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 45 20% 94%;
+  --border: 226 42% 10%;
+  --input: 225 41% 18%;
+  --ring: 45 54% 54%;
+  --radius: 0.5rem;
+}
+
+.dark {
+  --background: 225 50% 6%;
+  --foreground: 45 20% 94%;
+  --card: 225 41% 18%;
+  --card-foreground: 45 20% 94%;
+  --popover: 225 50% 6%;
+  --popover-foreground: 45 20% 94%;
+  --primary: 45 54% 54%;
+  --primary-foreground: 225 50% 6%;
+  --secondary: 196 100% 47%;
+  --secondary-foreground: 45 20% 94%;
+  --muted: 226 42% 10%;
+  --muted-foreground: 228 11% 54%;
+  --accent: 196 100% 47%;
+  --accent-foreground: 45 20% 94%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 45 20% 94%;
+  --border: 226 42% 10%;
+  --input: 225 41% 18%;
+  --ring: 45 54% 54%;
 }
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  border: none;
-  outline: none;
 }
 
-FormInput::placeholder {
-  color: black; /* Adjust as needed */
+html {
+  scroll-behavior: smooth;
 }
 
-/* Smooth Transition for Light/Dark Mode */
 body {
-  font-family: "Quicksand", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  font-weight: 400;
-  padding-top: 30px;
-  font-style: normal;
-  transition: background 0.9s ease-in-out, color 0.9s ease-in-out;
+  background: var(--navy);
+  color: var(--white);
+  font-family: 'Barlow', sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Light Mode (Default) */
-:root {
-  --gradient-start: #e0f2fe;  /* Soft blue */
-  --gradient-end: #ffffff;    /* White */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Bebas Neue', cursive;
+  letter-spacing: 1px;
 }
 
-/* Dark Mode */
-body.dark {
-  --background: #121212;
-  --foreground: #ffffff;
-  --gradient-start: #facc15;  /* Warm yellow */
-  --gradient-end: #121212;    /* Deep black */
+::selection {
+  background: var(--gold);
+  color: var(--navy);
 }
 
-/* Automatic Background Gradient for All Pages */
-body {
-  background: linear-gradient(to bottom left, var(--gradient-start), var(--gradient-end));
-  color: var(--foreground); /* Ensure text color is set */
+img::selection {
+  background: transparent;
 }
 
-/* Navbar Background Transition */
-.navbar {
-  transition: background-color 0.5s ease-in-out;
+button,
+a,
+.btn,
+nav {
+  font-family: 'Barlow Condensed', sans-serif;
 }
 
-/* Button & Link Transitions */
-button, a {
-  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+::-webkit-scrollbar {
+  width: 6px;
 }
 
-/* Define Custom Border Class */
+::-webkit-scrollbar-track {
+  background: var(--navy-mid);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(200, 168, 75, 0.3);
+  border-radius: 3px;
+}
+
 @layer components {
-  .border-border {
-    border: 1px solid currentColor; /* Adjust as needed */
-  }
-}
 
-@layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 20 14.3% 4.1%;
-    --card: 0 0% 100%;
-    --card-foreground: 20 14.3% 4.1%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 20 14.3% 4.1%;
-    --primary: 24 9.8% 10%;
-    --primary-foreground: 60 9.1% 97.8%;
-    --secondary: 60 4.8% 95.9%;
-    --secondary-foreground: 24 9.8% 10%;
-    --muted: 60 4.8% 95.9%;
-    --muted-foreground: 25 5.3% 44.7%;
-    --accent: 60 4.8% 95.9%;
-    --accent-foreground: 24 9.8% 10%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 60 9.1% 97.8%;
-    --border: 20 5.9% 90%;
-    --input: 20 5.9% 90%;
-    --ring: 20 14.3% 4.1%;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
-    --radius: 0.5rem;
+  /* Ticker */
+  .ticker-bar {
+    @apply bg-vsky overflow-hidden h-11 flex items-center relative;
   }
-  .dark {
-    --background: 20 14.3% 4.1%;
-    --foreground: 60 9.1% 97.8%;
-    --card: 20 14.3% 4.1%;
-    --card-foreground: 60 9.1% 97.8%;
-    --popover: 20 14.3% 4.1%;
-    --popover-foreground: 60 9.1% 97.8%;
-    --primary: 60 9.1% 97.8%;
-    --primary-foreground: 24 9.8% 10%;
-    --secondary: 12 6.5% 15.1%;
-    --secondary-foreground: 60 9.1% 97.8%;
-    --muted: 12 6.5% 15.1%;
-    --muted-foreground: 24 5.4% 63.9%;
-    --accent: 12 6.5% 15.1%;
-    --accent-foreground: 60 9.1% 97.8%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 60 9.1% 97.8%;
-    --border: 12 6.5% 15.1%;
-    --input: 12 6.5% 15.1%;
-    --ring: 24 5.7% 82.9%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
+
+  .ticker-label {
+    @apply bg-vnavy text-vsky px-6 h-full flex items-center shrink-0 font-bebas text-[13px] tracking-[2.5px] whitespace-nowrap z-20;
+    box-shadow: 10px 0 20px rgba(0, 0, 0, 0.1);
   }
-  body {
-    @apply bg-background text-foreground;
+
+  .ticker-track {
+    @apply flex items-center h-full relative z-10;
+    gap: 80px;
+    animation: ticker 40s linear infinite;
+    white-space: nowrap;
+    will-change: transform;
+  }
+
+  @keyframes ticker {
+    from {
+      transform: translateX(0)
+    }
+
+    to {
+      transform: translateX(-50%)
+    }
+  }
+
+  .ticker-item {
+    @apply font-barlow-condensed font-bold text-[13px] tracking-wide text-vnavy flex items-center gap-2.5;
+  }
+
+  .ticker-sep {
+    color: rgba(8, 12, 24, 0.4);
+  }
+
+  /* Sections */
+  .section {
+    @apply py-[100px] px-6 md:px-[60px];
+  }
+
+  .section-eyebrow {
+    @apply font-barlow-condensed text-[11px] font-bold tracking-[3px] uppercase text-vsky mb-2.5;
+  }
+
+  .section-heading {
+    @apply font-bebas text-vwhite tracking-[2px] leading-[0.95] mb-4;
+    font-size: clamp(40px, 6vw, 72px);
+  }
+
+  .section-heading .accent {
+    @apply text-vgold;
+  }
+
+  .section-sub {
+    @apply text-base text-vmuted max-w-[520px] leading-[1.7] font-light;
+  }
+
+  .section-divider {
+    @apply h-[1px] bg-[var(--divider)] mx-6 md:mx-[60px];
+  }
+
+  /* Background Patterns */
+  .kz-grid {
+    @apply absolute inset-0 opacity-[0.035] pointer-events-none;
+    background-image:
+      repeating-linear-gradient(45deg, rgba(0, 174, 239, 0.9) 0, rgba(0, 174, 239, 0.9) 1px, transparent 1px, transparent 32px),
+      repeating-linear-gradient(-45deg, rgba(200, 168, 75, 0.9) 0, rgba(200, 168, 75, 0.9) 1px, transparent 1px, transparent 32px);
+  }
+
+  .hero-glow {
+    @apply absolute top-[-100px] right-[-100px] w-[600px] h-[600px] pointer-events-none;
+    background: radial-gradient(circle, rgba(0, 174, 239, 0.06) 0%, transparent 70%);
+  }
+
+  .hero-glow-gold {
+    @apply absolute bottom-[-100px] left-[-100px] w-[500px] h-[500px] pointer-events-none;
+    background: radial-gradient(circle, rgba(200, 168, 75, 0.05) 0%, transparent 70%);
+  }
+
+  .flag-strip {
+    @apply fixed top-[72px] left-0 right-0 z-[999] flex h-[3px];
+  }
+
+  /* Animations */
+  @keyframes fadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px)
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0)
+    }
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0
+    }
+
+    to {
+      opacity: 1
+    }
+  }
+
+  @keyframes pulseLive {
+
+    0%,
+    100% {
+      opacity: 1;
+      transform: scale(1)
+    }
+
+    50% {
+      opacity: 0.4;
+      transform: scale(0.6)
+    }
+  }
+
+  .hero-animate-up {
+    animation: fadeUp 0.7s ease both;
+  }
+
+  .hero-animate-in {
+    animation: fadeIn 1s ease both;
+  }
+
+  .live-dot-pulse {
+    animation: pulseLive 1s ease-in-out infinite;
+  }
+
+  .slow-pulse {
+    animation: pulseLive 2s ease-in-out infinite;
+  }
+
+  /* Roster / Player Cards */
+  .roster-section-title {
+    @apply font-bebas text-[18px] text-vmuted tracking-[3px] uppercase mt-[50px] mb-5 pb-2.5 border-b border-[var(--divider)] flex items-center gap-3;
+  }
+
+  .roster-section-title::before {
+    content: '';
+    @apply flex-[0_0_4px] h-[18px] bg-vgold rounded-[2px];
+  }
+
+  .player-grid {
+    @apply grid gap-4;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  }
+
+  .player-card-web {
+    @apply bg-vnavy-card rounded-[14px] border border-[var(--divider)] overflow-hidden cursor-pointer transition-all duration-200;
+  }
+
+  .player-card-web:hover {
+    @apply -translate-y-1.5 scale-[1.01] border-vsky/30;
+  }
+
+  .player-card-top {
+    @apply h-[160px] relative flex items-center justify-center overflow-hidden;
+  }
+
+  .player-card-top.gk {
+    background: linear-gradient(160deg, #1E1000, #100A00);
+  }
+
+  .player-card-top.def {
+    background: linear-gradient(160deg, #0A1A30, #06101E);
+  }
+
+  .player-card-top.mid {
+    background: linear-gradient(160deg, #0A2000, #061000);
+  }
+
+  .player-card-top.fwd {
+    background: linear-gradient(160deg, #200A08, #100504);
+  }
+
+  .player-num-bg {
+    @apply absolute top-2 right-3 font-bebas text-[52px] text-vwhite/5 leading-none pointer-events-none;
+  }
+
+  .player-avatar-web {
+    @apply w-[72px] h-[72px] rounded-full border-2 border-vwhite/10 flex items-center justify-center font-bebas text-[22px] transition-transform duration-500 overflow-hidden;
+  }
+
+  .pos-badge {
+    @apply absolute bottom-2.5 left-3 font-barlow-condensed font-bold text-[9px] tracking-[1.5px] uppercase px-2 py-0.5 rounded-[4px];
+  }
+
+  .player-card-info {
+    @apply p-[14px_16px_18px];
+  }
+
+  .player-num {
+    @apply font-bebas text-[13px] text-vmuted tracking-[1px] mb-0.5;
+  }
+
+  .player-web-name {
+    @apply font-barlow-condensed font-bold text-base text-vwhite mb-0.5 truncate;
+  }
+
+  .player-nat {
+    @apply text-[11px] text-vmuted;
+  }
+
+  /* Leader Cards */
+  .leader-card {
+    @apply bg-vnavy-card rounded-[16px] border border-[var(--divider)] overflow-hidden transition-all duration-300;
+  }
+  .leader-card:hover {
+    @apply border-vsky/25 -translate-y-1;
+  }
+
+  .leader-card-hero {
+    @apply h-[200px] flex items-end justify-start p-6 relative overflow-hidden bg-vnavy-mid;
+  }
+  .leader-card.founder .leader-card-hero {
+    @apply h-[240px];
+  }
+
+  .leader-initials-bg {
+    @apply absolute inset-0 flex items-center justify-center;
+  }
+
+  .initials-circle {
+    @apply w-[110px] h-[110px] rounded-full border-2 border-vgold/20 flex items-center justify-center font-bebas text-[36px] tracking-[2px] text-vgold bg-vgold/5;
+  }
+  .leader-card.founder .initials-circle {
+    @apply w-[140px] h-[140px] text-[44px];
+  }
+
+  .leader-card-body { @apply p-[24px_28px]; }
+  
+  .leader-role {
+    @apply font-barlow-condensed text-[11px] font-bold tracking-[2.5px] uppercase text-vsky mb-1.5;
+  }
+  
+  .leader-name {
+    @apply font-bebas text-[26px] text-vwhite tracking-[1px] mb-2.5;
+  }
+  .leader-card.founder .leader-name { @apply text-[34px]; }
+  
+  .leader-bio {
+    @apply font-barlow text-vmuted text-[13px] leading-relaxed;
   }
 }

@@ -5,7 +5,7 @@
  *   2. Run: node scripts/set-admin-user.js <user-email>
  *
  * Example:
- *   node scripts/set-admin-user.js admin@globalsportsfc.com
+ *   node scripts/set-admin-user.js admin@veriafc.com
  */
 
 const admin = require("firebase-admin");

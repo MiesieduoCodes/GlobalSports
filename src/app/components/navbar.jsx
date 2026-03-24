@@ -1,300 +1,101 @@
 "use client";
-import React, { useState } from "react";
-import Image from "next/image";
-import { Menu, X, ChevronDown } from "lucide-react";  
-import { useLanguage } from "@/app/context/LanguageContext";
-import { ModeToggle } from "@/app/components/mode-toggle";
-import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
 
-// Language translations
+import React, { useState, useEffect } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useLanguage } from "@/app/context/LanguageContext";
+
 const translations = {
   en: {
+    home: "Home",
     about: "About",
-    ourClub: "Our Club",
-    ourTeam: "Our Team",
-    news: "News",
-    contact: "Contact Us",
-    administration: "Administration",
-    clubHistory: "Club History",
-    awards: "Awards",
-    kidsClub: "Kids Club",
-    globalSports: "Global Sports For All",
-    partners: "Partners",
-    theTeam: "The Team",
-    squad: "Squad",
-    coaches: "Coaches",
-    matches: "Matches"
+    roster: "Roster",
+    contact: "Contact",
+    cta: "Get Tickets",
+    city: "Almaty · Kazakhstan"
   },
   ru: {
-    about: "О нас",
-    ourClub: "Наш клуб",
-    ourTeam: "Наша команда",
-    news: "Новости",
-    contact: "Связаться с нами",
-    administration: "Администрация",
-    clubHistory: "История клуба",
-    awards: "Награды",
-    kidsClub: "Детский клуб",
-    globalSports: "Глобальные виды спорта для всех",
-    partners: "Партнеры",
-    theTeam: "Команда",
-    squad: "Состав",
-    coaches: "Тренеры",
-    matches: "Матчи"
-  },
-  fr: {
-    about: "À propos",
-    ourClub: "Notre club",
-    ourTeam: "Notre équipe",
-    news: "Nouvelles",
-    contact: "Contactez-nous",
-    administration: "Administration",
-    clubHistory: "Histoire du club",
-    awards: "Récompenses",
-    kidsClub: "Club des enfants",
-    globalSports: "Sports mondiaux pour tous",
-    partners: "Partenaires",
-    theTeam: "L'équipe",
-    squad: "Équipe",
-    coaches: "Entraîneurs",
-    matches: "Matchs"
-  },
-  es: {
-    about: "Acerca de",
-    ourClub: "Nuestro club",
-    ourTeam: "Nuestro equipo",
-    news: "Noticias",
-    contact: "Contáctenos",
-    administration: "Administración",
-    clubHistory: "Historia del club",
-    awards: "Premios",
-    kidsClub: "Club de niños",
-    globalSports: "Deportes globales para todos",
-    partners: "Socios",
-    theTeam: "El equipo",
-    squad: "Plantilla",
-    coaches: "Entrenadores",
-    matches: "Partidos"
+    home: "Главная",
+    about: "О клубе",
+    roster: "Состав",
+    contact: "Контакт",
+    cta: "Билеты",
+    city: "Алматы · Казахстан"
   }
 };
 
-// Navigation data
-const Navdata = {
-  navMain: [
-    { titleKey: "about", url: "/about" },
-    {
-      titleKey: "ourClub",
-      url: "#",
-      items: [
-        { titleKey: "administration", url: "/administration" },
-        { titleKey: "clubHistory", url: "/clubhistory" },
-        { titleKey: "awards", url: "/awards" },
-        { titleKey: "kidsClub", url: "/kidscamp" },
-        { titleKey: "globalSports", url: "/forall" },
-        { titleKey: "partners", url: "/partners" },
-      ],
-    },
-    {
-      titleKey: "ourTeam",
-      url: "#",
-      items: [
-        { titleKey: "theTeam", url: "/theteams" },
-        { titleKey: "squad", url: "/squad" },
-        { titleKey: "coaches", url: "/coaches" },
-        { titleKey: "matches", url: "/matches" },
-      ],
-    },
-    { titleKey: "news", url: "/news" },
-    { titleKey: "contact", url: "/contact" }
-  ],
-};
-
 const Navbar = () => {
-  const { language, setLanguage } = useLanguage();
-  const [activeDropdown, setActiveDropdown] = useState(null);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
+  const { language } = useLanguage();
+  const t = translations[language] || translations.en;
+  const [scrolled, setScrolled] = useState(false);
 
-  const closeMobileMenu = () => {
-    setIsMobileMenuOpen(false);
-    setActiveDropdown(null);
-  };
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
-  const handleLanguageChange = (lang) => {
-    setLanguage(lang);
-  };
+  const navLinks = [
+    { name: t.home, path: "/" },
+    { name: t.about, path: "/about" },
+    { name: t.roster, path: "/squad" },
+    { name: t.contact, path: "/contact" }
+  ];
 
   return (
-    <nav className="fixed p-4 top-0 w-full bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm shadow-md z-50">
-      <div className="container mx-auto px-4 lg:px-8 flex justify-between items-center h-16">
-        <Link
-          href="/"
-          className="flex items-center space-x-2"
-          onClick={closeMobileMenu}
-        >
-          <Image
-            src="/images/LOGO-photoaidcom-cropped.jpg"
-            alt="Global Sports FC Logo"
-            width={60}
-            height={60}
-            className="object-contain"
-          />
-          <span className="text-xl font-bold text-gray-800 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
-            Global Sports FC
-          </span>
+    <>
+      <nav className={`navbar flex items-center justify-between px-6 md:px-[60px] h-[72px] fixed top-0 left-0 right-0 z-[1000] transition-all duration-300 ${scrolled ? 'bg-[rgba(8,12,24,0.95)] backdrop-blur-xl border-b border-[rgba(200,168,75,0.2)]' : 'bg-[rgba(8,12,24,0.85)] backdrop-blur-md border-b border-[rgba(255,255,255,0.06)]'}`}>
+
+        {/* Logo */}
+        <Link href="/" className="flex items-center gap-3.5 no-underline group">
+          <svg width="42" height="42" viewBox="0 0 90 90" fill="none">
+            <path d="M45 5 L78 18 L78 52 Q78 72 45 85 Q12 72 12 52 L12 18 Z" fill="#172038" stroke="#C8A84B" strokeWidth="2.5" />
+            <path d="M45 10 L72 21 L72 50 Q72 68 45 79 Q18 68 18 50 L18 21 Z" fill="none" stroke="rgba(0,174,239,0.15)" strokeWidth="1" />
+            <text x="45" y="34" fontFamily="Bebas Neue, sans-serif" fontSize="13" fill="#C8A84B" textAnchor="middle" letterSpacing="1.5">VERIA</text>
+            <text x="45" y="56" fontFamily="Bebas Neue, sans-serif" fontSize="26" fill="#F0EEE8" textAnchor="middle" letterSpacing="1">FC</text>
+            <line x1="30" y1="62" x2="60" y2="62" stroke="#C8A84B" strokeWidth="1" opacity="0.4" />
+            <text x="45" y="74" fontFamily="Bebas Neue, sans-serif" fontSize="10" fill="#00AEEF" textAnchor="middle" letterSpacing="2">ALMATY</text>
+          </svg>
+          <div className="flex flex-col leading-none">
+            <span className="font-bebas text-[22px] text-vwhite tracking-[2px] group-hover:text-vgold transition-colors">Veria FC</span>
+            <span className="font-barlow-condensed text-[10px] font-bold tracking-[3px] uppercase text-vsky">{t.city}</span>
+          </div>
         </Link>
 
-        <div className="hidden lg:flex items-center space-x-6">
-          {Navdata.navMain.map((item, index) => (
-            <div key={index} className="relative group">
-              {item.items ? (
-                <>
-                  <button
-                    onClick={() =>
-                      setActiveDropdown(
-                        index === activeDropdown ? null : index
-                      )
-                    }
-                    className="flex items-center px-4 py-2 text-gray-800 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium"
-                  >
-                    {translations[language][item.titleKey]}{" "}
-                    <ChevronDown
-                      className={`w-4 h-4 ml-2 transition-transform ${
-                        activeDropdown === index ? "rotate-180" : ""
-                      }`}
-                    />
-                  </button>
-                  <AnimatePresence>
-                    {activeDropdown === index && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 10 }}
-                        className="absolute top-full left-0 bg-white dark:bg-gray-800 shadow-lg rounded-lg p-2 min-w-[200px] z-50"
-                      >
-                        {item.items.map((subItem, subIndex) => (
-                          <Link
-                            key={subIndex}
-                            href={subItem.url}
-                            onClick={closeMobileMenu}
-                            className="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-gray-700 rounded-md transition-colors"
-                          >
-                            {translations[language][subItem.titleKey]}
-                          </Link>
-                        ))}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </>
-              ) : (
-                <Link
-                  href={item.url}
-                  onClick={closeMobileMenu}
-                  className="px-4 py-2 text-gray-800 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium"
-                >
-                  {translations[language][item.titleKey]}
-                </Link>
-              )}
-            </div>
-          ))}
-          <ModeToggle />
-          <select
-            value={language}
-            onChange={(e) => handleLanguageChange(e.target.value)}
-            className="ml-4 p-2 border-none rounded"
-          >
-            <option className="w-full" value="en">English</option>
-            <option className="w-" value="ru">Pycckий</option>
-            <option className="w-" value="fr">Français</option>
-            <option className="w-" value="es">Español</option>
-          </select>
+        {/* Links */}
+        <div className="hidden md:flex items-center gap-9">
+          {navLinks.map((link) => {
+            const isActive = pathname === link.path;
+            return (
+              <Link
+                key={link.path}
+                href={link.path}
+                className={`font-barlow-condensed text-[13px] font-bold tracking-[2px] uppercase transition-all relative py-1 hover:text-vwhite ${isActive ? 'text-vgold' : 'text-vmuted'}`}
+              >
+                {link.name}
+                <span className={`absolute bottom-[-4px] left-0 right-0 h-[2px] bg-vgold transition-transform origin-left ${isActive ? 'scale-x-100' : 'scale-x-0'}`} />
+              </Link>
+            );
+          })}
         </div>
 
-        <button
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          className="lg:hidden p-2 text-gray-800 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+        {/* CTA */}
+        <Link
+          href="/contact"
+          className="bg-vgold text-vnavy px-5 py-2.5 rounded-[6px] font-barlow-condensed font-bold text-[12px] tracking-[2px] uppercase hover:bg-vgold-light transition-colors hidden sm:block"
         >
-          {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-        </button>
-      </div>
+          {t.cta}
+        </Link>
 
-      <AnimatePresence>
-        {isMobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="lg:hidden bg-white dark:bg-gray-900 shadow-lg"
-          >
-            <div className="container mx-auto px-4 py-4">
-              {Navdata.navMain.map((item, index) => (
-                <div key={index} className="mb-2">
-                  {item.items ? (
-                    <>
-                      <button
-                        onClick={() =>
-                          setActiveDropdown(
-                            index === activeDropdown ? null : index
-                          )
-                        }
-                        className="flex w-full items-center justify-between px-4 py-2 text-gray-800 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium"
-                      >
-                        {translations[language][item.titleKey]}{" "}
-                        <ChevronDown
-                          className={`w-4 h-4 transition-transform ${
-                            activeDropdown === index ? "rotate-180" : ""
-                          }`}
-                        />
-                      </button>
-                      {activeDropdown === index && (
-                        <motion.div
-                          initial={{ opacity: 0, height: 0 }}
-                          animate={{ opacity: 1, height: "auto" }}
-                          exit={{ opacity: 0, height: 0 }}
-                          className="pl-4"
-                        >
-                          {item.items.map((subItem, subIndex) => (
-                            <Link
-                              key={subIndex}
-                              href={subItem.url}
-                              onClick={closeMobileMenu}
-                              className="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-blue-50 dark:hover:bg-gray-700 rounded-md transition-colors"
-                            >
-                              {translations[language][subItem.titleKey]}
-                            </Link>
-                          ))}
-                        </motion.div>
-                      )}
-                    </>
-                  ) : (
-                    <Link
-                      href={item.url}
-                      onClick={closeMobileMenu}
-                      className="block px-4 py-2 text-gray-800 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors font-medium"
-                    >
-                      {translations[language][item.titleKey]}
-                    </Link>
-                  )}
-                </div>
-              ))}
-              <div className="px-4 py-2">
-                <ModeToggle />
-                <select
-                  value={language}
-                  onChange={(e) => handleLanguageChange(e.target.value)}
-                  className="ml-4 p-2 border rounded"
-                >
-                  <option value="en">English</option>
-                  <option value="ru">Pycckий</option>
-                  <option value="fr">Français</option>
-                  <option value="es">Español</option>
-                </select>
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </nav>
+      </nav>
+
+      {/* Kazakh Flag Strip */}
+      <div className="flag-strip">
+        <div className="flex-1 bg-vsky" />
+        <div className="w-[80px] bg-vgold" />
+      </div>
+    </>
   );
 };
 

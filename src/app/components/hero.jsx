@@ -1,310 +1,118 @@
 "use client";
-import { useState, useEffect, useCallback } from "react";
-import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
-import Link from 'next/link';
+import React from "react";
+import Image from "next/image";
 import { useLanguage } from "@/app/context/LanguageContext";
-import { Button } from "./ui/button";
-import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const translations = {
-  en: [
-    {
-      id: 1,
-      title: "Exciting Logo Change Ahead",
-      text: "Our club is set to unveil a new logo next week! Stay tuned for the reveal and share your thoughts.",
-      buttonText: "Learn More"
-    },
-    {
-      id: 2,
-      title: "Players Gear Up for Next Match",
-      text: "Our team is in full training mode as they prepare for the upcoming match against our rivals this Saturday.",
-      buttonText: "Learn More"
-    },
-    {
-      id: 3,
-      title: "Youth Academy Shines",
-      text: "Our youth academy has produced another star! Join us in celebrating the achievements of our rising talent.",
-      buttonText: "Learn More"
-    }
-  ],
-  ru: [
-    {
-      id: 1,
-      title: "Скоро новое изменение логотипа",
-      text: "Наш клуб готовится представить новый логотип на следующей неделе! Оставайтесь с нами для раскрытия и делитесь своими мыслями.",
-      buttonText: "Узнать больше"
-    },
-    {
-      id: 2,
-      title: "Игроки готовятся к следующему матчу",
-      text: "Наша команда полна сил и готовится к предстоящему матчу против соперников в эту субботу.",
-      buttonText: "Узнать больше"
-    },
-    {
-      id: 3,
-      title: "Успехи молодежной академии",
-      text: "Наша молодежная академия вновь произвела звезду! Присоединяйтесь к нам, чтобы отпраздновать достижения нашего подрастающего таланта.",
-      buttonText: "Узнать больше"
-    }
-  ],
-  fr: [
-    {
-      id: 1,
-      title: "Changement de logo passionnant à venir",
-      text: "Notre club s'apprête à dévoiler un nouveau logo la semaine prochaine ! Restez à l'écoute pour la révélation et partagez vos pensées.",
-      buttonText: "En savoir plus"
-    },
-    {
-      id: 2,
-      title: "Les joueurs se préparent pour le prochain match",
-      text: "Notre équipe est en pleine préparation pour le match à venir contre nos rivaux ce samedi.",
-      buttonText: "En savoir plus"
-    },
-    {
-      id: 3,
-      title: "L'académie des jeunes brille",
-      text: "Notre académie de jeunes a produit une nouvelle star ! Joignez-vous à nous pour célébrer les réalisations de notre talent en pleine émergence.",
-      buttonText: "En savoir plus"
-    }
-  ],
-  es: [
-    {
-      id: 1,
-      title: "Cambio de logo emocionante por delante",
-      text: "¡Nuestro club está a punto de revelar un nuevo logo la próxima semana! Mantente atento para la revelación y comparte tus pensamientos.",
-      buttonText: "Aprender más"
-    },
-    {
-      id: 2,
-      title: "Los jugadores se preparan para el próximo partido",
-      text: "Nuestro equipo está en plena fase de entrenamiento mientras se prepara para el próximo partido contra nuestros rivales este sábado.",
-      buttonText: "Aprender más"
-    },
-    {
-      id: 3,
-      title: "La academia juvenil brilla",
-      text: "¡Nuestra academia juvenil ha producido otra estrella! Únete a nosotros para celebrar los logros de nuestro talento emergente.",
-      buttonText: "Aprender más"
-    }
-  ]
+  en: {
+    badge: "Kazakhstan Premier League · Season 2025/26",
+    title1: "VERIA",
+    title2: "FC",
+    city: "ALMATY",
+    tagline: <>One club. One city. One <em className="text-vgold not-italic">ambition</em>.<br />Built from the steppe up — forged in gold and sky.</>,
+    btnPrimary: "Meet The Squad",
+    btnSecondary: "Our Story",
+    liveLabel: "Last Result",
+    liveMeta: "KPL Matchday 21 · Central Stadium, Almaty",
+    stats: [
+      { label: "Wins", val: "14" },
+      { label: "Draws", val: "5" },
+      { label: "Losses", val: "3" },
+      { label: "KPL Position", val: "2nd", color: "text-vsky" },
+      { label: "Points", val: "47" }
+    ]
+  },
+  ru: {
+    badge: "Премьер-лига Казахстана · Сезон 2025/26",
+    title1: "ВЕРИЯ",
+    title2: "ФК",
+    city: "АЛМАТЫ",
+    tagline: <>Один клуб. Один город. Одна <em className="text-vgold not-italic">цель</em>.<br />Создано в степи — выковано в золоте и небе.</>,
+    btnPrimary: "Встречайте Состав",
+    btnSecondary: "Наша История",
+    liveLabel: "Последний Результат",
+    liveMeta: "КПЛ Тур 21 · Центральный Стадион, Алматы",
+    stats: [
+      { label: "Победы", val: "14" },
+      { label: "Ничьи", val: "5" },
+      { label: "Поражения", val: "3" },
+      { label: "Позиция в КПЛ", val: "2", color: "text-vsky" },
+      { label: "Очки", val: "47" }
+    ]
+  }
 };
 
 const Hero = () => {
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [isHovered, setIsHovered] = useState(false);
   const { language } = useLanguage();
-  const slides = translations[language] || translations.en;
-  
-  // Original hero images
-  const heroImages = [
-    "/images/IMG-20250219-WA0123.jpg",
-    "/images/IMG-20250219-WA0127.jpg",
-    "/images/IMG-20250219-WA0107.jpg"
-  ];
-
-  const nextSlide = useCallback(() => {
-    setCurrentSlide((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
-  }, [slides.length]);
-
-  const prevSlide = useCallback(() => {
-    setCurrentSlide((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
-  }, [slides.length]);
-
-  useEffect(() => {
-    if (!isHovered) {
-      const timer = setInterval(() => {
-        nextSlide();
-      }, 8000);
-      return () => clearInterval(timer);
-    }
-  }, [nextSlide, isHovered]);
-
-  const slideVariants = {
-    enter: (direction) => ({
-      x: direction > 0 ? '100%' : '-100%',
-      opacity: 0,
-      scale: 0.95,
-    }),
-    center: {
-      x: 0,
-      opacity: 1,
-      scale: 1,
-      transition: {
-        x: { type: 'spring', stiffness: 300, damping: 30 },
-        opacity: { duration: 0.5 },
-        scale: { duration: 0.5 },
-      },
-    },
-    exit: (direction) => ({
-      x: direction < 0 ? '100%' : '-100%',
-      opacity: 0,
-      scale: 0.95,
-    }),
-  };
-
-  const textVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: (i) => ({
-      opacity: 1,
-      y: 0,
-      transition: {
-        delay: 0.1 * i,
-        duration: 0.6,
-        ease: 'easeOut',
-      },
-    }),
-  };
+  const t = translations[language] || translations.en;
 
   return (
-    <section 
-      className="relative w-full h-screen max-h-[90vh] overflow-hidden bg-gradient-to-br from-blue-900 via-blue-800 to-blue-900"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
-      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent z-0" />
-      
-      <AnimatePresence mode="wait" initial={false} custom={currentSlide}>
-        {slides.map((slide, index) => 
-          index === currentSlide && (
-            <motion.div
-              key={slide.id}
-              custom={currentSlide}
-              variants={slideVariants}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              className="absolute inset-0 flex items-center justify-center p-4 md:p-8 lg:p-12"
-            >
-              <div 
-                className="absolute inset-0 bg-cover bg-center"
-                style={{ 
-                  backgroundImage: `url(${heroImages[index % heroImages.length]})`,
-                  filter: 'brightness(0.7)'
-                }} 
-              />
-              
-              <div className="relative z-10 max-w-6xl w-full mx-auto text-center px-4">
-                <motion.div 
-                  className="inline-block mb-4 px-4 py-1 bg-blue-600 text-white text-sm font-semibold rounded-full"
-                  custom={0}
-                  initial="hidden"
-                  animate="visible"
-                  variants={textVariants}
-                >
-                  {language === 'en' ? 'Latest News' : language === 'ru' ? 'Последние новости' : 'Dernières nouvelles'}
-                </motion.div>
-                
-                <motion.h1 
-                  className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 text-white leading-tight"
-                  custom={1}
-                  initial="hidden"
-                  animate="visible"
-                  variants={textVariants}
-                >
-                  {slide.title}
-                </motion.h1>
-                
-                <motion.p 
-                  className="text-lg md:text-xl lg:text-2xl text-gray-100 mb-8 max-w-3xl mx-auto leading-relaxed"
-                  custom={2}
-                  initial="hidden"
-                  animate="visible"
-                  variants={textVariants}
-                >
-                  {slide.text}
-                </motion.p>
-                
-                <motion.div
-                  custom={3}
-                  initial="hidden"
-                  animate="visible"
-                  variants={textVariants}
-                >
-                  <Link href="/news">
-                    <Button size="lg" className="group">
-                      {slide.buttonText}
-                      <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                    </Button>
-                  </Link>
-                </motion.div>
-              </div>
-            </motion.div>
-          )
-        )}
-      </AnimatePresence>
+    <section className="relative min-h-screen flex flex-col justify-center px-6 md:px-[60px] pt-[72px] pb-[80px] overflow-hidden bg-vnavy">
+      <div className="absolute inset-0 bg-[linear-gradient(175deg,rgba(8,12,24,0.1)_0%,rgba(8,12,24,0.6)_50%,rgba(8,12,24,1)_100%),linear-gradient(135deg,#080E20_0%,#0C1A32_35%,#102240_65%,#080E20_100%)]" />
+      <div className="kz-grid" />
+      <div className="hero-glow" />
+      <div className="hero-glow-gold" />
 
-      {/* Navigation Arrows */}
-      <button
-        onClick={prevSlide}
-        className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white p-3 rounded-full z-10 transition-all duration-300 hover:scale-110 backdrop-blur-sm"
-        aria-label="Previous slide"
-      >
-        <ChevronLeft className="h-6 w-6" />
-      </button>
-      
-      <button
-        onClick={nextSlide}
-        className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white p-3 rounded-full z-10 transition-all duration-300 hover:scale-110 backdrop-blur-sm"
-        aria-label="Next slide"
-      >
-        <ChevronRight className="h-6 w-6" />
-      </button>
+      <div className="relative z-10 max-w-[720px]">
+        <div className="hero-badge inline-flex items-center gap-2 bg-[rgba(0,174,239,0.1)] border border-[rgba(0,174,239,0.3)] rounded-full px-4 py-1.5 font-barlow-condensed font-semibold text-[11px] tracking-[2px] uppercase text-vsky mb-5 hero-animate-up">
+          <div className="w-[6px] h-[6px] bg-vsky rounded-full live-dot-pulse" />
+          {t.badge}
+        </div>
 
-      {/* Pagination Dots */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-2 z-10">
-        {slides.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => setCurrentSlide(index)}
-            className={`h-2 rounded-full transition-all duration-300 ${
-              index === currentSlide 
-                ? 'w-8 bg-white' 
-                : 'w-3 bg-white/50 hover:bg-white/75'
-            }`}
-            aria-label={`Go to slide ${index + 1}`}
-          />
-        ))}
+        <h1 className="font-bebas text-[clamp(56px,8vw,100px)] leading-[0.88] text-vwhite tracking-[2px] uppercase hero-animate-up" style={{ animationDelay: '0.1s' }}>
+          {t.title1}<span className="text-vgold">{t.title2}</span>
+          <span className="block font-bebas text-[clamp(24px,3.5vw,40px)] text-vsky tracking-[6px] mt-2">{t.city}</span>
+        </h1>
+
+        <p className="font-barlow-condensed text-base lg:text-lg font-light text-vmuted max-w-[480px] mt-5 leading-relaxed hero-animate-up" style={{ animationDelay: '0.2s' }}>
+          {t.tagline}
+        </p>
+
+        <div className="flex flex-wrap gap-4 mt-8 hero-animate-up" style={{ animationDelay: '0.3s' }}>
+          <button className="bg-vgold text-vnavy font-barlow-condensed font-bold text-[13px] tracking-[2px] uppercase px-8 py-3.5 rounded-[8px] hover:bg-vgold-light transition-all transform hover:-translate-y-0.5 shadow-lg shadow-vgold/10">
+            {t.btnPrimary}
+          </button>
+          <button className="bg-[rgba(0,174,239,0.12)] border border-[rgba(0,174,239,0.4)] text-vsky font-barlow-condensed font-bold text-[13px] tracking-[2px] uppercase px-8 py-3.5 rounded-[8px] hover:bg-[rgba(0,174,239,0.2)] transition-all">
+            {t.btnSecondary}
+          </button>
+        </div>
       </div>
 
-      {/* Scroll indicator */}
-      <motion.div 
-        className="absolute bottom-4 left-1/2 -translate-x-1/2 flex flex-col items-center text-white/60 text-sm z-10"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 1.5 }}
-      >
-        <span className="mb-2">Scroll Down</span>
-        <motion.div 
-          animate={{ y: [0, 10, 0] }}
-          transition={{ 
-            repeat: Infinity, 
-            duration: 1.5,
-            ease: "easeInOut"
-          }}
-        >
-          <ChevronDown className="h-6 w-6" />
-        </motion.div>
-      </motion.div>
+      {/* Live Result Card */}
+      <div className="absolute right-6 md:right-[60px] top-[40%] -translate-y-1/2 z-10 hidden lg:block hero-animate-in" style={{ animationDelay: '0.5s' }}>
+        <div className="bg-[rgba(23,32,56,0.95)] border border-[rgba(0,174,239,0.2)] backdrop-blur-xl rounded-[16px] p-7 min-w-[300px] shadow-2xl">
+          <div className="flex items-center gap-2 font-barlow-condensed text-[10px] font-bold tracking-[2px] uppercase text-vsky mb-4">
+            <div className="w-[8px] h-[8px] bg-red-500 rounded-full live-dot-pulse" />
+            {t.liveLabel}
+          </div>
+          <div className="flex items-center justify-between gap-4">
+            <span className="font-barlow-condensed font-bold text-sm text-vwhite text-center flex-1">Veria FC</span>
+            <div className="flex items-center gap-2">
+              <span className="font-bebas text-5xl text-vgold leading-none">3</span>
+              <span className="font-bebas text-2xl text-vmuted">—</span>
+              <span className="font-bebas text-5xl text-vgold leading-none">0</span>
+            </div>
+            <span className="font-barlow-condensed font-bold text-sm text-vwhite text-center flex-1">FC Kairat</span>
+          </div>
+          <div className="mt-5 pt-4 border-t border-[rgba(255,255,255,0.06)] font-barlow-condensed text-[11px] text-vmuted text-center tracking-[1px]">
+            {t.liveMeta}
+          </div>
+        </div>
+      </div>
+
+      {/* Hero Stats */}
+      <div className="absolute bottom-[40px] left-6 right-6 md:left-[60px] md:right-[60px] z-10 flex border-t border-transparent hero-animate-up" style={{ animationDelay: '0.6s' }}>
+        <div className="grid grid-cols-2 md:grid-cols-5 w-full bg-[rgba(15,21,37,0.85)] border border-white/5 backdrop-blur-md rounded-[12px] overflow-hidden shadow-2xl translate-y-[-20px]">
+          {t.stats.map((s, idx) => (
+            <div key={idx} className="p-5 border-r border-[rgba(255,255,255,0.06)] last:border-r-0 border-t md:border-t-0 border-[rgba(255,255,255,0.06)] first:border-t-2 first:border-vgold hover:border-l-2 hover:border-vsky transition-all group cursor-default">
+              <span className={`block font-bebas text-[34px] leading-none mb-1 transition-colors ${s.color || 'text-vgold'} group-hover:text-vwhite`}>{s.val}</span>
+              <span className="block font-barlow-condensed font-semibold text-[9px] tracking-[2px] uppercase text-vmuted group-hover:text-vsky transition-colors">{s.label}</span>
+            </div>
+          ))}
+        </div>
+      </div>
     </section>
   );
 };
-
-// Add missing import for ChevronDown
-const ChevronDown = (props) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    {...props}
-  >
-    <path d="m6 9 6 6 6-6" />
-  </svg>
-);
 
 export default Hero;

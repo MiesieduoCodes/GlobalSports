@@ -1,44 +1,28 @@
 "use client";
 
-import { useRef, useEffect, useState } from "react";
-import Image from "next/image";
-import { motion, useInView } from "framer-motion";
 import { useLanguage } from "@/app/context/LanguageContext";
+import { useState, useEffect } from "react";
 import { collection, getDocs, query, orderBy, limit } from "firebase/firestore";
 import { db } from "@/lib/firebase";
-import { Calendar, Clock, MapPin } from 'lucide-react';
-import { Button } from "./ui/button";
 
 const translations = {
   en: {
-    title: "Next Match",
-    date: "Coming Soon",
-    time: "TBD",
-    venue: "To be announced",
-    buyTickets: "Buy Tickets",
-    viewDetails: "Match Details",
-    loading: "Loading next match...",
-    noMatch: "No upcoming matches scheduled"
+    eyebrow: "Upcoming Fixture",
+    title: "Next ",
+    titleAccent: "Match",
+    label: "KPL · Matchday 22 · Kazakhstan Premier League",
+    kickoff: "Kick-off time (ALMT)",
+    venue: "Центральный Стадион (Central Stadium) · Almaty · Cap. 22,000",
+    buyTickets: "Buy Tickets / Билет"
   },
   ru: {
-    title: "Следующий матч",
-    date: "Скоро",
-    time: "Время уточняется",
-    venue: "Место уточняется",
-    buyTickets: "Купить билеты",
-    viewDetails: "Детали матча",
-    loading: "Загрузка матча...",
-    noMatch: "Ближайшие матчи не запланированы"
-  },
-  fr: {
-    title: "Prochain Match",
-    date: "Bientôt",
-    time: "À déterminer",
-    venue: "Lieu à confirmer",
-    buyTickets: "Acheter des billets",
-    viewDetails: "Détails du match",
-    loading: "Chargement du match...",
-    noMatch: "Aucun match à venir prévu"
+    eyebrow: "Предстоящий матч",
+    title: "Следующая ",
+    titleAccent: "Игра",
+    label: "КПЛ · Тур 22 · Премьер-лига Казахстана",
+    kickoff: "Время начала (ALMT)",
+    venue: "Центральный Стадион · Алматы · Вместимость 22,000",
+    buyTickets: "Купить билеты / Билет"
   }
 };
 
@@ -46,225 +30,99 @@ export default function NextMatch() {
   const { language } = useLanguage();
   const t = translations[language] || translations.en;
   const [match, setMatch] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, amount: 0.2 });
 
   useEffect(() => {
     const loadNextMatch = async () => {
-      setIsLoading(true);
       try {
-        const matchesRef = collection(db, "matches");
-        const q = query(matchesRef, orderBy("date", "asc"), limit(1));
-        const querySnapshot = await getDocs(q);
-        
-        if (!querySnapshot.empty) {
-          const doc = querySnapshot.docs[0];
-          setMatch({
-            id: doc.id,
-            team1: doc.data().team1 || "Team 1",
-            team1Logo: doc.data().team1Logo || "/images/team-placeholder.png",
-            team2: doc.data().team2 || "Team 2",
-            team2Logo: doc.data().team2Logo || "/images/team-placeholder.png",
-            date: doc.data().date || t.date,
-            time: doc.data().time || t.time,
-            venue: doc.data().venue || t.venue,
-            ticketLink: doc.data().ticketLink || "#",
-            matchDetailsLink: doc.data().matchDetailsLink || "#"
-          });
-        } else {
-          setMatch(null);
+        const q = query(collection(db, "matches"));
+        const snapshot = await getDocs(q);
+        if (!snapshot.empty) {
+          const matches = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+          const today = new Date().toISOString().split('T')[0];
+          const upcoming = matches
+            .filter(m => m.date && m.date >= today)
+            .sort((a, b) => a.date.localeCompare(b.date))[0];
+
+          if (upcoming) {
+            setMatch({
+              ...upcoming,
+              dateStr: new Date(upcoming.date).toLocaleDateString('en-US', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
+            });
+          }
         }
-      } catch (error) {
-        console.error("Error loading next match:", error);
-        setMatch(null);
-      } finally {
-        setIsLoading(false);
+      } catch (err) {
+        console.error("Error fetching next match:", err);
       }
     };
-
     loadNextMatch();
-  }, [t.date, t.time, t.venue]);
+  }, []);
 
-  const container = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2
-      }
-    }
+  const displayMatch = match ? {
+    date: match.dateStr || match.date,
+    time: match.time || "17:00",
+    team1: match.team1 || "Veria FC",
+    team1Abbr: match.team1?.substring(0, 3).toUpperCase() || "VFC",
+    team2: match.team2 || "Opponent",
+    team2Abbr: match.team2?.substring(0, 3).toUpperCase() || "OPP",
+    venue: match.venue || t.venue
+  } : {
+    date: "Saturday, 22 March 2026",
+    time: "17:00",
+    team1: "Veria FC",
+    team1Abbr: "VFC",
+    team2: "FC Tobol",
+    team2Abbr: "TOB",
+    venue: t.venue
   };
-
-  const item = {
-    hidden: { opacity: 0, y: 20 },
-    show: { 
-      opacity: 1, 
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: "easeOut"
-      }
-    }
-  };
-
-  if (isLoading) {
-    return (
-      <section className="py-16 bg-gradient-to-r from-blue-900 to-blue-700 text-white" ref={ref}>
-        <div className="container mx-auto px-4 text-center py-12">
-          <div className="animate-pulse space-y-4">
-            <div className="h-8 bg-blue-800 rounded w-48 mx-auto"></div>
-            <div className="h-6 bg-blue-800 rounded w-64 mx-auto"></div>
-          </div>
-        </div>
-      </section>
-    );
-  }
-
-  if (!match) {
-    return (
-      <section className="py-16 bg-gradient-to-r from-blue-900 to-blue-700 text-white" ref={ref}>
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-2xl md:text-3xl font-bold mb-4">{t.title}</h2>
-          <p className="text-lg">{t.noMatch}</p>
-        </div>
-      </section>
-    );
-  }
 
   return (
-    <section 
-      ref={ref}
-      className="relative py-16 bg-gradient-to-r from-blue-900 to-blue-700 text-white overflow-hidden"
-    >
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute top-0 left-0 w-full h-full bg-[url('/images/pattern.png')] bg-repeat opacity-20"></div>
-      </div>
+    <section className="section bg-vnavy">
+      <div className="max-w-[1440px] mx-auto">
+        <div className="section-eyebrow">{t.eyebrow}</div>
+        <div className="section-heading">{t.title}<span className="text-vgold">{t.titleAccent}</span></div>
 
-      <div className="container mx-auto px-4 relative z-10">
-        <motion.div
-          initial="hidden"
-          animate={isInView ? "show" : "hidden"}
-          variants={container}
-          className="max-w-6xl mx-auto"
-        >
-          <motion.h2 
-            variants={item}
-            className="text-3xl md:text-4xl font-bold text-center mb-2 text-yellow-400"
-          >
-            {t.title}
-          </motion.h2>
-          
-          <motion.div 
-            variants={item}
-            className="flex justify-center mb-8"
-          >
-            <div className="w-24 h-1 bg-yellow-400 rounded-full"></div>
-          </motion.div>
+        <div className="mt-12 bg-vnavy-light rounded-[20px] border border-vsky/10 overflow-hidden shadow-2xl">
+          <div className="bg-vsky/[0.07] px-9 py-5 flex items-center justify-between border-b border-vsky/10">
+            <span className="font-barlow-condensed font-bold text-[11px] tracking-[2.5px] uppercase text-vsky">{t.label}</span>
+            <span className="font-barlow-condensed font-semibold text-[13px] text-vmuted">{displayMatch.date}</span>
+          </div>
 
-          <motion.div 
-            variants={container}
-            className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 md:p-8 shadow-2xl border border-white/20"
-          >
-            <motion.div 
-              variants={item}
-              className="flex flex-col md:flex-row justify-between items-center mb-8 gap-6"
-            >
-              <div className="text-center md:text-left">
-                <div className="flex items-center justify-center md:justify-start text-blue-100 mb-1">
-                  <Calendar className="h-5 w-5 mr-2" />
-                  <span>{match.date}</span>
-                </div>
-                <div className="flex items-center justify-center md:justify-start text-blue-100">
-                  <Clock className="h-5 w-5 mr-2" />
-                  <span>{match.time}</span>
-                </div>
+          <div className="px-9 py-12 flex flex-col md:flex-row items-center gap-8 md:gap-0">
+            <div className="flex-1 flex flex-col items-center gap-3.5">
+              <div className="w-20 h-20 rounded-full bg-vsky/10 border-2 border-vsky/30 text-vsky flex items-center justify-center font-bebas text-[22px] tracking-[1px]">
+                {displayMatch.team1Abbr}
               </div>
-              
-              <div className="text-center">
-                <div className="flex items-center text-blue-100">
-                  <MapPin className="h-5 w-5 mr-2 flex-shrink-0" />
-                  <span>{match.venue}</span>
-                </div>
+              <div className="font-bebas text-[22px] text-vwhite tracking-[1px]">{displayMatch.team1}</div>
+              <div className="font-barlow-condensed text-[12px] text-vmuted">Almaty · Home</div>
+            </div>
+
+            <div className="flex flex-col items-center gap-2 px-10">
+              <div className="font-bebas text-[52px] text-vmuted leading-none">VS</div>
+              <div className="font-barlow-condensed font-bold text-[22px] text-vgold">{displayMatch.time}</div>
+              <div className="font-barlow-condensed text-[11px] text-vmuted tracking-[1px] whitespace-nowrap">{t.kickoff}</div>
+            </div>
+
+            <div className="flex-1 flex flex-col items-center gap-3.5">
+              <div className="w-20 h-20 rounded-full bg-vgold/10 border-2 border-vgold/25 text-vgold flex items-center justify-center font-bebas text-[22px] tracking-[1px]">
+                {displayMatch.team2Abbr}
               </div>
-            </motion.div>
+              <div className="font-bebas text-[22px] text-vwhite tracking-[1px]">{displayMatch.team2}</div>
+              <div className="font-barlow-condensed text-[12px] text-vmuted">Kostanay · Away</div>
+            </div>
+          </div>
 
-            <motion.div 
-              variants={container}
-              className="flex flex-col md:flex-row items-center justify-between gap-8 mb-8"
-            >
-              <motion.div 
-                variants={item}
-                className="flex flex-col items-center"
-              >
-                <div className="w-24 h-24 md:w-32 md:h-32 bg-white/10 rounded-full p-2 mb-4 shadow-lg border-2 border-yellow-400/50">
-                  <div className="w-full h-full bg-white rounded-full p-2 flex items-center justify-center">
-                    <Image
-                      src={match.team1Logo}
-                      width={96}
-                      height={96}
-                      className="w-full h-full object-contain"
-                      alt={match.team1}
-                      priority
-                    />
-                  </div>
-                </div>
-                <h3 className="text-xl font-bold text-center">{match.team1}</h3>
-              </motion.div>
-
-              <motion.div 
-                variants={item}
-                className="px-6 py-2 bg-yellow-400 text-blue-900 rounded-full font-bold text-xl"
-              >
-                VS
-              </motion.div>
-
-              <motion.div 
-                variants={item}
-                className="flex flex-col items-center"
-              >
-                <div className="w-24 h-24 md:w-32 md:h-32 bg-white/10 rounded-full p-2 mb-4 shadow-lg border-2 border-yellow-400/50">
-                  <div className="w-full h-full bg-white rounded-full p-2 flex items-center justify-center">
-                    <Image
-                      src={match.team2Logo}
-                      width={96}
-                      height={96}
-                      className="w-full h-full object-contain"
-                      alt={match.team2}
-                      priority
-                    />
-                  </div>
-                </div>
-                <h3 className="text-xl font-bold text-center">{match.team2}</h3>
-              </motion.div>
-            </motion.div>
-
-            <motion.div 
-              variants={item}
-              className="flex flex-col sm:flex-row justify-center gap-4 mt-8"
-            >
-              <Button 
-                size="lg" 
-                className="bg-yellow-400 hover:bg-yellow-300 text-blue-900 font-bold px-8 py-6 text-lg transition-all hover:scale-105"
-                asChild
-              >
-                <a href={match.ticketLink} target="_blank" rel="noopener noreferrer">
-                  {t.buyTickets}
-                </a>
-              </Button>
-              <Button 
-                variant="outline" 
-                size="lg"
-                className="border-white text-white hover:bg-white/10 px-8 py-6 text-lg transition-all hover:scale-105"
-                asChild
-              >
-                <a href={match.matchDetailsLink} target="_blank" rel="noopener noreferrer">
-                  {t.viewDetails}
-                </a>
-              </Button>
-            </motion.div>
-          </motion.div>
-        </motion.div>
+          <div className="px-9 py-5 bg-black/20 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-2">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="rgba(0,174,239,0.7)" />
+              </svg>
+              <span className="font-barlow-condensed text-[13px] text-vmuted">{displayMatch.venue || t.venue}</span>
+            </div>
+            <button className="bg-vgold text-vnavy font-barlow-condensed font-bold text-[12px] tracking-[2px] uppercase px-6 py-2.5 rounded-[6px] hover:bg-vgold-light transition-colors whitespace-nowrap">
+              {t.buyTickets}
+            </button>
+          </div>
+        </div>
       </div>
     </section>
   );

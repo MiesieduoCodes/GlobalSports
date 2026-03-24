@@ -1,4 +1,4 @@
-# Global Sports FC - Documentation
+# VeriaFC - Documentation
 
 ## Quick Start
 

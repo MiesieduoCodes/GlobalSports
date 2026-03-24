@@ -1,496 +1,240 @@
 "use client";
 
 import { useLanguage } from "@/app/context/LanguageContext";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { motion, AnimatePresence } from "framer-motion";
-import Image from "next/image";
 
-gsap.registerPlugin(ScrollTrigger);
-
-// Translations
 const translations = {
   en: {
-    title: "Meet Our Elite Squad",
-    subtitle: "The Heartbeat of Global Sport FC",
-    description: "Discover the exceptional talents driving GSFC's success. Each player represents a unique journey of dedication, skill, and triumph.",
-    filterAll: "All Players",
-    filterGoalkeepers: "Goalkeepers",
-    filterDefenders: "Defenders",
-    filterMidfielders: "Midfielders",
-    filterAttackers: "Attackers",
-    viewProfile: "View Profile",
-    stats: {
-      appearances: "Apps",
-      goals: "Goals",
-      assists: "Assists",
-      cleanSheets: "Clean Sheets"
+    heroTitle: "First Team ",
+    heroTitleAccent: "Squad",
+    heroEyebrow: "2025/26 Season",
+    heroSub: "Under Technical Director Otanwa Louis — a blend of Kazakh talent and international quality.",
+    filters: {
+      all: "All Players",
+      gk: "Goalkeepers",
+      def: "Defenders",
+      mid: "Midfielders",
+      fwd: "Forwards"
     },
-    joinDate: "Joined",
-    noPlayers: "No players found. Add players through the admin dashboard.",
-    loading: "Loading squad..."
+    sections: {
+      gk: "Goalkeepers",
+      def: "Defenders",
+      mid: "Midfielders",
+      fwd: "Forwards"
+    },
+    noPlayers: "No players found in this category."
   },
   ru: {
-    title: "Знакомьтесь с нашей элитной командой",
-    subtitle: "Сердцебиение Global Sport FC",
-    description: "Откройте для себя исключительные таланты, движущие успехом GSFC.",
-    filterAll: "Все игроки",
-    filterGoalkeepers: "Вратари",
-    filterDefenders: "Защитники",
-    filterMidfielders: "Полузащитники",
-    filterAttackers: "Нападающие",
-    viewProfile: "Профиль",
-    stats: {
-      appearances: "Матчи",
-      goals: "Голы",
-      assists: "Передачи",
-      cleanSheets: "Сухие матчи"
+    heroTitle: "Основной ",
+    heroTitleAccent: "Состав",
+    heroEyebrow: "Сезон 2025/26",
+    heroSub: "Под руководством технического директора Отанва Луиса — сочетание казахстанских талантов и международного качества.",
+    filters: {
+      all: "Все Игроки",
+      gk: "Вратари",
+      def: "Защитники",
+      mid: "Полузащитники",
+      fwd: "Нападающие"
     },
-    joinDate: "В клубе с",
-    noPlayers: "Игроки не найдены. Добавьте игроков через панель администратора.",
-    loading: "Загрузка состава..."
-  },
-  fr: {
-    title: "Rencontrez Notre Équipe d'Élite",
-    subtitle: "Le Cœur Battant du Global Sport FC",
-    description: "Découvrez les talents exceptionnels qui font le succès du GSFC.",
-    filterAll: "Tous les Joueurs",
-    filterGoalkeepers: "Gardiens",
-    filterDefenders: "Défenseurs",
-    filterMidfielders: "Milieux",
-    filterAttackers: "Attaquants",
-    viewProfile: "Voir Profil",
-    stats: {
-      appearances: "Matchs",
-      goals: "Buts",
-      assists: "Passes",
-      cleanSheets: "Clean Sheets"
+    sections: {
+      gk: "Вратари",
+      def: "Защитники",
+      mid: "Полузащитники",
+      fwd: "Нападающие"
     },
-    joinDate: "Arrivé en",
-    noPlayers: "Aucun joueur trouvé. Ajoutez des joueurs via le tableau de bord.",
-    loading: "Chargement de l'équipe..."
-  },
-  es: {
-    title: "Conoce a Nuestro Equipo de Élite",
-    subtitle: "El Latido del Global Sport FC",
-    description: "Descubre los talentos excepcionales que impulsan el éxito del GSFC.",
-    filterAll: "Todos los Jugadores",
-    filterGoalkeepers: "Porteros",
-    filterDefenders: "Defensores",
-    filterMidfielders: "Mediocampistas",
-    filterAttackers: "Atacantes",
-    viewProfile: "Ver Perfil",
-    stats: {
-      appearances: "Partidos",
-      goals: "Goles",
-      assists: "Asistencias",
-      cleanSheets: "Porterías a cero"
-    },
-    joinDate: "Se unió en",
-    noPlayers: "No se encontraron jugadores. Agregue jugadores a través del panel de administración.",
-    loading: "Cargando plantilla..."
-  },
+    noPlayers: "Игроки в этой категории не найдены."
+  }
 };
 
-export default function PlayersPage() {
-  const { language } = useLanguage();
-  const content = translations[language] || translations.en;
-  const sectionRef = useRef(null);
-  const [activeFilter, setActiveFilter] = useState("all");
-  const [selectedPlayer, setSelectedPlayer] = useState(null);
-  const [players, setPlayers] = useState([]);
-  const [loading, setLoading] = useState(true);
+const FALLBACK_PLAYERS = [
+  // Goalkeepers
+  { id: 'fb-1', name: "A. Seitkali", position: "GK", jerseyNumber: "1", nationality: "🇰🇿 Kazakhstan", category: "gk" },
+  { id: 'fb-2', name: "D. Bekzhanov", position: "GK", jerseyNumber: "13", nationality: "🇰🇿 Kazakhstan", category: "gk" },
+  // Defenders
+  { id: 'fb-3', name: "M. Akhmetov", position: "CB", jerseyNumber: "2", nationality: "🇰🇿 Kazakhstan", category: "def" },
+  { id: 'fb-4', name: "D. Bekov", position: "CB", jerseyNumber: "4", nationality: "🇰🇿 Kazakhstan", category: "def" },
+  { id: 'fb-5', name: "Y. Sartaev", position: "CB", jerseyNumber: "5", nationality: "🇰🇿 Kazakhstan", category: "def" },
+  { id: 'fb-6', name: "K. Zhaksybekov", position: "LB", jerseyNumber: "3", nationality: "🇰🇿 Kazakhstan", category: "def" },
+  { id: 'fb-7', name: "A. Dzhaksybekov", position: "RB", jerseyNumber: "22", nationality: "🇰🇿 Kazakhstan", category: "def" },
+  // Midfielders
+  { id: 'fb-8', name: "B. Nurmagambetov", position: "DM", jerseyNumber: "6", nationality: "🇰🇿 Kazakhstan", category: "mid" },
+  { id: 'fb-9', name: "R. Islamov", position: "CM", jerseyNumber: "8", nationality: "🇰🇿 Kazakhstan", category: "mid" },
+  { id: 'fb-10', name: "N. Zhukov", position: "AM", jerseyNumber: "10", nationality: "🇷🇺 Russia", category: "mid" },
+  { id: 'fb-11', name: "T. Ospanov", position: "CM", jerseyNumber: "14", nationality: "🇰🇿 Kazakhstan", category: "mid" },
+  { id: 'fb-12', name: "E. Kaliyev", position: "DM", jerseyNumber: "16", nationality: "🇰🇿 Kazakhstan", category: "mid" },
+  // Forwards
+  { id: 'fb-13', name: "K. Abenov", position: "ST", jerseyNumber: "9", nationality: "🇰🇿 Kazakhstan", category: "fwd" },
+  { id: 'fb-14', name: "K. Nurlan", position: "LW", jerseyNumber: "7", nationality: "🇰🇿 Kazakhstan", category: "fwd" },
+  { id: 'fb-15', name: "A. Seidaliev", position: "RW", jerseyNumber: "11", nationality: "🇰🇿 Kazakhstan", category: "fwd" },
+  { id: 'fb-16', name: "Z. Baimanov", position: "ST", jerseyNumber: "19", nationality: "🇰🇿 Kazakhstan", category: "fwd" },
+];
 
-  // Load players from Firestore
+export default function SquadPage() {
+  const { language } = useLanguage();
+  const t = translations[language] || translations.en;
+
+  const [players, setPlayers] = useState([]);
+  const [activeFilter, setActiveFilter] = useState("all");
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
-    async function loadPlayers() {
-      setLoading(true);
+    const loadPlayers = async () => {
       try {
         const snapshot = await getDocs(collection(db, "players"));
-        const docs = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setPlayers(docs);
-      } catch (error) {
-        console.error("Error loading players:", error);
+        const docs = snapshot.docs.map(doc => {
+          const data = doc.data();
+          return {
+            id: doc.id,
+            ...data,
+            name: data.name || "Unknown Player",
+            position: data.position || "Midfielder",
+            image: data.image || data.imageUrl || ""
+          };
+        });
+        setPlayers(docs.length > 0 ? docs : FALLBACK_PLAYERS);
+      } catch (err) {
+        console.error("Error fetching players:", err);
+        setPlayers(FALLBACK_PLAYERS);
       } finally {
-        setLoading(false);
+        setIsLoading(false);
       }
-    }
+    };
     loadPlayers();
   }, []);
 
-  // Filter players by position
-  const filteredPlayers = players.filter(player => {
-    if (activeFilter === "all") return true;
-    const position = player.position?.toLowerCase() || "";
-    if (activeFilter === "goalkeepers") return position.includes("goalkeeper");
-    if (activeFilter === "defenders") return position.includes("defender");
-    if (activeFilter === "midfielders") return position.includes("midfielder");
-    if (activeFilter === "attackers") return position.includes("attacker") || position.includes("forward") || position.includes("striker");
-    return true;
-  });
-
-  // GSAP Animations
-  useEffect(() => {
-    if (sectionRef.current) {
-      gsap.fromTo(
-        sectionRef.current,
-        { opacity: 0, y: 50 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 1,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top 85%",
-          },
-        }
-      );
-    }
-  }, []);
-
-  const getPositionColor = (position) => {
-    const pos = position?.toLowerCase() || "";
-    if (pos.includes("goalkeeper")) return "from-yellow-500 to-orange-600";
-    if (pos.includes("defender")) return "from-blue-500 to-blue-700";
-    if (pos.includes("midfielder")) return "from-green-500 to-green-700";
-    if (pos.includes("attacker") || pos.includes("forward") || pos.includes("striker")) return "from-red-500 to-red-700";
-    return "from-gray-500 to-gray-700";
+  const categorized = {
+    gk: players.filter(p => {
+      const pos = (p.position || "").toLowerCase();
+      const cat = (p.category || "").toLowerCase();
+      return cat === "gk" || pos.includes("gk") || pos.includes("goalkeeper");
+    }),
+    def: players.filter(p => {
+      const pos = (p.position || "").toLowerCase();
+      const cat = (p.category || "").toLowerCase();
+      return cat === "def" || pos.includes("def") || pos.includes("cb") || pos.includes("lb") || pos.includes("rb");
+    }),
+    mid: players.filter(p => {
+      const pos = (p.position || "").toLowerCase();
+      const cat = (p.category || "").toLowerCase();
+      return cat === "mid" || pos.includes("mid") || pos.includes("dm") || pos.includes("cm") || pos.includes("am");
+    }),
+    fwd: players.filter(p => {
+      const pos = (p.position || "").toLowerCase();
+      const cat = (p.category || "").toLowerCase();
+      return cat === "fwd" || pos.includes("fwd") || pos.includes("st") || pos.includes("lw") || pos.includes("rw") || pos.includes("att");
+    })
   };
 
-  const getFlagEmoji = (nationality) => {
-    const flags = {
-      Ghana: "🇬🇭",
-      Nigeria: "🇳🇬",
-      Kazakhstan: "🇰🇿",
-      Russia: "🇷🇺",
-      USA: "🇺🇸",
-      UK: "🇬🇧",
-      France: "🇫🇷",
-      Spain: "🇪🇸",
-      Germany: "🇩🇪",
-      Brazil: "🇧🇷",
-      Argentina: "🇦🇷",
-    };
-    return flags[nationality] || "🏴";
-  };
+  const sections = activeFilter === "all" ? ["gk", "def", "mid", "fwd"] : [activeFilter];
 
   return (
-    <section
-      ref={sectionRef}
-      className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 dark:from-gray-900 dark:to-blue-900/20 py-24 transition-colors duration-300"
-    >
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <motion.div 
-          className="text-center mb-16"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-        >
-          <div className="inline-flex items-center px-4 py-2 bg-blue-100 dark:bg-blue-900/30 rounded-full mb-6">
-            <div className="w-2 h-2 bg-blue-500 rounded-full mr-2 animate-pulse"></div>
-            <span className="text-blue-600 dark:text-blue-300 text-sm font-semibold">
-              Elite Football Talent
-            </span>
-          </div>
-          
-          <h1 className="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-            {content.title}
-          </h1>
-          
-          <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-4 font-light">
-            {content.subtitle}
-          </p>
-          
-          <p className="text-lg text-gray-500 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed">
-            {content.description}
-          </p>
-        </motion.div>
+    <main className="bg-vnavy min-h-screen pb-20">
 
-        {/* Filter Buttons */}
-        <motion.div 
-          className="flex flex-wrap justify-center gap-3 mb-12"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-        >
-          {["all", "goalkeepers", "defenders", "midfielders", "attackers"].map((filter) => (
-            <button
-              key={filter}
-              onClick={() => setActiveFilter(filter)}
-              className={`px-5 py-2.5 rounded-xl font-semibold text-sm transition-all duration-300 transform hover:scale-105 ${
-                activeFilter === filter
-                  ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/25"
-                  : "bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-600"
-              }`}
-            >
-              {content[`filter${filter.charAt(0).toUpperCase() + filter.slice(1)}`]}
-            </button>
-          ))}
-        </motion.div>
+      {/* Hero */}
+      <section className="relative pt-[140px] pb-[60px] px-6 md:px-[60px] bg-vnavy-mid overflow-hidden">
+        <div className="kz-grid opacity-[0.025]" />
+        <div className="absolute right-[-20px] top-1/2 -translate-y-1/2 font-bebas text-[180px] text-vwhite/[0.02] tracking-[10px] pointer-events-none hidden lg:block uppercase">SQUAD</div>
 
-        {/* Loading State */}
-        {loading && (
-          <div className="text-center py-16">
-            <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-            <p className="text-gray-500 dark:text-gray-400">{content.loading}</p>
-          </div>
-        )}
+        <div className="max-w-[1440px] mx-auto relative z-10">
+          <span className="section-eyebrow">{t.heroEyebrow}</span>
+          <h1 className="section-heading mb-3">{t.heroTitle}<span className="text-vgold">{t.heroTitleAccent}</span></h1>
+          <p className="section-sub mb-8">{t.heroSub}</p>
 
-        {/* Players Grid */}
-        {!loading && filteredPlayers.length > 0 && (
-          <motion.div 
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-          >
-            <AnimatePresence mode="popLayout">
-              {filteredPlayers.map((player, index) => (
-                <motion.div
-                  key={player.id}
-                  layout
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  transition={{ duration: 0.3, delay: index * 0.05 }}
-                  className="group bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 overflow-hidden border border-gray-100 dark:border-gray-700"
-                >
-                  {/* Player Image/Header */}
-                  <div className="relative h-48 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600">
-                    {/* Jersey Number Badge */}
-                    <div className="absolute top-4 right-4 z-10">
-                      <div className="w-12 h-12 bg-gradient-to-br from-yellow-400 to-yellow-500 rounded-full flex items-center justify-center text-blue-900 font-bold text-lg shadow-lg">
-                        {player.jerseyNumber || "?"}
-                      </div>
-                    </div>
-                    
-                    {/* Player Image or Placeholder */}
-                    <div className="w-full h-full flex items-center justify-center">
-                      {player.image ? (
-                        <Image
-                          src={player.image}
-                          alt={player.name}
-                          fill
-                          className="object-cover group-hover:scale-110 transition-transform duration-500"
-                        />
-                      ) : (
-                        <div className="text-center">
-                          <div className="w-20 h-20 bg-gray-300 dark:bg-gray-600 rounded-full mx-auto mb-2 flex items-center justify-center">
-                            <span className="text-3xl">⚽</span>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                    
-                    {/* Gradient Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                  </div>
-
-                  {/* Player Info */}
-                  <div className="p-5">
-                    <div className="mb-3">
-                      <h3 className="text-lg font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-1">
-                        {player.name}
-                      </h3>
-                      <div className="flex items-center gap-2 mt-1 flex-wrap">
-                        <span className={`inline-block px-2.5 py-1 text-xs font-semibold rounded-full bg-gradient-to-r ${getPositionColor(player.position)} text-white`}>
-                          {player.position}
-                        </span>
-                        {player.nationality && (
-                          <span className="flex items-center text-sm text-gray-500 dark:text-gray-400">
-                            <span className="mr-1">{getFlagEmoji(player.nationality)}</span>
-                            {player.nationality}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Stats Grid */}
-                    <div className="grid grid-cols-3 gap-2 mb-4">
-                      <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-2 text-center">
-                        <div className="font-bold text-gray-900 dark:text-white">{player.appearances || 0}</div>
-                        <div className="text-xs text-gray-500 dark:text-gray-400">{content.stats.appearances}</div>
-                      </div>
-                      <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-2 text-center">
-                        <div className="font-bold text-green-600">{player.goals || 0}</div>
-                        <div className="text-xs text-gray-500 dark:text-gray-400">{content.stats.goals}</div>
-                      </div>
-                      <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-2 text-center">
-                        <div className="font-bold text-blue-600">{player.assists || 0}</div>
-                        <div className="text-xs text-gray-500 dark:text-gray-400">{content.stats.assists}</div>
-                      </div>
-                    </div>
-
-                    {/* Strengths */}
-                    {player.strengths && (
-                      <p className="text-xs text-gray-500 dark:text-gray-400 mb-3 line-clamp-1">
-                        <span className="font-medium">Strengths:</span> {player.strengths}
-                      </p>
-                    )}
-
-                    {/* Join Year & Action */}
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs text-gray-400">
-                        {content.joinDate}: {player.joinYear || "N/A"}
-                      </span>
-                      <button 
-                        onClick={() => setSelectedPlayer(player)}
-                        className="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300"
-                      >
-                        {content.viewProfile} →
-                      </button>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          </motion.div>
-        )}
-
-        {/* Empty State */}
-        {!loading && filteredPlayers.length === 0 && (
-          <motion.div 
-            className="text-center py-16"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-          >
-            <div className="w-24 h-24 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-6">
-              <span className="text-4xl">👥</span>
-            </div>
-            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-              {activeFilter === "all" ? "No Players Yet" : "No Players in This Position"}
-            </h3>
-            <p className="text-gray-500 dark:text-gray-400 max-w-md mx-auto">
-              {content.noPlayers}
-            </p>
-            {activeFilter !== "all" && (
+          <div className="flex flex-wrap gap-2">
+            {Object.entries(t.filters).map(([id, label]) => (
               <button
-                onClick={() => setActiveFilter("all")}
-                className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-colors"
+                key={id}
+                onClick={() => setActiveFilter(id)}
+                className={`px-6 py-2.5 font-barlow-condensed font-semibold text-[12px] tracking-[1.5px] uppercase rounded-[6px] border transition-all ${activeFilter === id ? 'bg-vgold border-vgold text-vnavy' : 'bg-vnavy-card border-white/10 text-vmuted hover:border-vgold/50'}`}
               >
-                View All Players
+                {label}
               </button>
-            )}
-          </motion.div>
-        )}
-      </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-      {/* Player Modal */}
-      <AnimatePresence>
-        {selectedPlayer && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50"
-            onClick={() => setSelectedPlayer(null)}
-          >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-white dark:bg-gray-800 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl"
-              onClick={(e) => e.stopPropagation()}
-            >
-              {/* Modal Header */}
-              <div className="relative h-48 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-t-2xl overflow-hidden">
-                <div className="absolute top-4 right-4 z-10">
-                  <button
-                    onClick={() => setSelectedPlayer(null)}
-                    className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-colors"
-                  >
-                    ✕
-                  </button>
-                </div>
-                <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/60 to-transparent">
-                  <div className="flex items-end gap-4">
-                    <div className="w-20 h-20 bg-yellow-400 rounded-xl flex items-center justify-center text-blue-900 font-bold text-2xl shadow-lg">
-                      {selectedPlayer.jerseyNumber || "?"}
-                    </div>
-                    <div className="text-white">
-                      <h2 className="text-2xl font-bold">{selectedPlayer.name}</h2>
-                      <p className="text-blue-200">{selectedPlayer.position}</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
+      {/* Roster Sections */}
+      <section className="px-6 md:px-[60px] pt-10">
+        <div className="max-w-[1440px] mx-auto">
+          {sections.map(sectionId => {
+            const sectionPlayers = categorized[sectionId];
+            if (sectionPlayers.length === 0 && activeFilter !== "all") return <p key={sectionId} className="text-center py-20 font-bebas text-xl text-vmuted tracking-[2px]">{t.noPlayers}</p>;
+            if (sectionPlayers.length === 0) return null;
 
-              {/* Modal Content */}
-              <div className="p-6">
-                {/* Stats Row */}
-                <div className="grid grid-cols-4 gap-4 mb-6">
-                  <div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 text-center">
-                    <div className="text-2xl font-bold text-gray-900 dark:text-white">{selectedPlayer.appearances || 0}</div>
-                    <div className="text-sm text-gray-500 dark:text-gray-400">{content.stats.appearances}</div>
-                  </div>
-                  <div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 text-center">
-                    <div className="text-2xl font-bold text-green-600">{selectedPlayer.goals || 0}</div>
-                    <div className="text-sm text-gray-500 dark:text-gray-400">{content.stats.goals}</div>
-                  </div>
-                  <div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 text-center">
-                    <div className="text-2xl font-bold text-blue-600">{selectedPlayer.assists || 0}</div>
-                    <div className="text-sm text-gray-500 dark:text-gray-400">{content.stats.assists}</div>
-                  </div>
-                  <div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 text-center">
-                    <div className="text-2xl font-bold text-purple-600">{selectedPlayer.cleanSheets || 0}</div>
-                    <div className="text-sm text-gray-500 dark:text-gray-400">{content.stats.cleanSheets}</div>
-                  </div>
+            return (
+              <div key={sectionId} className="mb-16 last:mb-0">
+                <div className="roster-section-title">
+                  {t.sections[sectionId]}
                 </div>
 
-                {/* Player Info */}
-                <div className="space-y-4">
-                  <div className="flex items-center gap-3">
-                    <span className="text-2xl">{getFlagEmoji(selectedPlayer.nationality)}</span>
-                    <div>
-                      <div className="text-sm text-gray-500 dark:text-gray-400">Nationality</div>
-                      <div className="font-semibold text-gray-900 dark:text-white">{selectedPlayer.nationality || "N/A"}</div>
-                    </div>
-                  </div>
-
-                  {selectedPlayer.strengths && (
-                    <div>
-                      <div className="text-sm text-gray-500 dark:text-gray-400 mb-2">Strengths</div>
-                      <div className="flex flex-wrap gap-2">
-                        {selectedPlayer.strengths.split(",").map((strength, idx) => (
-                          <span
-                            key={idx}
-                            className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-sm rounded-full font-medium"
-                          >
-                            {strength.trim()}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {selectedPlayer.story && (
-                    <div>
-                      <div className="text-sm text-gray-500 dark:text-gray-400 mb-2">Biography</div>
-                      <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                        {selectedPlayer.story}
-                      </p>
-                    </div>
-                  )}
-
-                  <div className="pt-4 border-t border-gray-200 dark:border-gray-600">
-                    <div className="text-sm text-gray-500 dark:text-gray-400">
-                      {content.joinDate}: {selectedPlayer.joinYear || "N/A"}
-                    </div>
-                  </div>
+                <div className="player-grid">
+                  <AnimatePresence mode="popLayout">
+                    {sectionPlayers.map((player) => {
+                      return (
+                        <motion.div
+                          key={player.id}
+                          layout
+                          initial={{ opacity: 0, scale: 0.95 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          exit={{ opacity: 0, scale: 0.95 }}
+                          className="player-card-web group"
+                        >
+                          <div className={`player-card-top ${sectionId}`}>
+                            <div className="player-num-bg">{player.jerseyNumber || "0"}</div>
+                            <div
+                              className="player-avatar-web"
+                              style={{
+                                background: sectionId === 'gk' ? 'rgba(200,168,75,0.15)' :
+                                  sectionId === 'def' ? 'rgba(0,174,239,0.12)' :
+                                    sectionId === 'mid' ? 'rgba(97,153,34,0.2)' :
+                                      'rgba(226,75,74,0.2)',
+                                color: sectionId === 'gk' ? 'var(--gold)' :
+                                  sectionId === 'def' ? 'var(--sky)' :
+                                    sectionId === 'mid' ? '#97C459' :
+                                      '#F09595'
+                              }}
+                            >
+                              {player.image ? (
+                                <img src={player.image} alt={player.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                              ) : (
+                                <span>{player.position?.substring(0, 2).toUpperCase() || sectionId.toUpperCase()}</span>
+                              )}
+                            </div>
+                            <div
+                              className="pos-badge"
+                              style={{
+                                background: sectionId === 'gk' ? 'var(--gold)' :
+                                  sectionId === 'def' ? 'var(--sky)' :
+                                    sectionId === 'mid' ? '#97C459' :
+                                      '#E24B4A',
+                                color: sectionId === 'mid' ? '#0A1628' :
+                                  sectionId === 'gk' ? 'var(--navy)' :
+                                    'white'
+                              }}
+                            >
+                              {player.position || sectionId.toUpperCase()}
+                            </div>
+                          </div>
+                          <div className="player-card-info">
+                            <div className="player-num">#{player.jerseyNumber || "0"}</div>
+                            <div className="player-web-name">{player.name}</div>
+                            <div className="player-nat">{player.nationality || "Kazakhstan"}</div>
+                          </div>
+                        </motion.div>
+                      );
+                    })}
+                  </AnimatePresence>
                 </div>
               </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </section>
+            );
+          })}
+        </div>
+      </section>
+
+    </main>
   );
 }

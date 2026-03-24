@@ -1,5 +1,4 @@
-// src/app/metadata.js
 export const metadata = {
-    title: "Global Sports FC",
-    description: "The Official Website for Global Sports FC",
-  };
+  title: "Veria FC | Official Website",
+  description: "The Official Website of Veria Football Club, Almaty. Kazakhstan Premier League.",
+};

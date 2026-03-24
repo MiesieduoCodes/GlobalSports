@@ -1,461 +1,185 @@
 "use client";
 
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useLanguage } from '@/app/context/LanguageContext';
+import { useState, useEffect } from "react";
+import { useLanguage } from "@/app/context/LanguageContext";
 import { collection, getDocs, orderBy, query } from "firebase/firestore";
 import { db } from "@/lib/firebase";
-import { Calendar, Clock, MapPin, Filter, Ticket, ChevronRight } from 'lucide-react';
-import Image from 'next/image';
+import { Calendar, MapPin, Ticket, ChevronRight, Trophy, Clock } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const translations = {
   en: {
-    title: "Match Centre",
-    subtitle: "All Fixtures & Results",
-    description: "Stay up to date with all Global Sports FC fixtures, results, and match information.",
-    previousMatches: "Past Results",
-    nextMatches: "Upcoming Fixtures",
-    filterBy: "Filter",
-    all: "All Competitions",
-    league: "League",
-    cup: "Cup",
-    friendly: "Friendly",
-    timeRemaining: "Kicks off in",
-    buyTickets: "Buy Tickets",
-    matchDetails: "View Details",
-    venue: "Venue",
-    noMatches: "No matches found",
-    loading: "Loading matches...",
-    days: "days",
-    hours: "hours",
-    mins: "mins"
+    eyebrow: "Fixtures & Results",
+    title: "Match ",
+    titleAccent: "Centre",
+    upcoming: "Upcoming",
+    results: "Results",
+    loading: "Preparing Match Centre...",
+    noMatches: "No matches scheduled.",
+    tickets: "Buy Tickets",
+    details: "Details"
   },
   ru: {
-    title: "Матч-Центр",
-    subtitle: "Все Матчи и Результаты",
-    description: "Следите за всеми матчами, результатами и информацией Global Sports FC.",
-    previousMatches: "Прошедшие Матчи",
-    nextMatches: "Предстоящие Матчи",
-    filterBy: "Фильтр",
-    all: "Все Соревнования",
-    league: "Лига",
-    cup: "Кубок",
-    friendly: "Товарищеский",
-    timeRemaining: "До начала",
-    buyTickets: "Купить Билеты",
-    matchDetails: "Подробнее",
-    venue: "Место",
-    noMatches: "Матчи не найдены",
-    loading: "Загрузка матчей...",
-    days: "дней",
-    hours: "часов",
-    mins: "мин"
-  },
-  fr: {
-    title: "Centre des Matchs",
-    subtitle: "Tous les Matchs et Résultats",
-    description: "Restez informé de tous les matchs et résultats de Global Sports FC.",
-    previousMatches: "Résultats Passés",
-    nextMatches: "Matchs à Venir",
-    filterBy: "Filtrer",
-    all: "Toutes Compétitions",
-    league: "Ligue",
-    cup: "Coupe",
-    friendly: "Amical",
-    timeRemaining: "Coup d'envoi dans",
-    buyTickets: "Acheter Billets",
-    matchDetails: "Voir Détails",
-    venue: "Lieu",
-    noMatches: "Aucun match trouvé",
-    loading: "Chargement...",
-    days: "jours",
-    hours: "heures",
-    mins: "min"
-  },
-  es: {
-    title: "Centro de Partidos",
-    subtitle: "Todos los Partidos y Resultados",
-    description: "Mantente al día con todos los partidos y resultados de Global Sports FC.",
-    previousMatches: "Resultados Pasados",
-    nextMatches: "Próximos Partidos",
-    filterBy: "Filtrar",
-    all: "Todas las Competiciones",
-    league: "Liga",
-    cup: "Copa",
-    friendly: "Amistoso",
-    timeRemaining: "Comienza en",
-    buyTickets: "Comprar Entradas",
-    matchDetails: "Ver Detalles",
-    venue: "Lugar",
-    noMatches: "No se encontraron partidos",
-    loading: "Cargando...",
-    days: "días",
-    hours: "horas",
-    mins: "min"
+    eyebrow: "Расписание и результаты",
+    title: "Матч-",
+    titleAccent: "Центр",
+    upcoming: "Предстоящие",
+    results: "Результаты",
+    loading: "Загрузка...",
+    noMatches: "Матчей не запланировано.",
+    tickets: "Купить билеты",
+    details: "Детали"
   }
 };
 
-const MatchesPage = () => {
+export default function MatchesPage() {
   const { language } = useLanguage();
-  const content = translations[language] || translations.en;
-  const [activeTab, setActiveTab] = useState('upcoming');
-  const [filter, setFilter] = useState('all');
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const t = translations[language] || translations.en;
+  const [activeTab, setActiveTab] = useState("upcoming");
   const [matches, setMatches] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    async function loadMatches() {
-      setLoading(true);
+    const loadMatches = async () => {
       try {
-        const matchesRef = collection(db, "matches");
-        const q = query(matchesRef, orderBy("date", "asc"));
+        // Removed orderBy("date") to ensure compatibility with existing docs
+        const q = query(collection(db, "matches"));
         const snapshot = await getDocs(q);
-        
-        if (!snapshot.empty) {
-          const docs = snapshot.docs.map((doc) => ({
+        const docs = snapshot.docs.map(doc => {
+          const data = doc.data();
+          return {
             id: doc.id,
-            homeTeam: doc.data().team1 || "Global Sports FC",
-            awayTeam: doc.data().team2 || "Opponent",
-            homeLogo: doc.data().team1Logo || "/images/logo.png",
-            awayLogo: doc.data().team2Logo || "/images/opponent.png",
-            homeScore: doc.data().homeScore ?? null,
-            awayScore: doc.data().awayScore ?? null,
-            date: doc.data().date || new Date().toISOString().split('T')[0],
-            time: doc.data().time || "19:00",
-            venue: doc.data().venue || "Global Sports Arena",
-            competition: doc.data().competition || "league",
-            status: new Date(`${doc.data().date}T${doc.data().time || "19:00"}`) > new Date() ? "upcoming" : "completed"
-          }));
-          setMatches(docs);
-        } else {
-          // Sample data if no matches in Firestore
-          setMatches([
-            {
-              id: 1,
-              homeTeam: 'Global Sports FC',
-              awayTeam: 'FC United',
-              homeLogo: '/images/logo.png',
-              awayLogo: '/images/opponent.png',
-              homeScore: null,
-              awayScore: null,
-              date: '2025-12-15',
-              time: '19:45',
-              competition: 'league',
-              venue: 'Global Arena, Almaty',
-              status: 'upcoming'
-            },
-            {
-              id: 2,
-              homeTeam: 'Dynamo FC',
-              awayTeam: 'Global Sports FC',
-              homeLogo: '/images/opponent.png',
-              awayLogo: '/images/logo.png',
-              homeScore: null,
-              awayScore: null,
-              date: '2025-12-20',
-              time: '18:00',
-              competition: 'cup',
-              venue: 'Dynamo Stadium',
-              status: 'upcoming'
-            }
-          ]);
-        }
-      } catch (error) {
-        console.error("Error loading matches:", error);
-        setMatches([]);
+            ...data,
+            // Robust mapping
+            team1Logo: data.team1Logo || data.logo1 || "/images/team-placeholder.png",
+            team2Logo: data.team2Logo || data.logo2 || "/images/team-placeholder.png",
+            date: data.date || "TBD",
+            time: data.time || "00:00"
+          };
+        });
+        setMatches(docs);
+      } catch (err) {
+        console.error(err);
       } finally {
-        setLoading(false);
+        setIsLoading(false);
       }
-    }
+    };
     loadMatches();
   }, []);
 
-  const filteredMatches = matches
-    .filter(match => 
-      (filter === 'all' || match.competition === filter) &&
-      (activeTab === 'upcoming' ? match.status === 'upcoming' : match.status === 'completed')
-    )
-    .sort((a, b) => activeTab === 'upcoming' 
-      ? new Date(`${a.date}T${a.time}`) - new Date(`${b.date}T${b.time}`)
-      : new Date(`${b.date}T${b.time}`) - new Date(`${a.date}T${a.time}`)
-    );
-
-  const formatDate = (dateString) => {
-    try {
-      return new Date(dateString).toLocaleDateString(language, { 
-        weekday: 'short',
-        day: 'numeric',
-        month: 'short',
-        year: 'numeric'
-      });
-    } catch {
-      return dateString;
-    }
-  };
-
-  const CountdownTimer = ({ date, time }) => {
-    const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
-
-    function calculateTimeLeft() {
-      const difference = new Date(`${date}T${time}`) - new Date();
-      if (difference <= 0) return null;
-      return {
-        days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-        hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
-        minutes: Math.floor((difference / 1000 / 60) % 60),
-      };
-    }
-
-    useEffect(() => {
-      const timer = setInterval(() => {
-        setTimeLeft(calculateTimeLeft());
-      }, 60000); // Update every minute
-      return () => clearInterval(timer);
-    }, [date, time]);
-
-    if (!timeLeft) return null;
-
-    return (
-      <div className="flex items-center gap-4 text-center">
-        <div className="bg-blue-100 dark:bg-blue-900/30 rounded-lg px-3 py-2">
-          <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">{timeLeft.days}</div>
-          <div className="text-xs text-gray-500">{content.days}</div>
-        </div>
-        <div className="bg-blue-100 dark:bg-blue-900/30 rounded-lg px-3 py-2">
-          <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">{timeLeft.hours}</div>
-          <div className="text-xs text-gray-500">{content.hours}</div>
-        </div>
-        <div className="bg-blue-100 dark:bg-blue-900/30 rounded-lg px-3 py-2">
-          <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">{timeLeft.minutes}</div>
-          <div className="text-xs text-gray-500">{content.mins}</div>
-        </div>
-      </div>
-    );
-  };
+  const filteredMatches = matches.filter(m => {
+    const matchDate = new Date(`${m.date}T${m.time || "00:00"}`);
+    const isPast = matchDate < new Date();
+    return activeTab === "upcoming" ? !isPast : isPast;
+  });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 dark:from-gray-900 dark:to-blue-900/20 transition-colors duration-300">
-      {/* Hero Section */}
-      <section className="relative py-20 bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 text-white overflow-hidden">
-        <div className="absolute inset-0">
-          <div className="absolute top-20 left-10 w-40 h-40 bg-yellow-400/10 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-10 right-20 w-32 h-32 bg-blue-400/10 rounded-full blur-3xl"></div>
-        </div>
-        
-        <div className="container mx-auto px-4 relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center max-w-4xl mx-auto"
-          >
-            <div className="inline-flex items-center px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full mb-6 border border-white/20">
-              <Calendar className="w-4 h-4 mr-2" />
-              <span className="text-sm font-medium">{content.subtitle}</span>
+    <main className="bg-vnavy min-h-screen">
+
+      {/* Header */}
+      <section className="relative pt-[140px] pb-[80px] px-6 md:px-[60px] bg-vnavy-mid overflow-hidden text-center">
+        <div className="kz-grid opacity-[0.025]" />
+        <div className="relative z-10 max-w-[1440px] mx-auto">
+          <span className="section-eyebrow">{t.eyebrow}</span>
+          <h1 className="section-heading mt-4">{t.title}<span className="text-vgold">{t.titleAccent}</span></h1>
+
+          <div className="flex justify-center mt-12">
+            <div className="bg-vnavy flex p-1 rounded-lg border border-white/5">
+              <button
+                onClick={() => setActiveTab("upcoming")}
+                className={`px-8 py-2.5 rounded-md font-barlow-condensed font-bold text-[12px] tracking-[2px] uppercase transition-all ${activeTab === 'upcoming' ? 'bg-vgold text-vnavy' : 'text-vmuted hover:text-vwhite'}`}
+              >
+                {t.upcoming}
+              </button>
+              <button
+                onClick={() => setActiveTab("results")}
+                className={`px-8 py-2.5 rounded-md font-barlow-condensed font-bold text-[12px] tracking-[2px] uppercase transition-all ${activeTab === 'results' ? 'bg-vgold text-vnavy' : 'text-vmuted hover:text-vwhite'}`}
+              >
+                {t.results}
+              </button>
             </div>
-            
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
-              {content.title}
-            </h1>
-            
-            <p className="text-lg text-blue-100 max-w-3xl mx-auto leading-relaxed">
-              {content.description}
-            </p>
-          </motion.div>
+          </div>
         </div>
       </section>
 
-      <div className="max-w-7xl mx-auto px-4 py-12">
-        {/* Tab and Filter Controls */}
-        <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
-          <div className="flex bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden">
-            <button
-              onClick={() => setActiveTab('upcoming')}
-              className={`px-6 py-3 font-semibold transition-all ${
-                activeTab === 'upcoming'
-                  ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white'
-                  : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
-              }`}
-            >
-              {content.nextMatches}
-            </button>
-            <button
-              onClick={() => setActiveTab('completed')}
-              className={`px-6 py-3 font-semibold transition-all ${
-                activeTab === 'completed'
-                  ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white'
-                  : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
-              }`}
-            >
-              {content.previousMatches}
-            </button>
-          </div>
-
-          <div className="relative">
-            <button
-              onClick={() => setIsFilterOpen(!isFilterOpen)}
-              className="flex items-center gap-2 px-5 py-3 bg-white dark:bg-gray-800 rounded-xl shadow-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors font-medium"
-            >
-              <Filter className="w-5 h-5" />
-              <span>{content.filterBy}</span>
-            </button>
-
-            <AnimatePresence>
-              {isFilterOpen && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  className="absolute right-0 mt-2 w-56 bg-white dark:bg-gray-800 rounded-xl shadow-xl z-10 border border-gray-200 dark:border-gray-700 overflow-hidden"
-                >
-                  {['all', 'league', 'cup', 'friendly'].map((type) => (
-                    <button
-                      key={type}
-                      onClick={() => {
-                        setFilter(type);
-                        setIsFilterOpen(false);
-                      }}
-                      className={`w-full text-left px-4 py-3 text-sm font-medium ${
-                        filter === type
-                          ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400'
-                          : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
-                      }`}
-                    >
-                      {content[type] || type.charAt(0).toUpperCase() + type.slice(1)}
-                    </button>
-                  ))}
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-        </div>
-
-        {/* Matches Grid */}
-        {loading ? (
-          <div className="text-center py-16">
-            <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-            <p className="text-gray-500 dark:text-gray-400">{content.loading}</p>
-          </div>
-        ) : filteredMatches.length > 0 ? (
-          <div className="grid gap-6 md:grid-cols-2">
-            <AnimatePresence mode="popLayout">
-              {filteredMatches.map((match, index) => (
-                <motion.div
-                  key={match.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  transition={{ duration: 0.3, delay: index * 0.05 }}
-                  className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden border border-gray-100 dark:border-gray-700 hover:shadow-xl transition-shadow"
-                >
-                  {/* Match Header */}
-                  <div className="bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-3 flex justify-between items-center">
-                    <span className="px-3 py-1 bg-white/20 text-white text-xs font-bold rounded-full">
-                      {content[match.competition] || match.competition}
-                    </span>
-                    <div className="flex items-center text-white/80 text-sm">
-                      <Calendar className="w-4 h-4 mr-1" />
-                      {formatDate(match.date)}
+      {/* Grid */}
+      <section className="section">
+        <div className="max-w-[1440px] mx-auto">
+          {isLoading ? (
+            <div className="text-center py-20 font-bebas text-2xl text-vgold animate-pulse">{t.loading}</div>
+          ) : (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <AnimatePresence mode="popLayout">
+                {filteredMatches.map((match) => (
+                  <motion.div
+                    key={match.id}
+                    layout
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    className="bg-vnavy-mid border border-white/5 rounded-[20px] overflow-hidden hover:border-vgold/30 transition-all group"
+                  >
+                    <div className="px-7 py-4 bg-vsky/[0.04] border-b border-white/5 flex items-center justify-between">
+                      <span className="font-barlow-condensed font-bold text-[10px] tracking-[2px] uppercase text-vsky flex items-center gap-2">
+                        <Trophy className="w-3.5 h-3.5" /> {match.competition || "PREMIER LEAGUE"}
+                      </span>
+                      <span className="font-barlow-condensed font-semibold text-[11px] text-vmuted flex items-center gap-2">
+                        <Calendar className="w-3.5 h-3.5" /> {match.date}
+                      </span>
                     </div>
-                  </div>
 
-                  {/* Teams */}
-                  <div className="p-6">
-                    <div className="flex justify-between items-center mb-6">
-                      <div className="text-center flex-1">
-                        <div className="w-20 h-20 bg-gray-100 dark:bg-gray-700 rounded-full mx-auto mb-3 flex items-center justify-center overflow-hidden">
-                          {match.homeLogo ? (
-                            <img src={match.homeLogo} alt={match.homeTeam} className="w-16 h-16 object-contain" />
-                          ) : (
-                            <span className="text-2xl font-bold text-gray-400">{match.homeTeam.slice(0, 2)}</span>
-                          )}
+                    <div className="p-8 md:p-10 flex items-center justify-between gap-4">
+                      <div className="flex-1 flex flex-col items-center gap-4">
+                        <div className="w-20 h-20 md:w-24 md:h-24 bg-vnavy rounded-full border border-white/5 p-4 group-hover:scale-110 transition-all duration-500">
+                          <img src={match.team1Logo || '/images/team-placeholder.png'} className="w-full h-full object-contain" alt="" />
                         </div>
-                        <h3 className="font-bold text-gray-900 dark:text-white">{match.homeTeam}</h3>
-                        {match.homeScore !== null && (
-                          <span className="text-3xl font-bold text-blue-600 dark:text-blue-400">{match.homeScore}</span>
-                        )}
+                        <span className="font-bebas text-xl md:text-2xl text-vwhite text-center">{match.team1 || "VERIA FC"}</span>
                       </div>
-                      
-                      <div className="px-6">
-                        {match.status === 'completed' && match.homeScore !== null ? (
-                          <div className="text-4xl font-bold text-gray-300 dark:text-gray-600">-</div>
-                        ) : (
-                          <div className="flex flex-col items-center">
-                            <span className="text-2xl font-bold text-gray-400">VS</span>
-                            <div className="mt-2 flex items-center text-sm text-gray-500">
-                              <Clock className="w-4 h-4 mr-1" />
-                              {match.time}
-                            </div>
+
+                      <div className="flex flex-col items-center gap-2">
+                        {activeTab === 'results' ? (
+                          <div className="font-bebas text-4xl md:text-5xl text-vgold flex items-center gap-3">
+                            <span>{match.homeScore ?? 0}</span>
+                            <span className="text-vwhite/10">:</span>
+                            <span>{match.awayScore ?? 0}</span>
                           </div>
+                        ) : (
+                          <>
+                            <span className="font-bebas text-2xl text-vwhite/20">VS</span>
+                            <div className="font-barlow-condensed font-bold text-[18px] text-vgold flex items-center gap-2">
+                              <Clock className="w-4 h-4" /> {match.time || "00:00"}
+                            </div>
+                          </>
                         )}
                       </div>
-                      
-                      <div className="text-center flex-1">
-                        <div className="w-20 h-20 bg-gray-100 dark:bg-gray-700 rounded-full mx-auto mb-3 flex items-center justify-center overflow-hidden">
-                          {match.awayLogo ? (
-                            <img src={match.awayLogo} alt={match.awayTeam} className="w-16 h-16 object-contain" />
-                          ) : (
-                            <span className="text-2xl font-bold text-gray-400">{match.awayTeam.slice(0, 2)}</span>
-                          )}
+
+                      <div className="flex-1 flex flex-col items-center gap-4">
+                        <div className="w-20 h-20 md:w-24 md:h-24 bg-vnavy rounded-full border border-white/5 p-4 group-hover:scale-110 transition-all duration-500">
+                          <img src={match.team2Logo || '/images/team-placeholder.png'} className="w-full h-full object-contain" alt="" />
                         </div>
-                        <h3 className="font-bold text-gray-900 dark:text-white">{match.awayTeam}</h3>
-                        {match.awayScore !== null && (
-                          <span className="text-3xl font-bold text-blue-600 dark:text-blue-400">{match.awayScore}</span>
-                        )}
+                        <span className="font-bebas text-xl md:text-2xl text-vwhite text-center">{match.team2 || "OPPONENT"}</span>
                       </div>
                     </div>
 
-                    {/* Venue */}
-                    <div className="flex items-center justify-center text-gray-500 dark:text-gray-400 text-sm mb-4">
-                      <MapPin className="w-4 h-4 mr-1" />
-                      {match.venue}
-                    </div>
-
-                    {/* Countdown or Action */}
-                    {match.status === 'upcoming' && (
-                      <div className="border-t border-gray-100 dark:border-gray-700 pt-4">
-                        <div className="flex flex-col items-center">
-                          <span className="text-sm text-gray-500 mb-2">{content.timeRemaining}</span>
-                          <CountdownTimer date={match.date} time={match.time} />
-                          <button className="mt-4 w-full bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-300 hover:to-yellow-400 text-blue-900 font-bold py-3 px-6 rounded-xl transition-all flex items-center justify-center">
-                            <Ticket className="w-5 h-5 mr-2" />
-                            {content.buyTickets}
-                          </button>
-                        </div>
+                    <div className="px-7 py-4 bg-black/20 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4">
+                      <div className="flex items-center gap-2 text-vmuted font-barlow text-sm">
+                        <MapPin className="w-4 h-4 text-vsky" /> {match.venue || "Central Stadium"}
                       </div>
-                    )}
-
-                    {match.status === 'completed' && (
-                      <button className="w-full border-2 border-blue-600 text-blue-600 dark:border-blue-400 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 font-semibold py-3 px-6 rounded-xl transition-all flex items-center justify-center">
-                        {content.matchDetails}
-                        <ChevronRight className="w-5 h-5 ml-1" />
+                      <button className={`px-6 py-2 rounded-[6px] font-barlow-condensed font-bold text-[12px] tracking-[1.5px] uppercase transition-all ${activeTab === 'results' ? 'border border-white/20 text-vwhite hover:border-vgold hover:text-vgold' : 'bg-vgold text-vnavy hover:bg-vgold-light'}`}>
+                        {activeTab === 'results' ? t.details : t.tickets}
                       </button>
-                    )}
-                  </div>
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          </div>
-        ) : (
-          <div className="text-center py-16">
-            <div className="w-24 h-24 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-6">
-              <span className="text-4xl">⚽</span>
+                    </div>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
             </div>
-            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-              {content.noMatches}
-            </h3>
-            <button
-              onClick={() => { setFilter('all'); setActiveTab('upcoming'); }}
-              className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-colors"
-            >
-              Clear Filters
-            </button>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-};
+          )}
+          {!isLoading && filteredMatches.length === 0 && (
+            <p className="text-center py-20 font-bebas text-xl text-vmuted tracking-[2px]">{t.noMatches}</p>
+          )}
+        </div>
+      </section>
 
-export default MatchesPage;
+    </main>
+  );
+}

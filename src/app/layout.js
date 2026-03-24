@@ -16,20 +16,22 @@ function LayoutWrapper({ children }) {
       <head>
         <title>{metadata.title}</title>
         <meta name="description" content={metadata.description} />
+        <link rel="icon" href="/icon.svg" type="image/svg+xml" />
       </head>
-      <body className="min-h-screen pt-24">
+      <body className="min-h-screen">
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
-          enableSystem
+          defaultTheme="dark"
+          forcedTheme="dark"
+          enableSystem={false}
           disableTransitionOnChange
         >
           <Navbar />
           <main className="flex-1">
-          <ThemeWrapper>
-          {children}
-          </ThemeWrapper>
-            </main>
+            <ThemeWrapper>
+              {children}
+            </ThemeWrapper>
+          </main>
           <Footer />
         </ThemeProvider>
       </body>
