@@ -5,6 +5,7 @@ import { useLanguage } from "@/app/context/LanguageContext";
 import { db } from "@/lib/firebase";
 import { collection, query, orderBy, limit, getDocs } from "firebase/firestore";
 import Link from "next/link";
+import { FALLBACK_NEWS } from "@/lib/constants";
 
 const translations = {
   en: {

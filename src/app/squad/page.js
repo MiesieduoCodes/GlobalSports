@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { motion, AnimatePresence } from "framer-motion";
+import { FALLBACK_PLAYERS } from "@/lib/constants";
 
 const translations = {
   en: {
@@ -49,28 +50,7 @@ const translations = {
   }
 };
 
-const FALLBACK_PLAYERS = [
-  // Goalkeepers
-  { id: 'fb-1', name: "A. Seitkali", position: "GK", jerseyNumber: "1", nationality: "🇰🇿 Kazakhstan", category: "gk" },
-  { id: 'fb-2', name: "D. Bekzhanov", position: "GK", jerseyNumber: "13", nationality: "🇰🇿 Kazakhstan", category: "gk" },
-  // Defenders
-  { id: 'fb-3', name: "M. Akhmetov", position: "CB", jerseyNumber: "2", nationality: "🇰🇿 Kazakhstan", category: "def" },
-  { id: 'fb-4', name: "D. Bekov", position: "CB", jerseyNumber: "4", nationality: "🇰🇿 Kazakhstan", category: "def" },
-  { id: 'fb-5', name: "Y. Sartaev", position: "CB", jerseyNumber: "5", nationality: "🇰🇿 Kazakhstan", category: "def" },
-  { id: 'fb-6', name: "K. Zhaksybekov", position: "LB", jerseyNumber: "3", nationality: "🇰🇿 Kazakhstan", category: "def" },
-  { id: 'fb-7', name: "A. Dzhaksybekov", position: "RB", jerseyNumber: "22", nationality: "🇰🇿 Kazakhstan", category: "def" },
-  // Midfielders
-  { id: 'fb-8', name: "B. Nurmagambetov", position: "DM", jerseyNumber: "6", nationality: "🇰🇿 Kazakhstan", category: "mid" },
-  { id: 'fb-9', name: "R. Islamov", position: "CM", jerseyNumber: "8", nationality: "🇰🇿 Kazakhstan", category: "mid" },
-  { id: 'fb-10', name: "N. Zhukov", position: "AM", jerseyNumber: "10", nationality: "🇷🇺 Russia", category: "mid" },
-  { id: 'fb-11', name: "T. Ospanov", position: "CM", jerseyNumber: "14", nationality: "🇰🇿 Kazakhstan", category: "mid" },
-  { id: 'fb-12', name: "E. Kaliyev", position: "DM", jerseyNumber: "16", nationality: "🇰🇿 Kazakhstan", category: "mid" },
-  // Forwards
-  { id: 'fb-13', name: "K. Abenov", position: "ST", jerseyNumber: "9", nationality: "🇰🇿 Kazakhstan", category: "fwd" },
-  { id: 'fb-14', name: "K. Nurlan", position: "LW", jerseyNumber: "7", nationality: "🇰🇿 Kazakhstan", category: "fwd" },
-  { id: 'fb-15', name: "A. Seidaliev", position: "RW", jerseyNumber: "11", nationality: "🇰🇿 Kazakhstan", category: "fwd" },
-  { id: 'fb-16', name: "Z. Baimanov", position: "ST", jerseyNumber: "19", nationality: "🇰🇿 Kazakhstan", category: "fwd" },
-];
+
 
 export default function SquadPage() {
   const { language } = useLanguage();

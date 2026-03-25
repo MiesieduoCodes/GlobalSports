@@ -6,6 +6,7 @@ import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, Calendar, Clock, Search, Tag, X } from "lucide-react";
+import { FALLBACK_NEWS } from "@/lib/constants";
 
 const translations = {
   en: {
@@ -132,8 +133,8 @@ function NewsPageContent() {
               key={cat}
               onClick={() => setActiveCategory(cat === t.categories[0] ? "All" : cat)}
               className={`whitespace-nowrap px-6 py-2 rounded-full font-barlow-condensed font-bold text-[11px] tracking-[2px] border transition-all ${(cat === t.categories[0] && activeCategory === "All") || activeCategory === cat
-                  ? "bg-vgold border-vgold text-vnavy"
-                  : "bg-transparent border-[rgba(255,255,255,0.1)] text-vwhite hover:border-vgold/40"
+                ? "bg-vgold border-vgold text-vnavy"
+                : "bg-transparent border-[rgba(255,255,255,0.1)] text-vwhite hover:border-vgold/40"
                 }`}
             >
               {cat.toUpperCase()}

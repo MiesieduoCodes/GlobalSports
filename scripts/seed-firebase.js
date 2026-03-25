@@ -76,19 +76,47 @@ async function clearCollection(name) {
 }
 
 async function seedNews() {
-  const data = safeLoadJson("news.json");
-  if (!data) {
-    console.log("[seed-firebase] news.json not found, skipping.");
-    return { migrated: false, count: 0 };
-  }
-  
-  const items = Array.isArray(data.news) ? data.news : [];
+  const items = Array.isArray(data?.news) ? data.news : [
+    {
+      title: "Dominant 3–0 victory cements top-two grip in the KPL",
+      description: "A commanding performance at Central Stadium saw Veria FC dismantle FC Kairat with goals in each half, moving to within two points of the league leaders with eight games remaining.\n\nVeria FC showed why they are the most in-form team in the Kazakhstan Premier League right now. From the opening whistle, the pressure was relentless. Team captain A. Seitkali controlled the midfield, providing the assist for the opening goal in the 28th minute.\n\nThe second half was more of the same, with the defense holding firm against Kairat's desperate attempts to find a way back. A late third goal sealed the three points and sent the home crowd into a frenzy.",
+      image: "/images/AllPlayers.jpg",
+      category: "Match Report",
+      date: "Mar 18, 2026",
+      readTime: "4"
+    },
+    {
+      title: "Kazakh international winger K. Nurlan signs three-year deal",
+      description: "Veria FC is delighted to announce the signing of K. Nurlan from FC Tobol. The 24-year-old winger has signed a three-year contract at Central Stadium.\n\nKnown for his pace and technical ability, Nurlan is expected to bolster the club's attacking options as they push for the title. 'I am honored to join Veria FC,' Nurlan said. 'The ambition of this club is incredible, and I want to help bring trophies to Almaty.'",
+      image: "/images/Handsake.jpg",
+      category: "Transfer",
+      date: "Mar 15, 2026",
+      readTime: "3"
+    },
+    {
+      title: "Veria Sport Academy U17s crowned regional champions",
+      description: "The future looks bright for Veria FC as our U17 Academy team secured the regional championship title this weekend with a 2-0 win in the final.\n\nHead of Academy spoke about the achievement: 'These boys have worked incredibly hard. This is just the beginning of our vision to develop local talent for the first team.'",
+      image: "/images/kneelingimage.jpg",
+      category: "Academy",
+      date: "Mar 12, 2026",
+      readTime: "2"
+    },
+    {
+      title: "New South Stand expansion to add 3,000 seats for 2026/27",
+      description: "Veria FC can confirm that plans for the South Stand expansion at Central Stadium have been approved. The project will add 3,000 extra seats, bringing total capacity to 25,000.\n\nConstruction is set to begin in the off-season. 'Our fanbase is growing rapidly, and we need to ensure everyone has a place to support the club,' said the Strategic Manager.",
+      image: "/images/LOGO-photoaidcom-cropped.jpg",
+      category: "Club News",
+      date: "Mar 8, 2026",
+      readTime: "3"
+    }
+  ];
+
   await clearCollection("news");
   if (!items.length) {
-    console.log("[seed-firebase] No news items found in news.json");
+    console.log("[seed-firebase] No news items found");
     return { migrated: false, count: 0 };
   }
-  
+
   const batch = db.batch();
   const col = db.collection("news");
   items.forEach((item) => {
@@ -115,7 +143,7 @@ async function seedMatches() {
     console.log("[seed-firebase] matches.json not found or invalid, skipping.");
     return { migrated: false, count: 0 };
   }
-  
+
   await clearCollection("matches");
   const batch = db.batch();
   const col = db.collection("matches");
@@ -146,7 +174,7 @@ async function seedVideos() {
     console.log("[seed-firebase] videos.json not found or invalid, skipping.");
     return { migrated: false, count: 0 };
   }
-  
+
   await clearCollection("videos");
   const batch = db.batch();
   const col = db.collection("videos");
@@ -175,7 +203,7 @@ async function seedAwards() {
     console.log("[seed-firebase] awards.json not found or invalid, skipping.");
     return { migrated: false, count: 0 };
   }
-  
+
   await clearCollection("awards");
   const batch = db.batch();
   const col = db.collection("awards");
@@ -197,14 +225,14 @@ async function seedNewss() {
     console.log("[seed-firebase] newss.json not found, skipping.");
     return { migrated: false, count: 0 };
   }
-  
+
   const items = Array.isArray(data.news) ? data.news : [];
   await clearCollection("newss");
   if (!items.length) {
     console.log("[seed-firebase] No items found in newss.json");
     return { migrated: false, count: 0 };
   }
-  
+
   const batch = db.batch();
   const col = db.collection("newss");
   items.forEach((item) => {
@@ -225,7 +253,7 @@ async function seedNavData() {
     console.log("[seed-firebase] navData.json not found, skipping.");
     return { migrated: false, count: 0 };
   }
-  
+
   await clearCollection("navData");
   const col = db.collection("navData");
   await col.doc("main").set({
@@ -238,94 +266,26 @@ async function seedNavData() {
 
 async function seedPlayers() {
   let items = safeLoadJson("players.json");
-  
+
   if (!items || !Array.isArray(items)) {
-    console.log("[seed-firebase] players.json not found, using default players.");
+    console.log("[seed-firebase] players.json not found, using HTML-based players.");
     items = [
-      {
-        name: "Samuel Okoye",
-        position: "Goalkeeper",
-        nationality: "Nigeria",
-        jerseyNumber: 1,
-        image: "/images/players/player1.jpg",
-        story: "A commanding presence between the posts, Samuel joined GSFC in 2020 and has been instrumental in our defensive success.",
-        strengths: "Shot stopping, Communication, Distribution",
-        joinYear: "2020",
-        appearances: 45,
-        goals: 0,
-        assists: 2,
-        cleanSheets: 18
-      },
-      {
-        name: "David Mensah",
-        position: "Defender",
-        nationality: "Ghana",
-        jerseyNumber: 4,
-        image: "/images/players/player2.jpg",
-        story: "A rock-solid center-back with excellent reading of the game. David has been club captain since 2022.",
-        strengths: "Tackling, Aerial duels, Leadership",
-        joinYear: "2019",
-        appearances: 78,
-        goals: 5,
-        assists: 3,
-        cleanSheets: 25
-      },
-      {
-        name: "Alexei Petrov",
-        position: "Midfielder",
-        nationality: "Kazakhstan",
-        jerseyNumber: 8,
-        image: "/images/players/player3.jpg",
-        story: "A local talent who came through our academy. Alexei's vision and passing ability make him the creative hub of our midfield.",
-        strengths: "Passing, Vision, Set pieces",
-        joinYear: "2021",
-        appearances: 52,
-        goals: 12,
-        assists: 24,
-        cleanSheets: 0
-      },
-      {
-        name: "Michael Asante",
-        position: "Attacker",
-        nationality: "Ghana",
-        jerseyNumber: 9,
-        image: "/images/players/player4.jpg",
-        story: "Our prolific striker who has a natural instinct for scoring. Michael leads the line with pace and clinical finishing.",
-        strengths: "Finishing, Pace, Movement",
-        joinYear: "2022",
-        appearances: 40,
-        goals: 28,
-        assists: 8,
-        cleanSheets: 0
-      },
-      {
-        name: "Yuri Volkov",
-        position: "Midfielder",
-        nationality: "Russia",
-        jerseyNumber: 6,
-        image: "/images/players/player5.jpg",
-        story: "A tireless box-to-box midfielder who covers every blade of grass. Yuri provides balance and energy to the team.",
-        strengths: "Stamina, Tackling, Passing",
-        joinYear: "2020",
-        appearances: 65,
-        goals: 7,
-        assists: 15,
-        cleanSheets: 0
-      },
-      {
-        name: "Emmanuel Kwame",
-        position: "Defender",
-        nationality: "Ghana",
-        jerseyNumber: 3,
-        image: "/images/players/player6.jpg",
-        story: "A versatile defender who can play anywhere across the back line. Emmanuel's consistency is his greatest asset.",
-        strengths: "Versatility, Speed, Marking",
-        joinYear: "2021",
-        appearances: 48,
-        goals: 2,
-        assists: 6,
-        cleanSheets: 15
-      }
+      { name: "A. Seitkali", position: "GK", jerseyNumber: 1, nationality: "Kazakhstan", image: "", story: "Reliable first-choice goalkeeper for Veria FC.", strengths: "Reflexes, Distribution", joinYear: "2024", appearances: 45, goals: 0, assists: 1, cleanSheets: 18 },
+      { name: "D. Bekzhanov", position: "GK", jerseyNumber: 13, nationality: "Kazakhstan", image: "", story: "Promising young goalkeeper with great potential.", strengths: "Shot stopping, Bravery", joinYear: "2025", appearances: 12, goals: 0, assists: 0, cleanSheets: 4 },
+      { name: "M. Akhmetov", position: "CB", jerseyNumber: 2, nationality: "Kazakhstan", image: "", story: "A rock at the heart of the defense.", strengths: "Tackling, Aerial duels", joinYear: "2024", appearances: 52, goals: 3, assists: 1, cleanSheets: 20 },
+      { name: "D. Bekov", position: "CB", jerseyNumber: 4, nationality: "Kazakhstan", image: "", story: "Disciplined defender with excellent positioning.", strengths: "Interceptions, Marking", joinYear: "2023", appearances: 78, goals: 2, assists: 2, cleanSheets: 25 },
+      { name: "Y. Sartaev", position: "CB", jerseyNumber: 5, nationality: "Kazakhstan", image: "", story: "Powerful defender known for his physical presence.", strengths: "Strength, Headers", joinYear: "2024", appearances: 40, goals: 5, assists: 0, cleanSheets: 15 },
+      { name: "K. Zhaksybekov", position: "LB", jerseyNumber: 3, nationality: "Kazakhstan", image: "", story: "Attacking full-back with great crossing ability.", strengths: "Crossing, Stamina", joinYear: "2025", appearances: 28, goals: 1, assists: 8, cleanSheets: 10 },
+      { name: "A. Dzhaksybekov", position: "RB", jerseyNumber: 22, nationality: "Kazakhstan", image: "", story: "Fast and reliable right-back.", strengths: "Speed, Tackling", joinYear: "2024", appearances: 44, goals: 1, assists: 5, cleanSheets: 16 },
+      { name: "B. Nurmagambetov", position: "DM", jerseyNumber: 6, nationality: "Kazakhstan", image: "", story: "Tireless defensive midfielder who breaks up play effectively.", strengths: "Stamina, Tackling", joinYear: "2024", appearances: 50, goals: 2, assists: 4, cleanSheets: 18 },
+      { name: "R. Islamov", position: "CM", jerseyNumber: 8, nationality: "Kazakhstan", image: "", story: "Creative midfielder with a wide range of passing.", strengths: "Passing, Vision", joinYear: "2023", appearances: 85, goals: 12, assists: 25, cleanSheets: 0 },
+      { name: "N. Zhukov", position: "AM", jerseyNumber: 10, nationality: "Russia", image: "", story: "The creative engine of the team, known for his flair.", strengths: "Dribbling, Skills", joinYear: "2024", appearances: 38, goals: 15, assists: 20, cleanSheets: 0 },
+      { name: "T. Ospanov", position: "CM", jerseyNumber: 14, nationality: "Kazakhstan", image: "", story: "Versatile midfielder who contributes in both defense and attack.", strengths: "Versatility, Work rate", joinYear: "2025", appearances: 22, goals: 4, assists: 6, cleanSheets: 0 },
+      { name: "E. Kaliyev", position: "DM", jerseyNumber: 16, nationality: "Kazakhstan", image: "", story: "Strategic midfielder with great tactical intelligence.", strengths: "Positioning, Interceptions", joinYear: "2024", appearances: 48, goals: 1, assists: 3, cleanSheets: 0 },
+      { name: "K. Abenov", position: "ST", jerseyNumber: 9, nationality: "Kazakhstan", image: "", story: "Prolific striker who leads the line with confidence.", strengths: "Finishing, Strength", joinYear: "2024", appearances: 46, goals: 32, assists: 10, cleanSheets: 0 },
+      { name: "K. Nurlan", position: "LW", jerseyNumber: 7, nationality: "Kazakhstan", image: "", story: "Dynamic winger with incredible speed and crossing skills.", strengths: "Speed, Dribbling", joinYear: "2026", appearances: 8, goals: 4, assists: 6, cleanSheets: 0 },
+      { name: "A. Seidaliev", position: "RW", jerseyNumber: 11, nationality: "Kazakhstan", image: "", story: "Technical winger who excels in 1v1 situations.", strengths: "Technique, Agility", joinYear: "2025", appearances: 30, goals: 9, assists: 12, cleanSheets: 0 },
+      { name: "Z. Baimanov", position: "ST", jerseyNumber: 19, nationality: "Kazakhstan", image: "", story: "Young striker with a natural nose for goal.", strengths: "Movement, Finishing", joinYear: "2025", appearances: 15, goals: 7, assists: 2, cleanSheets: 0 }
     ];
   }
 
@@ -358,7 +318,7 @@ async function seedPlayers() {
 // Function to backup and remove local JSON files
 function backupAndRemoveLocalFiles() {
   const keepLocal = process.env.KEEP_LOCAL_FILES === "true";
-  
+
   if (keepLocal) {
     console.log("\n[seed-firebase] KEEP_LOCAL_FILES=true, skipping file removal.");
     return;
@@ -410,7 +370,7 @@ async function main() {
     console.log("\n========================================");
     console.log("   Firebase Data Migration Script");
     console.log("========================================\n");
-    
+
     console.log("[seed-firebase] Starting migration...\n");
 
     const results = {
@@ -441,7 +401,7 @@ async function main() {
     console.log("\n[seed-firebase] ✓ Migration complete!");
     console.log("[seed-firebase] All data has been migrated to Firebase Firestore.");
     console.log("[seed-firebase] Local JSON files have been moved to backup folder.\n");
-    
+
     process.exit(0);
   } catch (err) {
     console.error("\n[seed-firebase] ✗ ERROR during migration:", err);
