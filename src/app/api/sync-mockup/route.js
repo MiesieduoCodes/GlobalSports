@@ -3,6 +3,13 @@ import { adminDb } from '@/lib/firebase-admin';
 import { FALLBACK_NEWS, FALLBACK_PLAYERS } from '@/lib/constants';
 
 export async function GET() {
+    if (!adminDb) {
+        return NextResponse.json({
+            success: false,
+            error: "Firebase Admin SDK is not initialized. Please ensure FIREBASE_CLIENT_EMAIL and FIREBASE_PRIVATE_KEY are set."
+        }, { status: 500 });
+    }
+
     try {
         const results = {
             players: { cleared: 0, seeded: 0 },
