@@ -2,10 +2,11 @@
 
 export const dynamic = "force-dynamic";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import type React from "react";
 import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from "firebase/firestore";
-import { db, auth } from "@/lib/firebase";
+import { db, auth, storage } from "@/lib/firebase";
+import { ref as storageRef, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "firebase/auth";
 import type { NewsItem, MatchItem, VideoItem, LocalizedText } from "@/types/content";
@@ -1238,6 +1239,7 @@ function PlayersAdminSection() {
   const [items, setItems] = useState<PlayerItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState<number | null>(null);
   const [form, setForm] = useState<Partial<PlayerItem>>({
     name: "",
     position: "Midfielder",
@@ -1254,6 +1256,7 @@ function PlayersAdminSection() {
   });
   const [query, setQuery] = useState("");
   const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
+  const formRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     load();
@@ -1311,6 +1314,10 @@ function PlayersAdminSection() {
   function startEdit(item: PlayerItem) {
     setForm({ ...item });
     setPendingDeleteId(null);
+    // Scroll to form so user sees the populated fields
+    setTimeout(() => {
+      formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 50);
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -1368,9 +1375,28 @@ function PlayersAdminSection() {
 
   const positions = ["Goalkeeper", "Defender", "Midfielder", "Attacker"];
 
+  async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const path = `players/${Date.now()}_${file.name}`;
+    const sRef = storageRef(storage, path);
+    const task = uploadBytesResumable(sRef, file);
+    setUploadProgress(0);
+    task.on(
+      "state_changed",
+      (snap) => setUploadProgress(Math.round((snap.bytesTransferred / snap.totalBytes) * 100)),
+      (err) => { console.error(err); setUploadProgress(null); },
+      async () => {
+        const url = await getDownloadURL(task.snapshot.ref);
+        setForm((prev) => ({ ...prev, image: url }));
+        setUploadProgress(null);
+      }
+    );
+  }
+
   return (
     <div className="space-y-6">
-      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-100 dark:border-gray-700">
+      <div ref={formRef} className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-100 dark:border-gray-700">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-bold flex items-center">
             <span className="mr-3">👥</span> Players Management
@@ -1439,13 +1465,30 @@ function PlayersAdminSection() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium mb-2">Image URL</label>
+            <label className="block text-sm font-medium mb-2">Player Photo</label>
+            {/* Image preview */}
+            {form.image && (
+              <img src={form.image} alt="preview" className="w-20 h-20 object-cover rounded-xl mb-2 border border-gray-200 dark:border-gray-600" />
+            )}
+            {/* File upload */}
+            <label className="flex items-center gap-2 cursor-pointer w-full rounded-xl border border-dashed border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 px-4 py-3 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 transition">
+              <span>📤</span>
+              <span className="text-gray-600 dark:text-gray-300">{uploadProgress !== null ? `Uploading… ${uploadProgress}%` : "Upload photo"}</span>
+              <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} disabled={uploadProgress !== null} />
+            </label>
+            {/* Upload progress bar */}
+            {uploadProgress !== null && (
+              <div className="mt-2 h-1.5 rounded-full bg-gray-200 dark:bg-gray-700">
+                <div className="h-1.5 rounded-full bg-blue-500 transition-all" style={{ width: `${uploadProgress}%` }} />
+              </div>
+            )}
+            {/* OR: paste URL manually */}
             <input
               type="text"
               value={form.image ?? ""}
               onChange={(e) => handleChange("image", e.target.value)}
-              className="w-full rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 px-4 py-3 text-sm"
-              placeholder="/images/players/player.jpg"
+              className="mt-2 w-full rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 px-4 py-2 text-xs text-gray-500"
+              placeholder="Or paste image URL here"
             />
           </div>
           <div>

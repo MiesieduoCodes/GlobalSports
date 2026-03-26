@@ -1,4 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Barlow:ital,wght@0,300;0,400;0,500;1,300&display=swap');
+/* Google Fonts are loaded via <link> in layout.js for reliable rendering */
+
 
 @tailwind base;
 @tailwind components;
@@ -334,6 +335,7 @@ nav {
   .leader-card {
     @apply bg-vnavy-card rounded-[16px] border border-[var(--divider)] overflow-hidden transition-all duration-300;
   }
+
   .leader-card:hover {
     @apply border-vsky/25 -translate-y-1;
   }
@@ -341,6 +343,7 @@ nav {
   .leader-card-hero {
     @apply h-[200px] flex items-end justify-start p-6 relative overflow-hidden bg-vnavy-mid;
   }
+
   .leader-card.founder .leader-card-hero {
     @apply h-[240px];
   }
@@ -352,21 +355,27 @@ nav {
   .initials-circle {
     @apply w-[110px] h-[110px] rounded-full border-2 border-vgold/20 flex items-center justify-center font-bebas text-[36px] tracking-[2px] text-vgold bg-vgold/5;
   }
+
   .leader-card.founder .initials-circle {
     @apply w-[140px] h-[140px] text-[44px];
   }
 
-  .leader-card-body { @apply p-[24px_28px]; }
-  
+  .leader-card-body {
+    @apply p-[24px_28px];
+  }
+
   .leader-role {
     @apply font-barlow-condensed text-[11px] font-bold tracking-[2.5px] uppercase text-vsky mb-1.5;
   }
-  
+
   .leader-name {
     @apply font-bebas text-[26px] text-vwhite tracking-[1px] mb-2.5;
   }
-  .leader-card.founder .leader-name { @apply text-[34px]; }
-  
+
+  .leader-card.founder .leader-name {
+    @apply text-[34px];
+  }
+
   .leader-bio {
     @apply font-barlow text-vmuted text-[13px] leading-relaxed;
   }
