@@ -53,8 +53,8 @@ const translations = {
       },
       {
         role: "Business Development Manager",
-        name: "Kaz",
-        initials: "KAZ",
+        name: "Audu Emmanuel Kaz",
+        initials: "AEK",
         bio: "Kaz leads Veria FC's commercial strategy — forging partnerships, growing the club's brand across Central Asia and beyond, and building the commercial infrastructure that sustains long-term success."
       },
       {
@@ -88,7 +88,7 @@ const translations = {
     leaders: [
       { role: "Основатель и Председатель", name: "Верия Лоуренс Эбикс", initials: "VLE", image: "/images/IMG-20260324-WA0048.jpg", bio: "Движущая сила Верия ФК, Верия Лоуренс Эбикс основал клуб с твердым убеждением в успехе футбола мирового класса в Алматы.", isFounder: true },
       { role: "Технический Директор", name: "Отанва Луис", initials: "OL", bio: "Отанва Луис привносит глубокую тактическую экспертизу и современную футбольную философию в Верия ФК." },
-      { role: "Менеджер по развитию бизнеса", name: "Каз", initials: "KAZ", bio: "Каз руководит коммерческой стратегией Верия ФК — создавая партнерства и развивая бренд клуба." },
+      { role: "Менеджер по развитию бизнеса", name: "Ауду Эммануэль Каз", initials: "AEK", bio: "Каз руководит коммерческой стратегией Верия ФК — создавая партнерства и развивая бренд клуба." },
       { role: "Стратегический Менеджер", name: "Барий А Сануси", initials: "BAS", image: "/images/IMG-20260324-WA0050.jpg", bio: "Барий А Сануси выступает в качестве стратегического менеджера клуба, отвечая за реализацию видения основателя." }
     ]
   }

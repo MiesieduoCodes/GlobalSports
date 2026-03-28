@@ -560,7 +560,7 @@ function NewsAdminSection() {
                     <>
                       <button
                         type="button"
-                        disabled={saving}
+                        disabled={saving || item.id.startsWith('fb-')}
                         onClick={() => handleDelete(item.id)}
                         className="px-3 py-2 text-xs rounded-lg bg-red-600 text-white font-semibold hover:bg-red-700 disabled:opacity-60"
                       >
@@ -568,7 +568,7 @@ function NewsAdminSection() {
                       </button>
                       <button
                         type="button"
-                        disabled={saving}
+                        disabled={saving || item.id.startsWith('fb-')}
                         onClick={() => setPendingDeleteId(null)}
                         className="px-3 py-2 text-xs rounded-lg bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-100 font-semibold hover:bg-gray-300 dark:hover:bg-gray-500 disabled:opacity-60"
                       >
@@ -578,8 +578,8 @@ function NewsAdminSection() {
                   ) : (
                     <button
                       type="button"
-                      disabled={saving}
-                      onClick={() => setPendingDeleteId(item.id)}
+                      disabled={saving || item.id.startsWith('fb-')}
+                      onClick={() => setPendingDeleteId(item.id)} title={item.id.startsWith('fb-') ? 'Cannot delete fallback player' : 'Delete player'}
                       className="px-3 py-2 text-xs rounded-lg bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 font-medium hover:bg-red-200 dark:hover:bg-red-900/50 disabled:opacity-60"
                     >
                       Delete
@@ -924,7 +924,7 @@ function MatchesAdminSection() {
                             <>
                               <button
                                 type="button"
-                                disabled={saving}
+                                disabled={saving || item.id.startsWith('fb-')}
                                 onClick={() => handleDelete(item.id)}
                                 className="px-3 py-2 text-xs rounded-xl bg-red-600 text-white font-semibold hover:bg-red-700 disabled:opacity-60"
                               >
@@ -932,7 +932,7 @@ function MatchesAdminSection() {
                               </button>
                               <button
                                 type="button"
-                                disabled={saving}
+                                disabled={saving || item.id.startsWith('fb-')}
                                 onClick={() => setPendingDeleteId(null)}
                                 className="px-3 py-2 text-xs rounded-xl bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-100 font-semibold hover:bg-gray-300 dark:hover:bg-gray-600 disabled:opacity-60"
                               >
@@ -942,9 +942,9 @@ function MatchesAdminSection() {
                           ) : (
                             <button
                               type="button"
-                              disabled={saving}
-                              onClick={() => setPendingDeleteId(item.id)}
-                              className="px-3 py-2 text-xs rounded-xl bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 font-semibold hover:bg-red-200 dark:hover:bg-red-900/50 disabled:opacity-60"
+                              disabled={saving || item.id.startsWith('fb-')}
+                              onClick={() => setPendingDeleteId(item.id)} title={item.id.startsWith('fb-') ? 'Cannot delete fallback player' : 'Delete player'}
+                              className={`px-3 py-2 text-xs rounded-xl font-semibold disabled:opacity-60 ${item.id.startsWith('fb-') ? 'bg-gray-100 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed' : 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 hover:bg-red-200 dark:hover:bg-red-900/50'}`}
                             >
                               Delete
                             </button>
@@ -1270,7 +1270,16 @@ function PlayersAdminSection() {
         id: d.id,
         ...(d.data() as Omit<PlayerItem, "id">),
       }));
+      
+      console.log('Loaded players from Firestore:', docs.length);
+      console.log('Player IDs:', docs.map(p => p.id));
+      
+      // If no players in Firestore, don't show fallback data in admin
+      // This prevents trying to edit non-existent Firestore documents
       setItems(docs);
+    } catch (error) {
+      console.error('Error loading players:', error);
+      setItems([]);
     } finally {
       setLoading(false);
     }
@@ -1312,6 +1321,7 @@ function PlayersAdminSection() {
   }
 
   function startEdit(item: PlayerItem) {
+    console.log('Editing player:', item);
     setForm({ ...item });
     setPendingDeleteId(null);
     // Scroll to form so user sees the populated fields
@@ -1340,6 +1350,13 @@ function PlayersAdminSection() {
         cleanSheets: Number(form.cleanSheets) || 0,
         translations: (form as any).translations || {},
       };
+      
+      // Check if trying to update a fallback player (starts with 'fb-')
+      if (form.id && form.id.startsWith('fb-')) {
+        alert('Cannot update fallback player data. Please create a new player instead.');
+        return;
+      }
+      
       if (form.id) {
         await updateDoc(doc(db, "players", form.id), payload);
       } else {
@@ -1673,8 +1690,19 @@ function PlayersAdminSection() {
                         <div className="flex justify-end gap-2">
                           <button
                             type="button"
-                            onClick={() => startEdit(item)}
-                            className="px-3 py-2 text-xs rounded-xl bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 font-semibold hover:bg-blue-200 dark:hover:bg-blue-900/50"
+                            onClick={(e) => {
+                              console.log('Edit button clicked for item:', item);
+                              e.preventDefault();
+                              e.stopPropagation();
+                              startEdit(item);
+                            }}
+                            disabled={item.id.startsWith('fb-')}
+                            className={`px-3 py-2 text-xs rounded-xl font-semibold ${
+                              item.id.startsWith('fb-')
+                                ? 'bg-gray-100 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed'
+                                : 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-blue-900/50'
+                            }`}
+                            title={item.id.startsWith('fb-') ? 'Cannot edit fallback player' : 'Edit player'}
                           >
                             Edit
                           </button>
@@ -1682,7 +1710,7 @@ function PlayersAdminSection() {
                             <>
                               <button
                                 type="button"
-                                disabled={saving}
+                                disabled={saving || item.id.startsWith('fb-')}
                                 onClick={() => handleDelete(item.id)}
                                 className="px-3 py-2 text-xs rounded-xl bg-red-600 text-white font-semibold hover:bg-red-700 disabled:opacity-60"
                               >
@@ -1690,7 +1718,7 @@ function PlayersAdminSection() {
                               </button>
                               <button
                                 type="button"
-                                disabled={saving}
+                                disabled={saving || item.id.startsWith('fb-')}
                                 onClick={() => setPendingDeleteId(null)}
                                 className="px-3 py-2 text-xs rounded-xl bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-100 font-semibold hover:bg-gray-300 dark:hover:bg-gray-600 disabled:opacity-60"
                               >
@@ -1700,9 +1728,9 @@ function PlayersAdminSection() {
                           ) : (
                             <button
                               type="button"
-                              disabled={saving}
-                              onClick={() => setPendingDeleteId(item.id)}
-                              className="px-3 py-2 text-xs rounded-xl bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 font-semibold hover:bg-red-200 dark:hover:bg-red-900/50 disabled:opacity-60"
+                              disabled={saving || item.id.startsWith('fb-')}
+                              onClick={() => setPendingDeleteId(item.id)} title={item.id.startsWith('fb-') ? 'Cannot delete fallback player' : 'Delete player'}
+                              className={`px-3 py-2 text-xs rounded-xl font-semibold disabled:opacity-60 ${item.id.startsWith('fb-') ? 'bg-gray-100 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed' : 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 hover:bg-red-200 dark:hover:bg-red-900/50'}`}
                             >
                               Delete
                             </button>
