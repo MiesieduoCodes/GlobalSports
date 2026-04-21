@@ -16,8 +16,8 @@ service cloud.firestore {
     // For development: Allow all authenticated users to write
     // Remove this in production and use isAdmin() only
     function canWrite() {
-      return isAuthenticated(); // Development mode - any authenticated user
-      // return isAdmin(); // Production mode - uncomment this line
+      // return isAuthenticated(); // Development mode - any authenticated user
+      return isAdmin(); // Production mode - uncomment this line
     }
     
     // News collection - public read, authenticated write (dev) / admin write (prod)

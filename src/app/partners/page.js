@@ -8,7 +8,7 @@ const translations = {
     heroEyebrow: "Global Network",
     heroTitle: "Club ",
     heroTitleAccent: "Partners",
-    sub: "Working with the most prestigious brands in Central Asia and beyond to scale the Veria FC vision.",
+    sub: "Working with the most prestigious brands in Central Asia and beyond to scale the VE-GLOBALSPORTS FC vision.",
     tiers: [
       { name: "Principal Partners", color: "text-vgold", partners: ["Gold Air", "Almaty Energy", "KazBank"] },
       { name: "Official Partners", color: "text-vsky", partners: ["Steppe Motors", "Sky Logistics", "Mount Vision"] }
@@ -18,7 +18,7 @@ const translations = {
     heroEyebrow: "Глобальная сеть",
     heroTitle: "Партнеры ",
     heroTitleAccent: "Клуба",
-    sub: "Работа с самыми престижными брендами в Центральной Азии для масштабирования видения Верия ФК.",
+    sub: "Работа с самыми престижными брендами в Центральной Азии для масштабирования видения ВЕ-ГЛОБАЛСПОРТС ФК.",
     tiers: [
       { name: "Генеральные партнеры", color: "text-vgold", partners: ["Gold Air", "Almaty Energy", "KazBank"] },
       { name: "Официальные партнеры", color: "text-vsky", partners: ["Steppe Motors", "Sky Logistics", "Mount Vision"] }

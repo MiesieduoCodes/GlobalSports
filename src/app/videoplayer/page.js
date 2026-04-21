@@ -18,7 +18,7 @@ function VideoContent() {
   const videoId = searchParams.get("v") || "1";
 
   // Mock for now, in a real app this would fetch based on videoId
-  const video = { title: videoId === "1" ? "Highlights: Veria FC 3–0 FC Kairat" : "Veria FC Premium Content", category: "Match Report", duration: "8:45" };
+  const video = { title: videoId === "1" ? "Highlights: VE-GLOBALSPORTS FC 3–0 FC Kairat" : "VE-GLOBALSPORTS FC Premium Content", category: "Match Report", duration: "8:45" };
 
   return (
     <div className="max-w-[1200px] mx-auto">

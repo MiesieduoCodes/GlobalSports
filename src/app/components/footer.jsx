@@ -7,7 +7,7 @@ import Link from "next/link";
 
 const translations = {
   en: {
-    brandName: "Veria FC · Almaty",
+    brandName: "VE-GLOBALSPORTS FC · Almaty",
     tagline: <>Kazakhstan Premier League · Центральный Стадион<br />Founded by Veria Lawrence Ebiks<br />Almaty, Kazakhstan</>,
     col1Title: "Navigate",
     col1Links: [
@@ -25,16 +25,16 @@ const translations = {
     ],
     col3Title: "Academy",
     col3Links: [
-      { name: "Veria Sport Academy", href: "/kidscamp" },
+      { name: "VE-GLOBALSPORTS Academy", href: "/kidscamp" },
       { name: "Youth Fixtures", href: "#" },
       { name: "Enroll Your Child", href: "/kidscamp" },
       { name: "Coaching Staff", href: "/coaches" }
     ],
-    copy: "© 2026 Veria FC · Almaty, Kazakhstan. All rights reserved.",
+    copy: "© 2026 VE-GLOBALSPORTS FC · Almaty, Kazakhstan. All rights reserved.",
     subscribe: "Subscribe to Newsletter"
   },
   ru: {
-    brandName: "Верия ФК · Алматы",
+    brandName: "ВЕ-ГЛОБАЛСПОРТС ФК · Алматы",
     tagline: <>Премьер-лига Казахстана · Центральный Стадион<br />Основано Верией Лоуренсом Эбиксом<br />Алматы, Казахстан</>,
     col1Title: "Навигация",
     col1Links: [
@@ -52,12 +52,12 @@ const translations = {
     ],
     col3Title: "Академия",
     col3Links: [
-      { name: "Академия Veria Sport", href: "/kidscamp" },
+      { name: "Академия VE-GLOBALSPORTS", href: "/kidscamp" },
       { name: "Новости молодежи", href: "#" },
       { name: "Записать ребенка", href: "/kidscamp" },
       { name: "Тренерский штаб", href: "/coaches" }
     ],
-    copy: "© 2026 Верия ФК · Алматы, Казахстан. Все права защищены.",
+    copy: "© 2026 ВЕ-ГЛОБАЛСПОРТС ФК · Алматы, Казахстан. Все права защищены.",
     subscribe: "Подписаться на рассылку"
   }
 };
@@ -98,7 +98,7 @@ export default function Footer() {
               <svg width="60" height="60" viewBox="0 0 90 90" fill="none">
                 <path d="M45 5 L78 18 L78 52 Q78 72 45 85 Q12 72 12 52 L12 18 Z" fill="#172038" stroke="#C8A84B" strokeWidth="2.5" />
                 <path d="M45 10 L72 21 L72 50 Q72 68 45 79 Q18 68 18 50 L18 21 Z" fill="none" stroke="rgba(0,174,239,0.15)" strokeWidth="1" />
-                <text x="45" y="34" fontFamily="Bebas Neue, sans-serif" fontSize="13" fill="#C8A84B" textAnchor="middle" letterSpacing="1.5">VERIA</text>
+                <text x="45" y="34" fontFamily="Bebas Neue, sans-serif" fontSize="7.5" fill="#C8A84B" textAnchor="middle" letterSpacing="0.5">VE-GLOBALSPORTS</text>
                 <text x="45" y="56" fontFamily="Bebas Neue, sans-serif" fontSize="26" fill="#F0EEE8" textAnchor="middle" letterSpacing="1">FC</text>
                 <line x1="30" y1="62" x2="60" y2="62" stroke="#C8A84B" strokeWidth="1" opacity="0.4" />
                 <text x="45" y="74" fontFamily="Bebas Neue, sans-serif" fontSize="10" fill="#00AEEF" textAnchor="middle" letterSpacing="2">ALMATY</text>

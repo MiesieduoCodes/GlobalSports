@@ -133,7 +133,7 @@ export default function MatchesPage() {
                         <div className="w-20 h-20 md:w-24 md:h-24 bg-vnavy rounded-full border border-white/5 p-4 group-hover:scale-110 transition-all duration-500">
                           <img src={match.team1Logo || '/images/team-placeholder.png'} className="w-full h-full object-contain" alt="" />
                         </div>
-                        <span className="font-bebas text-xl md:text-2xl text-vwhite text-center">{match.team1 || "VERIA FC"}</span>
+                        <span className="font-bebas text-xl md:text-2xl text-vwhite text-center">{match.team1 || "VE-GLOBALSPORTS FC"}</span>
                       </div>
 
                       <div className="flex flex-col items-center gap-2">

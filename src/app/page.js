@@ -10,17 +10,17 @@ export default function Page() {
   const { language } = useLanguage();
 
   const tickerItems = language === 'ru' ? [
-    'Верия ФК 3–0 ФК Кайрат · Финал',
+    'ВЕ-ГЛОБАЛСПОРТС ФК 3–0 ФК Кайрат · Финал',
     'Астана ФК 1–1 Шахтер · Финал',
-    'След: Верия ФК vs ФК Тобол · Сб 22 Мар · 17:00',
-    'Трансфер: К. Нурлан переходит в Верию ФК · Подтверждено',
-    'Таблица КПЛ: Верия ФК — 2-е место · 47 очков'
+    'След: ВЕ-ГЛОБАЛСПОРТС ФК vs ФК Тобол · Сб 22 Мар · 17:00',
+    'Трансфер: К. Нурлан переходит в ВЕ-ГЛОБАЛСПОРТС ФК · Подтверждено',
+    'Таблица КПЛ: ВЕ-ГЛОБАЛСПОРТС ФК — 2-е место · 47 очков'
   ] : [
-    'Veria FC 3–0 FC Kairat · FT',
+    'VE-GLOBALSPORTS FC 3–0 FC Kairat · FT',
     'Astana FC 1–1 Shakhter · FT',
-    'Next: Veria FC vs FC Tobol · Sat 22 Mar · 17:00',
-    'Transfer: K. Nurlan joins Veria FC · Confirmed',
-    'KPL Table: Veria FC — 2nd Place · 47 pts'
+    'Next: VE-GLOBALSPORTS FC vs FC Tobol · Sat 22 Mar · 17:00',
+    'Transfer: K. Nurlan joins VE-GLOBALSPORTS FC · Confirmed',
+    'KPL Table: VE-GLOBALSPORTS FC — 2nd Place · 47 pts'
   ];
 
 

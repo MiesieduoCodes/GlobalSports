@@ -60,16 +60,16 @@ export default function NextMatch() {
   const displayMatch = match ? {
     date: match.dateStr || match.date,
     time: match.time || "17:00",
-    team1: match.team1 || "Veria FC",
-    team1Abbr: match.team1?.substring(0, 3).toUpperCase() || "VFC",
+    team1: match.team1 || "VE-GLOBALSPORTS FC",
+    team1Abbr: match.team1?.substring(0, 3).toUpperCase() || "VEG",
     team2: match.team2 || "Opponent",
     team2Abbr: match.team2?.substring(0, 3).toUpperCase() || "OPP",
     venue: match.venue || t.venue
   } : {
     date: "Saturday, 22 March 2026",
     time: "17:00",
-    team1: "Veria FC",
-    team1Abbr: "VFC",
+    team1: "VE-GLOBALSPORTS FC",
+    team1Abbr: "VEG",
     team2: "FC Tobol",
     team2Abbr: "TOB",
     venue: t.venue

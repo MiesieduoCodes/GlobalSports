@@ -1,4 +1,4 @@
 export const metadata = {
-  title: "Veria FC | Official Website",
-  description: "The Official Website of Veria Football Club, Almaty. Kazakhstan Premier League.",
+  title: "VE-GLOBALSPORTS FC | Official Website",
+  description: "The Official Website of VE-GLOBALSPORTS FC, Almaty. Kazakhstan Premier League.",
 };

@@ -12,14 +12,14 @@ const translations = {
     story: [
       "Founded with a bold vision to bring world-class football to the heart of Central Asia, Veria Football Club was established in Almaty, Kazakhstan — a city of mountains, ambition and unstoppable energy.",
       "Under the leadership of founder Veria Lawrence Ebiks, the club has grown from a passionate idea into one of Kazakhstan's most dynamic football institutions, blending elite sporting standards with deep community values.",
-      "From the shadow of the Tian Shan mountains, Veria FC rises — building legacy, developing talent, and competing at the highest level the Kazakhstan Premier League has to offer."
+      "From the shadow of the Tian Shan mountains, VE-GLOBALSPORTS FC rises — building legacy, developing talent, and competing at the highest level the Kazakhstan Premier League has to offer."
     ],
     pillarsTitle: "Club Values",
     pillarsEyebrow: "What We Stand For",
     pillars: [
       {
         title: "Excellence",
-        desc: "We pursue the highest standards in every aspect of our game — on the pitch, in the academy, and in the front office. Mediocrity has no home at Veria FC.",
+        desc: "We pursue the highest standards in every aspect of our game — on the pitch, in the academy, and in the front office. Mediocrity has no home at VE-GLOBALSPORTS FC.",
         color: "rgba(200,168,75,0.1)", border: "rgba(200,168,75,0.2)", iconColor: "#C8A84B"
       },
       {
@@ -35,27 +35,27 @@ const translations = {
     ],
     leadershipTitle: "Club Leadership",
     leadershipEyebrow: "The People Behind The Club",
-    leadershipSub: "A united front of visionary professionals driving Veria FC's ambitions on and off the pitch.",
+    leadershipSub: "A united front of visionary professionals driving VE-GLOBALSPORTS FC's ambitions on and off the pitch.",
     leaders: [
       {
         role: "Founder & Chairman",
         name: "Veria Lawrence Ebiks",
         initials: "VLE",
         image: "/images/IMG-20260324-WA0048.jpg",
-        bio: "The driving force behind Veria FC, Veria Lawrence Ebiks founded the club with a singular conviction: that world-class football could and should thrive in Almaty, Kazakhstan. His entrepreneurial vision, global perspective and unwavering passion for the beautiful game have shaped every aspect of the club — from its philosophy and identity to its long-term strategic ambitions.",
+        bio: "The driving force behind VE-GLOBALSPORTS FC, Veria Lawrence Ebiks founded the club with a singular conviction: that world-class football could and should thrive in Almaty, Kazakhstan. His entrepreneurial vision, global perspective and unwavering passion for the beautiful game have shaped every aspect of the club — from its philosophy and identity to its long-term strategic ambitions.",
         isFounder: true
       },
       {
         role: "Technical Director",
         name: "Otanwa Louis",
         initials: "OL",
-        bio: "Otanwa Louis brings deep tactical expertise and a modern football philosophy to Veria FC. Responsible for the club's technical structure — from first team to academy — he has built a cohesive playing identity that demands intensity, intelligence and creativity."
+        bio: "Otanwa Louis brings deep tactical expertise and a modern football philosophy to VE-GLOBALSPORTS FC. Responsible for the club's technical structure — from first team to academy — he has built a cohesive playing identity that demands intensity, intelligence and creativity."
       },
       {
         role: "Business Development Manager",
         name: "Audu Emmanuel Kaz",
         initials: "AEK",
-        bio: "Kaz leads Veria FC's commercial strategy — forging partnerships, growing the club's brand across Central Asia and beyond, and building the commercial infrastructure that sustains long-term success."
+        bio: "Kaz leads VE-GLOBALSPORTS FC's commercial strategy — forging partnerships, growing the club's brand across Central Asia and beyond, and building the commercial infrastructure that sustains long-term success."
       },
       {
         role: "Strategic Manager",
@@ -71,9 +71,9 @@ const translations = {
     heroTitle: "Клуб. ",
     heroTitleAccent: "Видение.",
     story: [
-      "Основанный с смелым видением принести футбол мирового класса в сердце Центральной Азии, футбольный клуб Верия был создан в Алматы, Казахстан — городе гор, амбиций и неудержимой энергии.",
+      "Основанный с смелым видением принести футбол мирового класса в сердце Центральной Азии, футбольный клуб ВЕ-ГЛОБАЛСПОРТС был создан в Алматы, Казахстан — городе гор, амбиций и неудержимой энергии.",
       "Под руководством основателя Верии Лоуренса Эбикса клуб вырос из страстной идеи в один из самых динамичных футбольных институтов Казахстана.",
-      "Из тени гор Тянь-Шаня Верия ФК поднимается — создавая наследие, развивая таланты и соревнуясь на самом высоком уровне."
+      "Из тени гор Тянь-Шаня ВЕ-ГЛОБАЛСПОРТС ФК поднимается — создавая наследие, развивая таланты и соревнуясь на самом высоком уровне."
     ],
     pillarsTitle: "Ценности Клуба",
     pillarsEyebrow: "За Что Мы Стоим",
@@ -84,11 +84,11 @@ const translations = {
     ],
     leadershipTitle: "Руководство Клуба",
     leadershipEyebrow: "Люди, Стоящие За Клубом",
-    leadershipSub: "Единый фронт дальновидных профессионалов, реализующих амбиции Верия ФК.",
+    leadershipSub: "Единый фронт дальновидных профессионалов, реализующих амбиции ВЕ-ГЛОБАЛСПОРТС ФК.",
     leaders: [
-      { role: "Основатель и Председатель", name: "Верия Лоуренс Эбикс", initials: "VLE", image: "/images/IMG-20260324-WA0048.jpg", bio: "Движущая сила Верия ФК, Верия Лоуренс Эбикс основал клуб с твердым убеждением в успехе футбола мирового класса в Алматы.", isFounder: true },
-      { role: "Технический Директор", name: "Отанва Луис", initials: "OL", bio: "Отанва Луис привносит глубокую тактическую экспертизу и современную футбольную философию в Верия ФК." },
-      { role: "Менеджер по развитию бизнеса", name: "Ауду Эммануэль Каз", initials: "AEK", bio: "Каз руководит коммерческой стратегией Верия ФК — создавая партнерства и развивая бренд клуба." },
+      { role: "Основатель и Председатель", name: "Верия Лоуренс Эбикс", initials: "VLE", image: "/images/IMG-20260324-WA0048.jpg", bio: "Движущая сила ВЕ-ГЛОБАЛСПОРТС ФК, Верия Лоуренс Эбикс основал клуб с твердым убеждением в успехе футбола мирового класса в Алматы.", isFounder: true },
+      { role: "Технический Директор", name: "Отанва Луис", initials: "OL", bio: "Отанва Луис привносит глубокую тактическую экспертизу и современную футбольную философию в ВЕ-ГЛОБАЛСПОРТС ФК." },
+      { role: "Менеджер по развитию бизнеса", name: "Ауду Эммануэль Каз", initials: "AEK", bio: "Каз руководит коммерческой стратегией ВЕ-ГЛОБАЛСПОРТС ФК — создавая партнерства и развивая бренд клуба." },
       { role: "Стратегический Менеджер", name: "Барий А Сануси", initials: "BAS", image: "/images/IMG-20260324-WA0050.jpg", bio: "Барий А Сануси выступает в качестве стратегического менеджера клуба, отвечая за реализацию видения основателя." }
     ]
   }

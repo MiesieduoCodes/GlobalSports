@@ -9,9 +9,9 @@ const translations = {
     heroEyebrow: "Our Legacy",
     heroTitle: "Club ",
     heroTitleAccent: "History",
-    sub: "Founded by Veria Lawrence Ebiks, Veria FC was built on a vision to revolutionise football in Almaty, Kazakhstan.",
+    sub: "Founded by Veria Lawrence Ebiks, VE-GLOBALSPORTS FC was built on a vision to revolutionise football in Almaty, Kazakhstan.",
     timeline: [
-      { year: "2023", title: "The Foundation", desc: "Veria Lawrence Ebiks establishes Veria FC in Almaty, setting the groundwork for a world-class institution.", icon: <Shield className="w-5 h-5 text-vsky" /> },
+      { year: "2023", title: "The Foundation", desc: "Veria Lawrence Ebiks establishes VE-GLOBALSPORTS FC in Almaty, setting the groundwork for a world-class institution.", icon: <Shield className="w-5 h-5 text-vsky" /> },
       { year: "2024", title: "KPL Entrance", desc: "The club makes its debut in the Kazakhstan Premier League, instantly becoming a symbol of Almaty's ambition.", icon: <Globe className="w-5 h-5 text-vgold" /> },
       { year: "2025", title: "First Silverware", desc: "A historic victory in the Kazakhstan Cup marks the beginning of a golden era for the club.", icon: <Trophy className="w-5 h-5 text-vsky" /> }
     ]
@@ -20,9 +20,9 @@ const translations = {
     heroEyebrow: "Наше Наследие",
     heroTitle: "История ",
     heroTitleAccent: "Клуба",
-    sub: "Основанный Верией Лоуренсом Эбиксом, Верия ФК был создан с видением революции в футболе Алматы.",
+    sub: "Основанный Верией Лоуренсом Эбиксом, ВЕ-ГЛОБАЛСПОРТС ФК был создан с видением революции в футболе Алматы.",
     timeline: [
-      { year: "2023", title: "Основание", desc: "Верия Лоуренс Эбикс основывает Верия ФК в Алматы.", icon: <Shield className="w-5 h-5 text-vsky" /> },
+      { year: "2023", title: "Основание", desc: "Верия Лоуренс Эбикс основывает ВЕ-ГЛОБАЛСПОРТС ФК в Алматы.", icon: <Shield className="w-5 h-5 text-vsky" /> },
       { year: "2024", title: "Вход в КПЛ", desc: "Дебют клуба в Премьер-лиге Казахстана.", icon: <Globe className="w-5 h-5 text-vgold" /> },
       { year: "2025", title: "Первый Трофей", desc: "Историческая победа в Кубке Казахстана.", icon: <Trophy className="w-5 h-5 text-vsky" /> }
     ]

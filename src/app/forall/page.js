@@ -19,7 +19,7 @@ const translations = {
     ]
   },
   ru: {
-    heroEyebrow: "Верия для всех",
+    heroEyebrow: "ВЕ-ГЛОБАЛСПОРТС для всех",
     heroTitle: "Наш ",
     heroTitleAccent: "Фонд",
     sub: "Футбол — для каждого. Наша миссия — использовать игру для социальных изменений.",

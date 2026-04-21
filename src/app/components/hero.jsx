@@ -6,7 +6,7 @@ import { useLanguage } from "@/app/context/LanguageContext";
 const translations = {
   en: {
     badge: "Kazakhstan Premier League · Season 2025/26",
-    title1: "VERIA",
+    title1: "VE-GLOBALSPORTS",
     title2: "FC",
     city: "ALMATY",
     tagline: <>One club. One city. One <em className="text-vgold not-italic">ambition</em>.<br />Built from the steppe up — forged in gold and sky.</>,
@@ -24,7 +24,7 @@ const translations = {
   },
   ru: {
     badge: "Премьер-лига Казахстана · Сезон 2025/26",
-    title1: "ВЕРИЯ",
+    title1: "ВЕ-ГЛОБАЛСПОРТС",
     title2: "ФК",
     city: "АЛМАТЫ",
     tagline: <>Один клуб. Один город. Одна <em className="text-vgold not-italic">цель</em>.<br />Создано в степи — выковано в золоте и небе.</>,
@@ -59,7 +59,7 @@ const Hero = () => {
           {t.badge}
         </div>
 
-        <h1 className="font-bebas text-[clamp(56px,8vw,100px)] leading-[0.88] text-vwhite tracking-[2px] uppercase hero-animate-up" style={{ animationDelay: '0.1s' }}>
+        <h1 className="font-bebas text-[clamp(36px,5.5vw,72px)] leading-[0.88] text-vwhite tracking-[1px] uppercase hero-animate-up" style={{ animationDelay: '0.1s' }}>
           {t.title1}<span className="text-vgold">{t.title2}</span>
           <span className="block font-bebas text-[clamp(24px,3.5vw,40px)] text-vsky tracking-[6px] mt-2">{t.city}</span>
         </h1>
@@ -85,7 +85,7 @@ const Hero = () => {
               {t.liveLabel}
             </div>
             <div className="flex items-center justify-between gap-4">
-              <span className="font-barlow-condensed font-bold text-xs text-vwhite text-center flex-1 line-clamp-1">Veria FC</span>
+              <span className="font-barlow-condensed font-bold text-xs text-vwhite text-center flex-1 line-clamp-1">VE-GLOBALSPORTS FC</span>
               <div className="flex items-center gap-2 scale-90">
                 <span className="font-bebas text-4xl text-vgold leading-none">3</span>
                 <span className="font-bebas text-xl text-vmuted">—</span>
@@ -102,13 +102,13 @@ const Hero = () => {
 
       {/* Live Result Card (Desktop Hover) */}
       <div className="absolute right-6 md:right-[60px] top-[40%] -translate-y-1/2 z-10 hidden lg:block hero-animate-in" style={{ animationDelay: '0.5s' }}>
-        <div className="bg-[rgba(23,32,56,0.95)] border border-[rgba(0,174,239,0.2)] backdrop-blur-xl rounded-[16px] p-7 min-w-[300px] shadow-2xl">
+        <div className="bg-[rgba(23,32,56,0.95)] border border-[rgba(0,174,239,0.2)] backdrop-blur-xl rounded-[16px] p-7 min-w-[340px] shadow-2xl">
           <div className="flex items-center gap-2 font-barlow-condensed text-[10px] font-bold tracking-[2px] uppercase text-vsky mb-4">
             <div className="w-[8px] h-[8px] bg-red-500 rounded-full live-dot-pulse" />
             {t.liveLabel}
           </div>
           <div className="flex items-center justify-between gap-4">
-            <span className="font-barlow-condensed font-bold text-sm text-vwhite text-center flex-1">Veria FC</span>
+            <span className="font-barlow-condensed font-bold text-sm text-vwhite text-center flex-1">VE-GLOBALSPORTS FC</span>
             <div className="flex items-center gap-2">
               <span className="font-bebas text-5xl text-vgold leading-none">3</span>
               <span className="font-bebas text-2xl text-vmuted">—</span>

@@ -15,7 +15,7 @@ const translations = {
     watch: "Watch Now"
   },
   ru: {
-    heroEyebrow: "Медиа Верия",
+    heroEyebrow: "Медиа ВЕ-ГЛОБАЛСПОРТС",
     heroTitle: "Премиум ",
     heroTitleAccent: "Видео",
     sub: "Эксклюзивные обзоры матчей, интервью с игроками и закулисный контент.",
@@ -25,7 +25,7 @@ const translations = {
 };
 
 const mockVideos = [
-  { id: "1", title: "Highlights: Veria FC 3–0 FC Kairat", category: "Highlights", date: "Mar 18, 2026", duration: "8:45" },
+  { id: "1", title: "Highlights: VE-GLOBALSPORTS FC 3–0 FC Kairat", category: "Highlights", date: "Mar 18, 2026", duration: "8:45" },
   { id: "2", title: "Interview: K. Nurlan on joining the club", category: "Interviews", date: "Mar 16, 2026", duration: "12:20" },
   { id: "3", title: "Academy Spotlight: U17 Champions", category: "Academy", date: "Mar 14, 2026", duration: "15:10" }
 ];

@@ -9,7 +9,7 @@ const translations = {
     heroEyebrow: "Technical Leadership",
     heroTitle: "Elite ",
     heroTitleAccent: "Coaching",
-    sub: "UEFA-licensed professionals dedicated to the tactical and physical development of Veria FC players.",
+    sub: "UEFA-licensed professionals dedicated to the tactical and physical development of VE-GLOBALSPORTS FC players.",
     coaches: [
       { name: "Otanwa Louis", role: "Technical Director", initials: "OL", bio: "Leading the club's long-term technical vision and first-team methodology." },
       { name: "S. Nurlan", role: "Head Coach", initials: "SN", bio: "Former national player with deep tactical expertise in modern positional play." },
@@ -20,7 +20,7 @@ const translations = {
     heroEyebrow: "Техническое руководство",
     heroTitle: "Элитный ",
     heroTitleAccent: "Тренинг",
-    sub: "Профессионалы с лицензиями UEFA, посвятившие себя тактическому развитию игроков Верия ФК.",
+    sub: "Профессионалы с лицензиями UEFA, посвятившие себя тактическому развитию игроков ВЕ-ГЛОБАЛСПОРТС ФК.",
     coaches: [
       { name: "Отанва Луис", role: "Технический директор", initials: "OL", bio: "Руководит долгосрочным техническим видением клуба." },
       { name: "С. Нурлан", role: "Главный тренер", initials: "SN", bio: "Бывший игрок национальной сборной с глубокой тактической экспертизой." },

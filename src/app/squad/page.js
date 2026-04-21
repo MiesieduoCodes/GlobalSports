@@ -163,29 +163,23 @@ export default function SquadPage() {
                           exit={{ opacity: 0, scale: 0.95 }}
                           className="player-card-web group"
                         >
-                          <div className={`player-card-top ${sectionId}`}>
-                            <div className="player-num-bg">{player.jerseyNumber || "0"}</div>
-                            <div
-                              className="player-avatar-web"
-                              style={{
-                                background: sectionId === 'gk' ? 'rgba(200,168,75,0.15)' :
-                                  sectionId === 'def' ? 'rgba(0,174,239,0.12)' :
-                                    sectionId === 'mid' ? 'rgba(97,153,34,0.2)' :
-                                      'rgba(226,75,74,0.2)',
-                                color: sectionId === 'gk' ? 'var(--gold)' :
-                                  sectionId === 'def' ? 'var(--sky)' :
-                                    sectionId === 'mid' ? '#97C459' :
-                                      '#F09595'
-                              }}
-                            >
-                              {player.image ? (
-                                <img src={player.image} alt={player.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
-                              ) : (
-                                <span>{player.position?.substring(0, 2).toUpperCase() || sectionId.toUpperCase()}</span>
-                              )}
+                          <div className={`player-card-top ${sectionId} !h-[260px]`}>
+                            {/* Huge Background Number */}
+                            <div className="absolute top-[45%] left-1/2 -translate-x-1/2 -translate-y-1/2 font-bebas text-[180px] text-vwhite/[0.04] leading-none pointer-events-none z-0 group-hover:scale-110 group-hover:text-vwhite/[0.08] transition-all duration-700">
+                              {player.jerseyNumber || "0"}
                             </div>
+
+                            {/* Background Image */}
+                            {player.image && (
+                              <div className="absolute inset-0 z-0">
+                                <img src={player.image} alt={player.name} className="w-full h-full object-cover object-top opacity-75 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700" />
+                                <div className="absolute inset-0 bg-gradient-to-t from-vnavy-card via-vnavy-card/20 to-transparent" />
+                              </div>
+                            )}
+
+                            {/* Position Badge */}
                             <div
-                              className="pos-badge"
+                              className="absolute bottom-3 left-4 z-10 font-barlow-condensed font-bold text-[10px] tracking-[1.5px] uppercase px-2 py-0.5 rounded-[4px]"
                               style={{
                                 background: sectionId === 'gk' ? 'var(--gold)' :
                                   sectionId === 'def' ? 'var(--sky)' :

@@ -12,7 +12,7 @@ const translations = {
   en: {
     title: "CLUB NEWS",
     subtitle: "LATEST UPDATES & STORIES",
-    description: "The definitive source for everything Veria FC. From match results to exclusive interviews.",
+    description: "The definitive source for everything VE-GLOBALSPORTS FC. From match results to exclusive interviews.",
     searchPlaceholder: "Search articles...",
     all: "ALL NEWS",
     readMore: "READ FULL ARTICLE",
@@ -24,7 +24,7 @@ const translations = {
   ru: {
     title: "НОВОСТИ КЛУБА",
     subtitle: "ПОСЛЕДНИЕ ОБНОВЛЕНИЯ",
-    description: "Официальный источник новостей Верия ФК. От результатов матчей до эксклюзивных интервью.",
+    description: "Официальный источник новостей ВЕ-ГЛОБАЛСПОРТС ФК. От результатов матчей до эксклюзивных интервью.",
     searchPlaceholder: "Поиск статей...",
     all: "ВСЕ НОВОСТИ",
     readMore: "ЧИТАТЬ ПОЛНОСТЬЮ",
@@ -36,7 +36,7 @@ const translations = {
   fr: {
     title: "NOUVELLES DU CLUB",
     subtitle: "DERNIÈRES MISES À JOUR",
-    description: "La source définitive pour tout sur le Veria FC.",
+    description: "La source définitive pour tout sur le VE-GLOBALSPORTS FC.",
     searchPlaceholder: "Rechercher...",
     all: "TOUTES LES NOUVELLES",
     readMore: "LIRE L'ARTICLE",
@@ -48,7 +48,7 @@ const translations = {
   es: {
     title: "NOTICIAS DEL CLUB",
     subtitle: "ÚLTIMAS ACTUALIZACIONES",
-    description: "La fuente oficial de todo lo relacionado con el Veria FC.",
+    description: "La fuente oficial de todo lo relacionado con el VE-GLOBALSPORTS FC.",
     searchPlaceholder: "Buscar...",
     all: "TODAS LAS NOTICIAS",
     readMore: "LEER MÁS",

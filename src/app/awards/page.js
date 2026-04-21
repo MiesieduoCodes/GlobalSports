@@ -11,9 +11,9 @@ const translations = {
     heroTitleAccent: "Awards",
     sub: "A legacy forged in gold. Our record of excellence across all competitions.",
     honors: [
-      { year: "2025", title: "Kazakhstan Cup Winners", category: "Major Trophy", desc: "A historic night at Central Stadium as Veria FC claimed their first major title.", icon: <Trophy className="w-6 h-6 text-vgold" /> },
+      { year: "2025", title: "Kazakhstan Cup Winners", category: "Major Trophy", desc: "A historic night at Central Stadium as VE-GLOBALSPORTS FC claimed their first major title.", icon: <Trophy className="w-6 h-6 text-vgold" /> },
       { year: "2024", title: "KPL Fair Play Award", category: "Sportsmanship", desc: "Recognized for maintaining the highest standards of conduct throughout the season.", icon: <Award className="w-6 h-6 text-vsky" /> },
-      { year: "2024", title: "Academy Excellence", category: "Youth", desc: "Awarded to Veria Sport Academy for outstanding youth development infrastructure.", icon: <Star className="w-6 h-6 text-vgold" /> },
+      { year: "2024", title: "Academy Excellence", category: "Youth", desc: "Awarded to VE-GLOBALSPORTS Academy for outstanding youth development infrastructure.", icon: <Star className="w-6 h-6 text-vgold" /> },
       { year: "2023", title: "Best New Club", category: "Innovation", desc: "KPL recognition for the most impactful entrance of a new institution.", icon: <Medal className="w-6 h-6 text-vsky" /> }
     ]
   },
