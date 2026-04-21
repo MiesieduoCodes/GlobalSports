@@ -23,8 +23,8 @@ const translations = {
       },
       {
         title: "Email",
-        val: "info@veriafc.kz",
-        sub: "Tickets: tickets@veriafc.kz",
+        val: "info@ve-globalsportfc.kz",
+        sub: "Tickets: tickets@ve-globalsportfc.kz",
         icon: <Mail className="w-[18px] h-[18px] text-vsky" />
       },
       {
@@ -59,8 +59,8 @@ const translations = {
       },
       {
         title: "Email",
-        val: "info@veriafc.kz",
-        sub: "Билеты: tickets@veriafc.kz",
+        val: "info@ve-globalsportfc.kz",
+        sub: "Билеты: tickets@ve-globalsportfc.kz",
         icon: <Mail className="w-[18px] h-[18px] text-vsky" />
       },
       {

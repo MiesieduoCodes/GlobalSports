@@ -5,7 +5,7 @@
  *   2. Run: node scripts/set-admin-user.js <user-email>
  *
  * Example:
- *   node scripts/set-admin-user.js admin@veriafc.com
+ *   node scripts/set-admin-user.js admin@ve-globalsportfc.com
  */
 
 const admin = require("firebase-admin");
@@ -36,14 +36,14 @@ async function setAdminUser() {
   try {
     // Get user by email
     const user = await admin.auth().getUserByEmail(userEmail);
-    
+
     // Set custom claims
     await admin.auth().setCustomUserClaims(user.uid, { admin: true });
-    
+
     console.log(`[set-admin-user] ✓ Successfully set admin privileges for: ${userEmail}`);
     console.log(`[set-admin-user] User UID: ${user.uid}`);
     console.log(`[set-admin-user] Note: User may need to sign out and sign in again for changes to take effect.`);
-    
+
     process.exit(0);
   } catch (err) {
     if (err.code === "auth/user-not-found") {

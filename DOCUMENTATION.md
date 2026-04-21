@@ -1,4 +1,4 @@
-# VeriaFC - Documentation
+# ve-globalsportfc - Documentation
 
 ## Quick Start
 

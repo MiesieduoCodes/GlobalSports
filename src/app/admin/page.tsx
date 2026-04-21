@@ -112,7 +112,7 @@ function AdminAuthScreen() {
           <div className="w-20 h-20 bg-yellow-400 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
             <span className="text-blue-900 font-bold text-2xl">GS</span>
           </div>
-          <h1 className="text-3xl font-bold text-white mb-2">VeriaFC</h1>
+          <h1 className="text-3xl font-bold text-white mb-2">ve-globalsportfc</h1>
           <p className="text-blue-200">Admin Dashboard</p>
         </div>
 
@@ -138,7 +138,7 @@ function AdminAuthScreen() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                placeholder="admin@veriafc.com"
+                placeholder="admin@ve-globalsportfc.com"
               />
             </div>
             <div>
@@ -196,7 +196,7 @@ function AdminShell() {
               </div>
               <div>
                 <h1 className="text-base font-bold text-gray-900 dark:text-white leading-tight">Admin Dashboard</h1>
-                <p className="text-xs text-gray-500 dark:text-gray-400">VeriaFC</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">ve-globalsportfc</p>
               </div>
             </div>
           </div>
@@ -731,7 +731,7 @@ function MatchesAdminSection() {
               value={form.team1 ?? ""}
               onChange={(e) => handleChange("team1", e.target.value)}
               className="w-full rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500"
-              placeholder="VeriaFC"
+              placeholder="ve-globalsportfc"
             />
           </div>
           <div>
@@ -1270,10 +1270,10 @@ function PlayersAdminSection() {
         id: d.id,
         ...(d.data() as Omit<PlayerItem, "id">),
       }));
-      
+
       console.log('Loaded players from Firestore:', docs.length);
       console.log('Player IDs:', docs.map(p => p.id));
-      
+
       // If no players in Firestore, don't show fallback data in admin
       // This prevents trying to edit non-existent Firestore documents
       setItems(docs);
@@ -1350,13 +1350,13 @@ function PlayersAdminSection() {
         cleanSheets: Number(form.cleanSheets) || 0,
         translations: (form as any).translations || {},
       };
-      
+
       // Check if trying to update a fallback player (starts with 'fb-')
       if (form.id && form.id.startsWith('fb-')) {
         alert('Cannot update fallback player data. Please create a new player instead.');
         return;
       }
-      
+
       if (form.id) {
         await updateDoc(doc(db, "players", form.id), payload);
       } else {
@@ -1697,11 +1697,10 @@ function PlayersAdminSection() {
                               startEdit(item);
                             }}
                             disabled={item.id.startsWith('fb-')}
-                            className={`px-3 py-2 text-xs rounded-xl font-semibold ${
-                              item.id.startsWith('fb-')
+                            className={`px-3 py-2 text-xs rounded-xl font-semibold ${item.id.startsWith('fb-')
                                 ? 'bg-gray-100 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed'
                                 : 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-blue-900/50'
-                            }`}
+                              }`}
                             title={item.id.startsWith('fb-') ? 'Cannot edit fallback player' : 'Edit player'}
                           >
                             Edit
