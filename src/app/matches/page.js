@@ -6,6 +6,7 @@ import { collection, getDocs, orderBy, query } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { Calendar, MapPin, Ticket, ChevronRight, Trophy, Clock } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
 
 const translations = {
   en: {
@@ -165,9 +166,12 @@ export default function MatchesPage() {
                       <div className="flex items-center gap-2 text-vmuted font-barlow text-sm">
                         <MapPin className="w-4 h-4 text-vsky" /> {match.venue || "Central Stadium"}
                       </div>
-                      <button className={`px-6 py-2 rounded-[6px] font-barlow-condensed font-bold text-[12px] tracking-[1.5px] uppercase transition-all ${activeTab === 'results' ? 'border border-white/20 text-vwhite hover:border-vgold hover:text-vgold' : 'bg-vgold text-vnavy hover:bg-vgold-light'}`}>
+                      <Link 
+                        href={`/matches/${match.id}`}
+                        className={`px-6 py-2 rounded-[6px] font-barlow-condensed font-bold text-[12px] tracking-[1.5px] uppercase transition-all inline-block ${activeTab === 'results' ? 'border border-white/20 text-vwhite hover:border-vgold hover:text-vgold' : 'bg-vgold text-vnavy hover:bg-vgold-light'}`}
+                      >
                         {activeTab === 'results' ? t.details : t.tickets}
-                      </button>
+                      </Link>
                     </div>
                   </motion.div>
                 ))}

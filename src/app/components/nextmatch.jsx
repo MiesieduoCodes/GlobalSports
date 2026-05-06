@@ -4,6 +4,7 @@ import { useLanguage } from "@/app/context/LanguageContext";
 import { useState, useEffect } from "react";
 import { collection, getDocs, query, orderBy, limit } from "firebase/firestore";
 import { db } from "@/lib/firebase";
+import Link from "next/link";
 
 const translations = {
   en: {
@@ -126,9 +127,12 @@ export default function NextMatch() {
               </svg>
               <span className="font-barlow-condensed text-[13px] text-vmuted">{displayMatch.venue || t.venue}</span>
             </div>
-            <button className="bg-vgold text-vnavy font-barlow-condensed font-bold text-[12px] tracking-[2px] uppercase px-6 py-2.5 rounded-[6px] hover:bg-vgold-light transition-colors whitespace-nowrap">
+            <Link 
+              href={`/matches/${match.id}`}
+              className="bg-vgold text-vnavy font-barlow-condensed font-bold text-[12px] tracking-[2px] uppercase px-6 py-2.5 rounded-[6px] hover:bg-vgold-light transition-colors whitespace-nowrap"
+            >
               {t.buyTickets}
-            </button>
+            </Link>
           </div>
         </div>
       </div>
