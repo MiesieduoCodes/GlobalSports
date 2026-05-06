@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { motion, AnimatePresence } from "framer-motion";
-import { FALLBACK_PLAYERS } from "@/lib/constants";
 
 const translations = {
   en: {
@@ -74,10 +73,20 @@ export default function SquadPage() {
             image: data.image || data.imageUrl || ""
           };
         });
-        setPlayers(docs.length > 0 ? docs : FALLBACK_PLAYERS);
+        setPlayers(docs);
       } catch (err) {
         console.error("Error fetching players:", err);
-        setPlayers(FALLBACK_PLAYERS);
+        if (err.code === 'permission-denied' || err.message?.includes('permission')) {
+          setPlayers([{ 
+            id: 'error', 
+            name: "Database Access Error", 
+            position: "Admin action required", 
+            nationality: "Please update Firebase Security Rules",
+            image: "" 
+          }]);
+        } else {
+          setPlayers([]);
+        }
       } finally {
         setIsLoading(false);
       }

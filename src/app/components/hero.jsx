@@ -2,42 +2,38 @@
 import React from "react";
 import Image from "next/image";
 import { useLanguage } from "@/app/context/LanguageContext";
+import { motion } from "framer-motion";
+import { Goal, Trophy, Target, Users, Circle, Zap, Star, Heart, Hexagon, Triangle, Square, Diamond } from "lucide-react";
 
 const translations = {
   en: {
     badge: "Kazakhstan Premier League · Season 2025/26",
-    title1: "VE-GLOBALSPORTS",
-    title2: "FC",
-    city: "ALMATY",
-    tagline: <>One club. One city. One <em className="text-vgold not-italic">ambition</em>.<br />Built from the steppe up — forged in gold and sky.</>,
-    btnPrimary: "Meet The Squad",
-    btnSecondary: "Our Story",
-    liveLabel: "Last Result",
-    liveMeta: "KPL Matchday 21 · Central Stadium, Almaty",
+    title: "VE-GLOBALSPORTS FC",
+    subtitle: "One club. One city. One ambition.",
+    btnPrimary: "VIEW MATCHES",
+    liveLabel: "LAST MATCH",
+    liveMeta: "KPL MATCHDAY 21 · CENTRAL STADIUM, ALMATY",
     stats: [
-      { label: "Wins", val: "14" },
-      { label: "Draws", val: "5" },
-      { label: "Losses", val: "3" },
-      { label: "KPL Position", val: "2nd", color: "text-vsky" },
-      { label: "Points", val: "47" }
+      { label: "WINS", val: "14" },
+      { label: "DRAWS", val: "5" },
+      { label: "LOSSES", val: "3" },
+      { label: "POSITION", val: "2ND", color: "text-vsky" },
+      { label: "POINTS", val: "47" }
     ]
   },
   ru: {
     badge: "Премьер-лига Казахстана · Сезон 2025/26",
-    title1: "ВЕ-ГЛОБАЛСПОРТС",
-    title2: "ФК",
-    city: "АЛМАТЫ",
-    tagline: <>Один клуб. Один город. Одна <em className="text-vgold not-italic">цель</em>.<br />Создано в степи — выковано в золоте и небе.</>,
-    btnPrimary: "Встречайте Состав",
-    btnSecondary: "Наша История",
-    liveLabel: "Последний Результат",
-    liveMeta: "КПЛ Тур 21 · Центральный Стадион, Алматы",
+    title: "ВЕ-ГЛОБАЛСПОРТС ФК",
+    subtitle: "Один клуб. Один город. Одна цель.",
+    btnPrimary: "СМОТРЕТЬ МАТЧИ",
+    liveLabel: "ПОСЛЕДНИЙ МАТЧ",
+    liveMeta: "КПЛ ТУР 21 · ЦЕНТРАЛЬНЫЙ СТАДИОН, АЛМАТЫ",
     stats: [
-      { label: "Победы", val: "14" },
-      { label: "Ничьи", val: "5" },
-      { label: "Поражения", val: "3" },
-      { label: "Позиция в КПЛ", val: "2", color: "text-vsky" },
-      { label: "Очки", val: "47" }
+      { label: "ПОБЕДЫ", val: "14" },
+      { label: "НИЧЬИ", val: "5" },
+      { label: "ПОРАЖЕНИЯ", val: "3" },
+      { label: "ПОЗИЦИЯ", val: "2", color: "text-vsky" },
+      { label: "ОЧКИ", val: "47" }
     ]
   }
 };
@@ -45,97 +41,504 @@ const translations = {
 const Hero = () => {
   const { language } = useLanguage();
   const t = translations[language] || translations.en;
+  const [lastMatch, setLastMatch] = React.useState(null);
+  const [stats, setStats] = React.useState(t.stats);
+
+  React.useEffect(() => {
+    const loadHeroData = async () => {
+      try {
+        const { collection, getDocs, query, where, orderBy, limit } = await import("firebase/firestore");
+        const { db } = await import("@/lib/firebase");
+        
+        // Fetch last match
+        const qMatch = query(collection(db, "matches"), where("status", "==", "past"), orderBy("date", "desc"), limit(1));
+        const snapMatch = await getDocs(qMatch);
+        if (!snapMatch.empty) {
+          setLastMatch({ id: snapMatch.docs[0].id, ...snapMatch.docs[0].data() });
+        }
+
+        // Potential: Fetch stats from a 'clubStats' doc if it exists
+        // For now, we keep the translation stats but we could make them dynamic
+      } catch (err) {
+        console.error("Error loading hero data:", err);
+      }
+    };
+    loadHeroData();
+  }, []);
 
   return (
-    <section className="relative min-h-screen flex flex-col justify-center px-6 md:px-[60px] pt-[72px] pb-[80px] overflow-hidden bg-vnavy">
-      <div className="absolute inset-0 bg-[linear-gradient(175deg,rgba(8,12,24,0.1)_0%,rgba(8,12,24,0.6)_50%,rgba(8,12,24,1)_100%),linear-gradient(135deg,#080E20_0%,#0C1A32_35%,#102240_65%,#080E20_100%)]" />
-      <div className="kz-grid" />
-      <div className="hero-glow" />
-      <div className="hero-glow-gold" />
-
-      <div className="relative z-10 max-w-[720px]">
-        <div className="hero-badge inline-flex items-center gap-2 bg-[rgba(0,174,239,0.1)] border border-[rgba(0,174,239,0.3)] rounded-full px-4 py-1.5 font-barlow-condensed font-semibold text-[11px] tracking-[2px] uppercase text-vsky mb-5 hero-animate-up">
-          <div className="w-[6px] h-[6px] bg-vsky rounded-full live-dot-pulse" />
-          {t.badge}
-        </div>
-
-        <h1 className="font-bebas text-[clamp(36px,5.5vw,72px)] leading-[0.88] text-vwhite tracking-[1px] uppercase hero-animate-up" style={{ animationDelay: '0.1s' }}>
-          {t.title1}<span className="text-vgold">{t.title2}</span>
-          <span className="block font-bebas text-[clamp(24px,3.5vw,40px)] text-vsky tracking-[6px] mt-2">{t.city}</span>
-        </h1>
-
-        <p className="font-barlow-condensed text-base lg:text-lg font-light text-vmuted max-w-[480px] mt-5 leading-relaxed hero-animate-up" style={{ animationDelay: '0.2s' }}>
-          {t.tagline}
-        </p>
-
-        <div className="flex flex-wrap gap-4 mt-8 hero-animate-up" style={{ animationDelay: '0.3s' }}>
-          <button className="bg-vgold text-vnavy font-barlow-condensed font-bold text-[13px] tracking-[2px] uppercase px-8 py-3.5 rounded-[8px] hover:bg-vgold-light transition-all transform hover:-translate-y-0.5 shadow-lg shadow-vgold/10">
-            {t.btnPrimary}
-          </button>
-          <button className="bg-[rgba(0,174,239,0.12)] border border-[rgba(0,174,239,0.4)] text-vsky font-barlow-condensed font-bold text-[13px] tracking-[2px] uppercase px-8 py-3.5 rounded-[8px] hover:bg-[rgba(0,174,239,0.2)] transition-all">
-            {t.btnSecondary}
-          </button>
-        </div>
-
-        {/* Live Result Card (Mobile/Tablet) */}
-        <div className="mt-12 lg:hidden hero-animate-in" style={{ animationDelay: '0.4s' }}>
-          <div className="bg-[rgba(23,32,56,0.95)] border border-[rgba(0,174,239,0.2)] backdrop-blur-xl rounded-[16px] p-6 shadow-2xl">
-            <div className="flex items-center gap-2 font-barlow-condensed text-[10px] font-bold tracking-[2px] uppercase text-vsky mb-4">
-              <div className="w-[8px] h-[8px] bg-red-500 rounded-full live-dot-pulse" />
-              {t.liveLabel}
-            </div>
-            <div className="flex items-center justify-between gap-4">
-              <span className="font-barlow-condensed font-bold text-xs text-vwhite text-center flex-1 line-clamp-1">VE-GLOBALSPORTS FC</span>
-              <div className="flex items-center gap-2 scale-90">
-                <span className="font-bebas text-4xl text-vgold leading-none">3</span>
-                <span className="font-bebas text-xl text-vmuted">—</span>
-                <span className="font-bebas text-4xl text-vgold leading-none">0</span>
-              </div>
-              <span className="font-barlow-condensed font-bold text-xs text-vwhite text-center flex-1 line-clamp-1">FC Kairat</span>
-            </div>
-            <div className="mt-4 pt-3 border-t border-[rgba(255,255,255,0.06)] font-barlow-condensed text-[10px] text-vmuted text-center tracking-[1px]">
-              {t.liveMeta}
-            </div>
-          </div>
-        </div>
+    <section className="relative min-h-screen flex items-center justify-center px-6 md:px-[60px] pt-[72px] pb-[80px] overflow-hidden">
+      {/* Dynamic Background Image */}
+      <div className="absolute inset-0">
+        <div className="hero-bg-image" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/60 to-black/80" />
       </div>
 
-      {/* Live Result Card (Desktop Hover) */}
-      <div className="absolute right-6 md:right-[60px] top-[40%] -translate-y-1/2 z-10 hidden lg:block hero-animate-in" style={{ animationDelay: '0.5s' }}>
-        <div className="bg-[rgba(23,32,56,0.95)] border border-[rgba(0,174,239,0.2)] backdrop-blur-xl rounded-[16px] p-7 min-w-[340px] shadow-2xl">
-          <div className="flex items-center gap-2 font-barlow-condensed text-[10px] font-bold tracking-[2px] uppercase text-vsky mb-4">
-            <div className="w-[8px] h-[8px] bg-red-500 rounded-full live-dot-pulse" />
-            {t.liveLabel}
-          </div>
-          <div className="flex items-center justify-between gap-4">
-            <span className="font-barlow-condensed font-bold text-sm text-vwhite text-center flex-1">VE-GLOBALSPORTS FC</span>
-            <div className="flex items-center gap-2">
-              <span className="font-bebas text-5xl text-vgold leading-none">3</span>
-              <span className="font-bebas text-2xl text-vmuted">—</span>
-              <span className="font-bebas text-5xl text-vgold leading-none">0</span>
-            </div>
-            <span className="font-barlow-condensed font-bold text-sm text-vwhite text-center flex-1">FC Kairat</span>
-          </div>
-          <div className="mt-5 pt-4 border-t border-[rgba(255,255,255,0.06)] font-barlow-condensed text-[11px] text-vmuted text-center tracking-[1px]">
-            {t.liveMeta}
-          </div>
-        </div>
+      {/* Football Doodles - Background Elements */}
+      <div className="absolute inset-0 pointer-events-none">
+        {/* Top Left Corner */}
+        <motion.div 
+          className="absolute top-20 left-10 text-vgold/20"
+          animate={{ rotate: [0, 360] }}
+          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+        >
+          <Goal className="w-16 h-16" />
+        </motion.div>
+        
+        {/* Top Right Corner */}
+        <motion.div 
+          className="absolute top-32 right-16 text-vsky/15"
+          animate={{ rotate: [360, 0] }}
+          transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+        >
+          <Trophy className="w-12 h-12" />
+        </motion.div>
+        
+        {/* Bottom Left Corner */}
+        <motion.div 
+          className="absolute bottom-40 left-20 text-vgold/10"
+          animate={{ scale: [1, 1.2, 1] }}
+          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <Circle className="w-20 h-20" />
+        </motion.div>
+        
+        {/* Bottom Right Corner */}
+        <motion.div 
+          className="absolute bottom-32 right-12 text-vsky/10"
+          animate={{ rotate: [0, -360] }}
+          transition={{ duration: 18, repeat: Infinity, ease: "linear" }}
+        >
+          <Goal className="w-14 h-14" />
+        </motion.div>
+        
+        {/* Floating Stars */}
+        <motion.div 
+          className="absolute top-1/4 left-1/4 text-vgold/15"
+          animate={{ 
+            y: [0, -10, 0],
+            opacity: [0.15, 0.3, 0.15]
+          }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <Star className="w-8 h-8" />
+        </motion.div>
+        
+        <motion.div 
+          className="absolute top-1/3 right-1/3 text-vsky/15"
+          animate={{ 
+            y: [0, 10, 0],
+            opacity: [0.15, 0.3, 0.15]
+          }}
+          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+        >
+          <Star className="w-6 h-6" />
+        </motion.div>
+        
+        {/* Small Football Elements */}
+        <motion.div 
+          className="absolute top-1/2 left-16 text-vgold/10"
+          animate={{ 
+            x: [0, 5, 0],
+            rotate: [0, 180, 360]
+          }}
+          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <Circle className="w-10 h-10" />
+        </motion.div>
+        
+        <motion.div 
+          className="absolute top-2/3 right-20 text-vsky/10"
+          animate={{ 
+            x: [0, -5, 0],
+            rotate: [360, 180, 0]
+          }}
+          transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+        >
+          <Circle className="w-8 h-8" />
+        </motion.div>
+        
+        {/* Energy/Zap Elements */}
+        <motion.div 
+          className="absolute top-1/4 right-1/4 text-vgold/20"
+          animate={{ 
+            scale: [1, 1.3, 1],
+            opacity: [0.2, 0.4, 0.2]
+          }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <Zap className="w-12 h-12" />
+        </motion.div>
+        
+        {/* Heart Elements */}
+        <motion.div 
+          className="absolute bottom-1/4 left-1/3 text-vgold/15"
+          animate={{ 
+            scale: [1, 1.2, 1],
+            opacity: [0.15, 0.3, 0.15]
+          }}
+          transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
+        >
+          <Heart className="w-10 h-10" />
+        </motion.div>
+        
+        {/* Additional Doodles - Mid Section */}
+        <motion.div 
+          className="absolute top-1/2 left-1/4 text-vgold/12"
+          animate={{ 
+            rotate: [0, 180, 360],
+            scale: [1, 1.1, 1]
+          }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <Hexagon className="w-14 h-14" />
+        </motion.div>
+        
+        <motion.div 
+          className="absolute top-1/3 right-1/4 text-vsky/12"
+          animate={{ 
+            rotate: [360, 180, 0],
+            scale: [1, 0.9, 1]
+          }}
+          transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+        >
+          <Triangle className="w-12 h-12" />
+        </motion.div>
+        
+        {/* Small decorative elements */}
+        <motion.div 
+          className="absolute top-1/6 left-1/2 text-vgold/10"
+          animate={{ 
+            y: [0, -15, 0],
+            rotate: [0, 90, 180]
+          }}
+          transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <Square className="w-6 h-6" />
+        </motion.div>
+        
+        <motion.div 
+          className="absolute top-5/6 left-1/6 text-vsky/10"
+          animate={{ 
+            y: [0, 10, 0],
+            rotate: [180, 270, 360]
+          }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+        >
+          <Diamond className="w-8 h-8" />
+        </motion.div>
+        
+        {/* More floating elements */}
+        <motion.div 
+          className="absolute top-2/5 right-1/6 text-vgold/8"
+          animate={{ 
+            x: [0, 10, 0],
+            y: [0, -8, 0],
+            rotate: [0, 360]
+          }}
+          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <Star className="w-7 h-7" />
+        </motion.div>
+        
+        <motion.div 
+          className="absolute top-3/5 left-1/5 text-vsky/8"
+          animate={{ 
+            x: [0, -8, 0],
+            y: [0, 8, 0],
+            rotate: [360, 0]
+          }}
+          transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
+        >
+          <Circle className="w-6 h-6" />
+        </motion.div>
+        
+        {/* Corner accents */}
+        <motion.div 
+          className="absolute top-12 right-32 text-vgold/15"
+          animate={{ 
+            scale: [1, 1.3, 1],
+            opacity: [0.15, 0.25, 0.15]
+          }}
+          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <Zap className="w-9 h-9" />
+        </motion.div>
+        
+        <motion.div 
+          className="absolute bottom-20 right-28 text-vsky/15"
+          animate={{ 
+            scale: [1, 1.2, 1],
+            opacity: [0.15, 0.25, 0.15]
+          }}
+          transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+        >
+          <Trophy className="w-8 h-8" />
+        </motion.div>
+        
+        {/* Tiny scattered elements */}
+        <motion.div 
+          className="absolute top-1/4 left-1/6 text-vgold/6"
+          animate={{ 
+            rotate: [0, 720],
+            scale: [1, 1.1, 1]
+          }}
+          transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+        >
+          <Star className="w-4 h-4" />
+        </motion.div>
+        
+        <motion.div 
+          className="absolute top-3/4 right-1/5 text-vsky/6"
+          animate={{ 
+            rotate: [720, 0],
+            scale: [1, 0.9, 1]
+          }}
+          transition={{ duration: 9, repeat: Infinity, ease: "linear", delay: 2 }}
+        >
+          <Circle className="w-3 h-3" />
+        </motion.div>
+        
+        <motion.div 
+          className="absolute top-1/2 right-1/3 text-vgold/5"
+          animate={{ 
+            y: [0, -5, 0],
+            opacity: [0.05, 0.15, 0.05]
+          }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <Hexagon className="w-5 h-5" />
+        </motion.div>
+        
+        <motion.div 
+          className="absolute top-2/3 left-2/5 text-vsky/5"
+          animate={{ 
+            y: [0, 5, 0],
+            opacity: [0.05, 0.15, 0.05]
+          }}
+          transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
+        >
+          <Triangle className="w-4 h-4" />
+        </motion.div>
       </div>
 
-      {/* Hero Stats */}
-      <div className="absolute bottom-[40px] left-6 right-6 md:left-[60px] md:right-[60px] z-10 flex border-t border-transparent hero-animate-up" style={{ animationDelay: '0.6s' }}>
-        <div className="grid grid-cols-2 md:grid-cols-5 w-full bg-[rgba(15,21,37,0.85)] border border-white/5 backdrop-blur-md rounded-[12px] overflow-hidden shadow-2xl translate-y-[-20px]">
-          {t.stats.map((s, idx) => (
-            <div
-              key={idx}
-              className={`p-5 border-r border-[rgba(255,255,255,0.06)] last:border-r-0 border-t md:border-t-0 border-[rgba(255,255,255,0.06)] first:border-t-2 first:border-vgold hover:border-l-2 hover:border-vsky transition-all group cursor-default ${idx === 4 ? 'col-span-2 md:col-span-1' : ''}`}
+      <div className="relative z-10 max-w-[1200px] mx-auto">
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
+          {/* Left Content */}
+          <div className="text-center lg:text-left">
+            <motion.div 
+              className="hero-badge inline-flex items-center gap-2 bg-vgold/20 backdrop-blur-sm border border-vgold/40 rounded-full px-6 py-3 font-barlow-condensed font-bold text-[12px] tracking-[3px] uppercase text-vgold mb-8"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
             >
-              <span className={`block font-bebas text-[34px] leading-none mb-1 transition-colors ${s.color || 'text-vgold'} group-hover:text-vwhite`}>{s.val}</span>
-              <span className="block font-barlow-condensed font-semibold text-[9px] tracking-[2px] uppercase text-vmuted group-hover:text-vsky transition-colors">{s.label}</span>
-            </div>
+              <motion.div
+                animate={{ rotate: [0, 360] }}
+                transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+              >
+                <Trophy className="w-4 h-4" />
+              </motion.div>
+              {t.badge}
+            </motion.div>
+
+            <motion.div 
+              className="font-bebas text-[clamp(48px,8vw,96px)] leading-[0.85] text-white tracking-[2px] uppercase mb-4 relative"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+            >
+              {/* Doodles around title */}
+              <motion.div 
+                className="absolute -top-4 -left-8 text-vgold/30"
+                animate={{ rotate: [0, 360] }}
+                transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+              >
+                <Star className="w-6 h-6" />
+              </motion.div>
+              <motion.div 
+                className="absolute -top-2 -right-6 text-vsky/30"
+                animate={{ rotate: [360, 0] }}
+                transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
+              >
+                <Circle className="w-5 h-5" />
+              </motion.div>
+              {t.title}
+            </motion.div>
+
+            <motion.div 
+              className="font-barlow-condensed text-xl lg:text-2xl font-light text-white/90 max-w-[500px] mb-8 leading-relaxed relative"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+            >
+              {/* Subtitle decorations */}
+              <motion.div 
+                className="absolute -top-2 left-0 text-vgold/25"
+                animate={{ rotate: [0, 360] }}
+                transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
+              >
+                <Star className="w-4 h-4" />
+              </motion.div>
+              <motion.div 
+                className="absolute -bottom-1 right-0 text-vsky/25"
+                animate={{ rotate: [360, 0] }}
+                transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+              >
+                <Circle className="w-3 h-3" />
+              </motion.div>
+              {t.subtitle}
+            </motion.div>
+
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.6 }}
+              className="relative"
+            >
+              {/* Button decorations */}
+              <motion.div 
+                className="absolute -top-3 -left-3 text-vgold/40"
+                animate={{ scale: [1, 1.2, 1] }}
+                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+              >
+                <Zap className="w-5 h-5" />
+              </motion.div>
+              <motion.div 
+                className="absolute -bottom-2 -right-2 text-vsky/40"
+                animate={{ scale: [1, 1.2, 1] }}
+                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+              >
+                <Star className="w-4 h-4" />
+              </motion.div>
+              <button className="bg-vgold text-vnavy font-barlow-condensed font-bold text-[14px] tracking-[2px] uppercase px-12 py-4 rounded-[8px] hover:bg-vgold-light transition-all transform hover:-translate-y-1 shadow-xl shadow-vgold/30">
+                {t.btnPrimary}
+              </button>
+            </motion.div>
+          </div>
+
+          {/* Right Content - Match Score */}
+          {lastMatch && (
+            <motion.div 
+              className="flex justify-center lg:justify-end relative"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8, delay: 0.8 }}
+            >
+              {/* Match card decorations */}
+              <motion.div 
+                className="absolute top-0 right-0 text-vgold/30"
+                animate={{ 
+                  scale: [1, 1.2, 1],
+                  rotate: [0, 180, 360]
+                }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              >
+                <Trophy className="w-8 h-8" />
+              </motion.div>
+              <motion.div 
+                className="absolute bottom-0 left-0 text-vsky/30"
+                animate={{ 
+                  scale: [1, 1.2, 1],
+                  rotate: [360, 180, 0]
+                }}
+                transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+              >
+                <Goal className="w-7 h-7" />
+              </motion.div>
+              
+              <div className="bg-black/40 backdrop-blur-lg border border-white/20 rounded-[24px] p-8 max-w-[400px] w-full relative">
+                <motion.div 
+                  className="absolute -top-2 -right-2 text-vgold/20"
+                  animate={{ rotate: [0, 360] }}
+                  transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
+                >
+                  <Star className="w-5 h-5" />
+                </motion.div>
+                <motion.div 
+                  className="absolute -bottom-2 -left-2 text-vsky/20"
+                  animate={{ rotate: [360, 0] }}
+                  transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
+                >
+                  <Circle className="w-4 h-4" />
+                </motion.div>
+                <div className="flex items-center justify-center gap-3 font-barlow-condensed text-[10px] font-bold tracking-[2px] uppercase text-vgold mb-6">
+                  <div className="w-[8px] h-[8px] bg-vgold rounded-full live-dot-pulse" />
+                  {t.liveLabel}
+                </div>
+                
+                {/* Score Display */}
+                <div className="flex items-center justify-between gap-6 mb-6">
+                  <div className="flex-1 flex flex-col items-center">
+                    <div className="w-16 h-16 mx-auto bg-white/10 rounded-full flex items-center justify-center mb-3 p-3 overflow-hidden">
+                      {lastMatch.team1Logo ? (
+                        <img src={lastMatch.team1Logo} alt="" className="w-full h-full object-contain" />
+                      ) : (
+                        <span className="font-bebas text-2xl text-white">VS</span>
+                      )}
+                    </div>
+                    <div className="font-barlow-condensed font-bold text-xs text-white text-center line-clamp-1">{lastMatch.team1}</div>
+                  </div>
+                  
+                  <div className="flex items-center gap-4">
+                    <div className="text-center">
+                      <div className="font-bebas text-5xl text-vgold leading-none">{lastMatch.homeScore ?? 0}</div>
+                    </div>
+                    <div className="font-bebas text-2xl text-white/60">:</div>
+                    <div className="text-center">
+                      <div className="font-bebas text-5xl text-white leading-none">{lastMatch.awayScore ?? 0}</div>
+                    </div>
+                  </div>
+                  
+                  <div className="flex-1 flex flex-col items-center">
+                    <div className="w-16 h-16 mx-auto bg-white/10 rounded-full flex items-center justify-center mb-3 p-3 overflow-hidden">
+                      {lastMatch.team2Logo ? (
+                        <img src={lastMatch.team2Logo} alt="" className="w-full h-full object-contain" />
+                      ) : (
+                        <span className="font-bebas text-2xl text-white">FC</span>
+                      )}
+                    </div>
+                    <div className="font-barlow-condensed font-bold text-xs text-white text-center line-clamp-1">{lastMatch.team2}</div>
+                  </div>
+                </div>
+                
+                <div className="pt-4 border-t border-white/10 font-barlow-condensed text-[10px] text-white/60 text-center tracking-[1px] relative">
+                  <motion.div 
+                    className="absolute -top-1 left-1/2 transform -translate-x-1/2 text-vgold/30"
+                    animate={{ scale: [1, 1.1, 1] }}
+                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                  >
+                    <Zap className="w-3 h-3" />
+                  </motion.div>
+                  {lastMatch.competition || t.liveMeta} · {lastMatch.date}
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </div>
+      </div>
+
+
+      {/* Enhanced Football Stats */}
+      <motion.div 
+        className="absolute bottom-[40px] left-6 right-6 md:left-[60px] md:right-[60px] z-10"
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, delay: 1 }}
+      >
+        <div className="grid grid-cols-2 md:grid-cols-5 w-full bg-black/40 backdrop-blur-md border border-white/10 rounded-[16px] overflow-hidden">
+          {t.stats.map((s, idx) => (
+            <motion.div
+              key={idx}
+              className={`p-6 border-r border-white/10 last:border-r-0 border-t md:border-t-0 border-white/10 first:border-t-2 first:border-vgold hover:bg-white/5 transition-all group cursor-pointer ${idx === 4 ? 'col-span-2 md:col-span-1' : ''}`}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <span className={`block font-bebas text-[38px] leading-none mb-2 transition-colors ${s.color || 'text-vgold'} group-hover:text-white`}>{s.val}</span>
+              <span className="block font-barlow-condensed font-semibold text-[9px] tracking-[2px] uppercase text-white/60 group-hover:text-vgold transition-colors">{s.label}</span>
+            </motion.div>
           ))}
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 };

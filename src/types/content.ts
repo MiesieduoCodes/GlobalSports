@@ -26,6 +26,7 @@ export type MatchItem = {
   competition?: string;
   homeScore?: number;
   awayScore?: number;
+  status?: "upcoming" | "past";
 };
 
 export type LocalizedText = {

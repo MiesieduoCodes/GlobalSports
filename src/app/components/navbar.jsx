@@ -11,6 +11,8 @@ const translations = {
     home: "Home",
     about: "About",
     roster: "Roster",
+    games: "Games",
+    news: "News",
     contact: "Contact",
     cta: "Get Tickets",
     city: "Almaty · Kazakhstan"
@@ -19,6 +21,8 @@ const translations = {
     home: "Главная",
     about: "О клубе",
     roster: "Состав",
+    games: "Игры",
+    news: "Новости",
     contact: "Контакт",
     cta: "Билеты",
     city: "Алматы · Казахстан"
@@ -42,6 +46,8 @@ const Navbar = () => {
     { name: t.home, path: "/" },
     { name: t.about, path: "/about" },
     { name: t.roster, path: "/squad" },
+    { name: t.games, path: "/matches" },
+    { name: t.news, path: "/news" },
     { name: t.contact, path: "/contact" }
   ];
 

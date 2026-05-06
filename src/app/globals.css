@@ -379,4 +379,143 @@ nav {
   .leader-bio {
     @apply font-barlow text-vmuted text-[13px] leading-relaxed;
   }
+
+  /* Hero Background Image */
+  .hero-bg-image {
+    @apply absolute inset-0 pointer-events-none;
+    background-image: url('/images/hero-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  /* Fallback for missing image */
+  .hero-bg-image::before {
+    content: '';
+    @apply absolute inset-0 bg-gradient-to-br from-vnavy via-vnavy-mid to-vnavy;
+  }
+
+  /* Football Theme Styles */
+  .football-pitch {
+    @apply absolute inset-0 pointer-events-none;
+    background: 
+      linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(0, 174, 239, 0.03) 10%, 
+        rgba(0, 174, 239, 0.03) 90%, 
+        transparent 100%
+      ),
+      linear-gradient(0deg, 
+        rgba(8, 12, 24, 0.8) 0%, 
+        rgba(8, 12, 24, 0.4) 50%, 
+        rgba(8, 12, 24, 0.8) 100%
+      );
+  }
+
+  .pitch-lines {
+    @apply absolute inset-0 pointer-events-none opacity-20;
+    background-image:
+      /* Center circle */
+      radial-gradient(circle at 50% 50%, transparent 120px, rgba(200, 168, 75, 0.1) 122px, rgba(200, 168, 75, 0.1) 124px, transparent 126px),
+      /* Half-way line */
+      linear-gradient(90deg, transparent 49%, rgba(200, 168, 75, 0.1) 49.5%, rgba(200, 168, 75, 0.1) 50.5%, transparent 51%),
+      /* Penalty areas */
+      linear-gradient(90deg, transparent 25%, rgba(200, 168, 75, 0.08) 25%, rgba(200, 168, 75, 0.08) 35%, transparent 35%),
+      linear-gradient(90deg, transparent 65%, rgba(200, 168, 75, 0.08) 65%, rgba(200, 168, 75, 0.08) 75%, transparent 75%),
+      /* Goal areas */
+      linear-gradient(90deg, transparent 40%, rgba(200, 168, 75, 0.06) 40%, rgba(200, 168, 75, 0.06) 45%, transparent 45%),
+      linear-gradient(90deg, transparent 55%, rgba(200, 168, 75, 0.06) 55%, rgba(200, 168, 75, 0.06) 60%, transparent 60%);
+  }
+
+  .stadium-lights {
+    @apply absolute inset-0 pointer-events-none;
+    background: 
+      radial-gradient(ellipse at 20% 20%, rgba(200, 168, 75, 0.02) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 20%, rgba(200, 168, 75, 0.02) 0%, transparent 50%),
+      radial-gradient(ellipse at 20% 80%, rgba(200, 168, 75, 0.02) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 80%, rgba(200, 168, 75, 0.02) 0%, transparent 50%);
+  }
+
+  .goal-net-left {
+    @apply absolute top-0 left-0 w-32 h-full pointer-events-none opacity-10;
+    background: 
+      repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 10px,
+        rgba(200, 168, 75, 0.1) 10px,
+        rgba(200, 168, 75, 0.1) 12px
+      ),
+      repeating-linear-gradient(
+        -45deg,
+        transparent,
+        transparent 10px,
+        rgba(200, 168, 75, 0.1) 10px,
+        rgba(200, 168, 75, 0.1) 12px
+      );
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  }
+
+  .goal-net-right {
+    @apply absolute top-0 right-0 w-32 h-full pointer-events-none opacity-10;
+    background: 
+      repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 10px,
+        rgba(200, 168, 75, 0.1) 10px,
+        rgba(200, 168, 75, 0.1) 12px
+      ),
+      repeating-linear-gradient(
+        -45deg,
+        transparent,
+        transparent 10px,
+        rgba(200, 168, 75, 0.1) 10px,
+        rgba(200, 168, 75, 0.1) 12px
+      );
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  }
+
+  .floating-ball {
+    @apply absolute pointer-events-none;
+  }
+
+  .ball-1 {
+    top: 15%;
+    left: 10%;
+  }
+
+  .ball-2 {
+    top: 25%;
+    right: 15%;
+  }
+
+  /* Enhanced hero animations */
+  @keyframes floatBall {
+    0%, 100% {
+      transform: translateY(0px) rotate(0deg);
+    }
+    25% {
+      transform: translateY(-15px) rotate(90deg);
+    }
+    50% {
+      transform: translateY(-25px) rotate(180deg);
+    }
+    75% {
+      transform: translateY(-15px) rotate(270deg);
+    }
+  }
+
+  @keyframes stadiumGlow {
+    0%, 100% {
+      opacity: 0.02;
+    }
+    50% {
+      opacity: 0.06;
+    }
+  }
+
+  .stadium-lights {
+    animation: stadiumGlow 4s ease-in-out infinite;
+  }
 }

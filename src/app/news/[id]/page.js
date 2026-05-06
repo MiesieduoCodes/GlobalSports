@@ -3,11 +3,10 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { db } from "@/lib/firebase";
-import { doc, getDoc, collection, query, limit, getDocs } from "firebase/firestore";
+import { doc, getDoc, collection, query, limit, getDocs, where } from "firebase/firestore";
 import { useLanguage } from "@/app/context/LanguageContext";
 import { motion } from "framer-motion";
 import { Calendar, User, ArrowLeft, Clock } from "lucide-react";
-import { FALLBACK_NEWS } from "@/lib/constants";
 import Link from "next/link";
 import Navbar from "@/app/components/navbar";
 import Footer from "@/app/components/footer";
@@ -23,6 +22,7 @@ export default function NewsDetailPage() {
         async function fetchData() {
             if (!id) return;
             try {
+                // 1. Try to fetch by Firestore ID
                 const docRef = doc(db, "news", id);
                 const docSnap = await getDoc(docRef);
 
@@ -30,30 +30,30 @@ export default function NewsDetailPage() {
                 if (docSnap.exists()) {
                     currentArticle = { id: docSnap.id, ...docSnap.data() };
                 } else {
-                    // Check fallback
-                    const base = FALLBACK_NEWS[language] || FALLBACK_NEWS.en;
-                    const found = base.find(n => n.id === id);
-                    if (found) {
-                        currentArticle = {
-                            ...found,
-                            imageUrl: found.image,
-                            renderedTitle: found.title,
-                            renderedDesc: found.description
-                        };
+                    // 2. Try to fetch by slug (link field)
+                    const qSlug = query(collection(db, "news"), where("link", "==", id), limit(1));
+                    const slugSnap = await getDocs(qSlug);
+                    if (!slugSnap.empty) {
+                        const d = slugSnap.docs[0];
+                        currentArticle = { id: d.id, ...d.data() };
                     }
                 }
-                setArticle(currentArticle);
+
+                // 3. Check if still not found
+                if (!currentArticle) {
+                    setArticle(null);
+                } else {
+                    setArticle(currentArticle);
+                }
 
                 // Fetch related news
-                const q = query(collection(db, "news"), limit(3));
+                const q = query(collection(db, "news"), limit(6));
                 const relSnap = await getDocs(q);
-                let relData = relSnap.docs.filter(d => d.id !== id).map(d => ({ id: d.id, ...d.data() }));
-
-                if (relData.length === 0) {
-                    const base = FALLBACK_NEWS[language] || FALLBACK_NEWS.en;
-                    relData = base.filter(n => n.id !== id).slice(0, 3);
-                }
-                setRelated(relData);
+                let relData = relSnap.docs
+                    .map(d => ({ id: d.id, ...d.data() }))
+                    .filter(d => d.id !== currentArticle?.id && d.link !== id);
+                
+                setRelated(relData.slice(0, 3));
             } catch (err) {
                 console.error("Error fetching news detail:", err);
             } finally {
@@ -134,7 +134,7 @@ export default function NewsDetailPage() {
                             <h3 className="font-bebas text-2xl text-vwhite tracking-[2px] mb-6 border-b border-white/5 pb-2">Related Stories</h3>
                             <div className="space-y-6">
                                 {related.map((rel, i) => (
-                                    <Link key={rel.id} href={`/news/${rel.id}`} className="group block">
+                                    <Link key={rel.id} href={`/news/${rel.link || rel.id}`} className="group block">
                                         <div className="flex gap-4 items-start">
                                             <div className="w-20 h-20 shrink-0 rounded-[8px] overflow-hidden bg-vnavy-mid">
                                                 <img src={rel.image || rel.imageUrl} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="" />

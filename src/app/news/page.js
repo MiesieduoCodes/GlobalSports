@@ -1,12 +1,12 @@
 "use client";
 
+import Link from "next/link";
 import { Suspense, useState, useEffect } from "react";
 import { useLanguage } from "@/app/context/LanguageContext";
 import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, Calendar, Clock, Search, Tag, X } from "lucide-react";
-import { FALLBACK_NEWS } from "@/lib/constants";
 
 const translations = {
   en: {
@@ -161,35 +161,39 @@ function NewsPageContent() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.9 }}
                     transition={{ delay: idx * 0.05 }}
-                    className="group cursor-pointer"
-                    onClick={() => window.location.href = `/news/${item.id}`}
+                    className="group"
                   >
-                    <div className="relative aspect-[16/10] rounded-[24px] overflow-hidden mb-6 border border-[rgba(255,255,255,0.06)] shadow-xl">
-                      <img src={item.image || '/images/placeholder-news.jpg'} className="w-full h-full object-cover transition-transform duration-[1s] group-hover:scale-110" alt={item.title} />
-                      <div className="absolute inset-0 bg-gradient-to-t from-vnavy via-transparent to-transparent opacity-60" />
-                      <div className="absolute top-6 left-6">
-                        <span className="px-3 py-1 bg-vgold text-vnavy font-barlow-condensed font-bold text-[10px] tracking-[2px] rounded uppercase">
-                          {item.category || t.newsBadge}
-                        </span>
+                    <Link href={`/news/${item.link || item.id}`} className="block">
+                      <div className="relative aspect-[16/10] rounded-[24px] overflow-hidden mb-6 border border-[rgba(255,255,255,0.06)] shadow-xl">
+                        <img src={item.image || '/images/placeholder-news.jpg'} className="w-full h-full object-cover transition-transform duration-[1s] group-hover:scale-110" alt={item.title} />
+                        <div className="absolute inset-0 bg-gradient-to-t from-vnavy via-transparent to-transparent opacity-60" />
+                        <div className="absolute top-6 left-6">
+                          <span className="px-3 py-1 bg-vgold text-vnavy font-barlow-condensed font-bold text-[10px] tracking-[2px] rounded uppercase">
+                            {item.category || t.newsBadge}
+                          </span>
+                        </div>
                       </div>
-                    </div>
 
-                    <div className="flex items-center gap-4 text-vmuted font-barlow-condensed text-[12px] font-bold mb-3">
-                      <div className="flex items-center gap-1.5"><Calendar className="w-3 h-3" /> {new Date(item.date).toLocaleDateString(language, { day: 'numeric', month: 'short', year: 'numeric' })}</div>
-                      <div className="flex items-center gap-1.5"><Clock className="w-3 h-3" /> {item.readTime || '3m'} READ</div>
-                    </div>
+                      <div className="flex items-center gap-4 text-vmuted font-barlow-condensed text-[12px] font-bold mb-3">
+                        <div className="flex items-center gap-1.5">
+                          <Calendar className="w-3 h-3" /> 
+                          {item.date || "Mar 2026"}
+                        </div>
+                        <div className="flex items-center gap-1.5"><Clock className="w-3 h-3" /> {item.readTime || '3m'} READ</div>
+                      </div>
 
-                    <h2 className="font-bebas text-[28px] text-vwhite tracking-[1.5px] leading-[1.1] group-hover:text-vgold transition-colors mb-4 line-clamp-2">
-                      {item.title}
-                    </h2>
+                      <h2 className="font-bebas text-[28px] text-vwhite tracking-[1.5px] leading-[1.1] group-hover:text-vgold transition-colors mb-4 line-clamp-2">
+                        {item.title}
+                      </h2>
 
-                    <p className="font-barlow text-sm text-vmuted leading-relaxed line-clamp-2">
-                      {item.description}
-                    </p>
+                      <p className="font-barlow text-sm text-vmuted leading-relaxed line-clamp-2">
+                        {item.description}
+                      </p>
 
-                    <div className="mt-6 flex items-center gap-2 text-vsky font-barlow-condensed font-bold text-[12px] tracking-[2px] uppercase opacity-0 group-hover:opacity-100 transition-opacity">
-                      {t.readMore} <ArrowRight className="w-4 h-4" />
-                    </div>
+                      <div className="mt-6 flex items-center gap-2 text-vsky font-barlow-condensed font-bold text-[12px] tracking-[2px] uppercase opacity-0 group-hover:opacity-100 transition-opacity">
+                        {t.readMore} <ArrowRight className="w-4 h-4" />
+                      </div>
+                    </Link>
                   </motion.article>
                 ))}
               </AnimatePresence>

@@ -4,24 +4,37 @@ import React from "react";
 import Hero from "@/app/components/hero";
 import NextMatch from "@/app/components/nextmatch";
 import News from "@/app/components/news";
+import RecentResults from "@/app/components/recentresults";
 import { useLanguage } from "@/app/context/LanguageContext";
 
 export default function Page() {
   const { language } = useLanguage();
+  const [tickerItems, setTickerItems] = React.useState([]);
 
-  const tickerItems = language === 'ru' ? [
-    'ВЕ-ГЛОБАЛСПОРТС ФК 3–0 ФК Кайрат · Финал',
-    'Астана ФК 1–1 Шахтер · Финал',
-    'След: ВЕ-ГЛОБАЛСПОРТС ФК vs ФК Тобол · Сб 22 Мар · 17:00',
-    'Трансфер: К. Нурлан переходит в ВЕ-ГЛОБАЛСПОРТС ФК · Подтверждено',
-    'Таблица КПЛ: ВЕ-ГЛОБАЛСПОРТС ФК — 2-е место · 47 очков'
-  ] : [
-    'VE-GLOBALSPORTS FC 3–0 FC Kairat · FT',
-    'Astana FC 1–1 Shakhter · FT',
-    'Next: VE-GLOBALSPORTS FC vs FC Tobol · Sat 22 Mar · 17:00',
-    'Transfer: K. Nurlan joins VE-GLOBALSPORTS FC · Confirmed',
-    'KPL Table: VE-GLOBALSPORTS FC — 2nd Place · 47 pts'
-  ];
+  React.useEffect(() => {
+    const loadTicker = async () => {
+      try {
+        const { collection, getDocs, query, limit } = await import("firebase/firestore");
+        const { db } = await import("@/lib/firebase");
+        
+        const snapshot = await getDocs(query(collection(db, "matches"), limit(10)));
+        const matches = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        
+        const items = matches.map(m => {
+          if (m.status === 'past') {
+            return `${m.team1} ${m.homeScore ?? 0}–${m.awayScore ?? 0} ${m.team2} · FT`;
+          } else {
+            return `Next: ${m.team1} vs ${m.team2} · ${m.date} · ${m.time}`;
+          }
+        });
+
+        setTickerItems(items);
+      } catch (err) {
+        console.error("Error loading ticker:", err);
+      }
+    };
+    loadTicker();
+  }, [language]);
 
 
   return (
@@ -48,6 +61,7 @@ export default function Page() {
       </div>
 
       <NextMatch />
+      <RecentResults />
       <News />
 
       {/* Footer is rendered by Layout */}

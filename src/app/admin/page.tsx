@@ -602,6 +602,8 @@ function MatchesAdminSection() {
   const [items, setItems] = useState<MatchItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [uploadProgress1, setUploadProgress1] = useState<number | null>(null);
+  const [uploadProgress2, setUploadProgress2] = useState<number | null>(null);
   const [form, setForm] = useState<Partial<MatchItem>>({
     team1: "",
     team2: "",
@@ -613,6 +615,7 @@ function MatchesAdminSection() {
     competition: "PREMIER LEAGUE",
     homeScore: 0,
     awayScore: 0,
+    status: "upcoming",
   });
   const [query, setQuery] = useState("");
   const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
@@ -620,6 +623,38 @@ function MatchesAdminSection() {
   useEffect(() => {
     load();
   }, []);
+
+  async function handleLogoUpload(e: React.ChangeEvent<HTMLInputElement>, field: "team1Logo" | "team2Logo") {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const isTeam1 = field === "team1Logo";
+    const setProgress = isTeam1 ? setUploadProgress1 : setUploadProgress2;
+
+    const path = `logos/${Date.now()}_${file.name}`;
+    const sRef = storageRef(storage, path);
+    const task = uploadBytesResumable(sRef, file);
+
+    setProgress(0);
+    task.on(
+      "state_changed",
+      (snap) => setProgress(Math.round((snap.bytesTransferred / snap.totalBytes) * 100)),
+      (err) => { 
+        console.error("Upload error:", err); 
+        setLoading(false);
+        setProgress(null); 
+        if (err.code === 'storage/unauthorized') {
+          alert("PERMISSION DENIED: You don't have permission to upload to Firebase Storage. Please check your Security Rules.");
+        } else {
+          alert("Upload failed: " + err.message);
+        }
+      },
+      async () => {
+        const url = await getDownloadURL(task.snapshot.ref);
+        setForm((prev) => ({ ...prev, [field]: url }));
+        setProgress(null);
+      }
+    );
+  }
 
   async function load() {
     setLoading(true);
@@ -648,6 +683,7 @@ function MatchesAdminSection() {
       competition: "PREMIER LEAGUE",
       homeScore: 0,
       awayScore: 0,
+      status: "upcoming",
     });
     setPendingDeleteId(null);
   }
@@ -673,6 +709,7 @@ function MatchesAdminSection() {
         competition: form.competition || "PREMIER LEAGUE",
         homeScore: Number(form.homeScore) || 0,
         awayScore: Number(form.awayScore) || 0,
+        status: form.status || "upcoming",
       };
       if (form.id) {
         await updateDoc(doc(db, "matches", form.id), payload);
@@ -735,13 +772,25 @@ function MatchesAdminSection() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium mb-2">Team 1 Logo URL</label>
+            <label className="block text-sm font-medium mb-2">Team 1 Logo</label>
+            <div className="flex items-center gap-4 mb-2">
+              {form.team1Logo && (
+                <img src={form.team1Logo} alt="Team 1 Logo" className="w-12 h-12 object-contain rounded-lg border border-gray-200 dark:border-gray-700 bg-white" />
+              )}
+              <label className="flex-1 flex items-center gap-2 cursor-pointer rounded-xl border border-dashed border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 px-4 py-2.5 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 transition">
+                <span>📤</span>
+                <span className="text-gray-600 dark:text-gray-300">
+                  {uploadProgress1 !== null ? `Uploading… ${uploadProgress1}%` : "Upload Logo"}
+                </span>
+                <input type="file" accept="image/*" className="hidden" onChange={(e) => handleLogoUpload(e, "team1Logo")} disabled={uploadProgress1 !== null} />
+              </label>
+            </div>
             <input
               type="text"
               value={form.team1Logo ?? ""}
               onChange={(e) => handleChange("team1Logo", e.target.value)}
-              className="w-full rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500"
-              placeholder="/images/logo.png"
+              className="w-full rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 px-4 py-2 text-xs text-gray-500"
+              placeholder="Or paste URL here"
             />
           </div>
           <div>
@@ -755,13 +804,25 @@ function MatchesAdminSection() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium mb-2">Team 2 Logo URL</label>
+            <label className="block text-sm font-medium mb-2">Team 2 Logo</label>
+            <div className="flex items-center gap-4 mb-2">
+              {form.team2Logo && (
+                <img src={form.team2Logo} alt="Team 2 Logo" className="w-12 h-12 object-contain rounded-lg border border-gray-200 dark:border-gray-700 bg-white" />
+              )}
+              <label className="flex-1 flex items-center gap-2 cursor-pointer rounded-xl border border-dashed border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 px-4 py-2.5 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 transition">
+                <span>📤</span>
+                <span className="text-gray-600 dark:text-gray-300">
+                  {uploadProgress2 !== null ? `Uploading… ${uploadProgress2}%` : "Upload Logo"}
+                </span>
+                <input type="file" accept="image/*" className="hidden" onChange={(e) => handleLogoUpload(e, "team2Logo")} disabled={uploadProgress2 !== null} />
+              </label>
+            </div>
             <input
               type="text"
               value={form.team2Logo ?? ""}
               onChange={(e) => handleChange("team2Logo", e.target.value)}
-              className="w-full rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500"
-              placeholder="/images/opponent-logo.png"
+              className="w-full rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 px-4 py-2 text-xs text-gray-500"
+              placeholder="Or paste URL here"
             />
           </div>
           <div>
@@ -818,6 +879,17 @@ function MatchesAdminSection() {
               className="w-full rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500"
               placeholder="Stadium Name, City"
             />
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-2">Match Status</label>
+            <select
+              value={form.status ?? "upcoming"}
+              onChange={(e) => handleChange("status", e.target.value)}
+              className="w-full rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="upcoming">Upcoming</option>
+              <option value="past">Past / Result</option>
+            </select>
           </div>
           <div className="md:col-span-2 flex justify-end gap-3 mt-4">
             <button
@@ -880,6 +952,7 @@ function MatchesAdminSection() {
                     <th className="px-4 py-3 text-left font-semibold">Time</th>
                     <th className="px-4 py-3 text-left font-semibold">Match</th>
                     <th className="px-4 py-3 text-left font-semibold">Venue</th>
+                    <th className="px-4 py-3 text-left font-semibold">Status</th>
                     <th className="px-4 py-3 text-right font-semibold">Actions</th>
                   </tr>
                 </thead>
@@ -910,6 +983,11 @@ function MatchesAdminSection() {
                       </td>
                       <td className="px-4 py-3 text-gray-700 dark:text-gray-200 min-w-[220px]">
                         {item.venue || "—"}
+                      </td>
+                      <td className="px-4 py-3 whitespace-nowrap">
+                        <span className={`px-2 py-1 rounded-full text-[10px] font-bold uppercase ${item.status === 'past' ? 'bg-gray-100 text-gray-600' : 'bg-green-100 text-green-700'}`}>
+                          {item.status || 'upcoming'}
+                        </span>
                       </td>
                       <td className="px-4 py-3 whitespace-nowrap">
                         <div className="flex justify-end gap-2">
@@ -970,6 +1048,7 @@ function VideosAdminSection() {
   const [items, setItems] = useState<VideoItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState<number | null>(null);
   const [form, setForm] = useState({
     id: "",
     src: "",
@@ -1001,6 +1080,33 @@ function VideosAdminSection() {
     }
   }
 
+  async function handleThumbnailUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const path = `thumbnails/${Date.now()}_${file.name}`;
+    const sRef = storageRef(storage, path);
+    const task = uploadBytesResumable(sRef, file);
+    setUploadProgress(0);
+    task.on(
+      "state_changed",
+      (snap) => setUploadProgress(Math.round((snap.bytesTransferred / snap.totalBytes) * 100)),
+      (err) => { 
+        console.error("Upload error:", err); 
+        setUploadProgress(null); 
+        if (err.code === 'storage/unauthorized') {
+          alert("PERMISSION DENIED: You don't have permission to upload to Firebase Storage. Please check your Security Rules.");
+        } else {
+          alert("Upload failed: " + err.message);
+        }
+      },
+      async () => {
+        const url = await getDownloadURL(task.snapshot.ref);
+        setForm((prev) => ({ ...prev, thumbnail: url }));
+        setUploadProgress(null);
+      }
+    );
+  }
+
   function handleChange(field: string, value: string) {
     setForm((prev) => ({ ...prev, [field]: value }));
   }
@@ -1021,6 +1127,33 @@ function VideosAdminSection() {
       link: "",
       date: "",
     });
+  }
+
+  async function handleVideoUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const path = `videos/${Date.now()}_${file.name}`;
+    const sRef = storageRef(storage, path);
+    const task = uploadBytesResumable(sRef, file);
+    setUploadProgress(0);
+    task.on(
+      "state_changed",
+      (snap) => setUploadProgress(Math.round((snap.bytesTransferred / snap.totalBytes) * 100)),
+      (err) => { 
+        console.error("Upload error:", err); 
+        setUploadProgress(null); 
+        if (err.code === 'storage/unauthorized') {
+          alert("PERMISSION DENIED: You don't have permission to upload to Firebase Storage. Please check your Security Rules.");
+        } else {
+          alert("Upload failed: " + err.message);
+        }
+      },
+      async () => {
+        const url = await getDownloadURL(task.snapshot.ref);
+        setForm((prev) => ({ ...prev, src: url }));
+        setUploadProgress(null);
+      }
+    );
   }
 
   function startEdit(item: VideoItem) {
@@ -1106,22 +1239,50 @@ function VideosAdminSection() {
         <form onSubmit={handleSubmit} className="grid gap-4 md:grid-cols-2">
           <div>
             <label className="block text-sm font-medium mb-2">Video Source Path *</label>
+            {/* File upload */}
+            <label className="flex items-center gap-2 cursor-pointer w-full rounded-xl border border-dashed border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 px-4 py-3 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 transition">
+              <span>📹</span>
+              <span className="text-gray-600 dark:text-gray-300">{uploadProgress !== null ? `Uploading… ${uploadProgress}%` : "Upload video file"}</span>
+              <input type="file" accept="video/*" className="hidden" onChange={handleVideoUpload} disabled={uploadProgress !== null} />
+            </label>
+            {/* Progress bar */}
+            {uploadProgress !== null && (
+              <div className="mt-2 h-1.5 rounded-full bg-gray-200 dark:bg-gray-700">
+                <div className="h-1.5 rounded-full bg-blue-500 transition-all" style={{ width: `${uploadProgress}%` }} />
+              </div>
+            )}
             <input
               type="text"
               value={form.src}
               onChange={(e) => handleChange("src", e.target.value)}
-              className="w-full rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 px-4 py-3 text-sm"
-              placeholder="/videos/video.mp4"
+              className="mt-2 w-full rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 px-4 py-2 text-xs"
+              placeholder="Or paste video URL/path"
             />
           </div>
           <div>
             <label className="block text-sm font-medium mb-2">Thumbnail Image *</label>
+            {/* Image preview */}
+            {form.thumbnail && (
+              <img src={form.thumbnail} alt="preview" className="w-20 h-12 object-cover rounded-lg mb-2 border border-gray-200 dark:border-gray-600" />
+            )}
+            {/* File upload */}
+            <label className="flex items-center gap-2 cursor-pointer w-full rounded-xl border border-dashed border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 px-4 py-3 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 transition">
+              <span>🖼️</span>
+              <span className="text-gray-600 dark:text-gray-300">{uploadProgress !== null ? `Uploading… ${uploadProgress}%` : "Upload thumbnail"}</span>
+              <input type="file" accept="image/*" className="hidden" onChange={handleThumbnailUpload} disabled={uploadProgress !== null} />
+            </label>
+            {/* Progress bar */}
+            {uploadProgress !== null && (
+              <div className="mt-2 h-1.5 rounded-full bg-gray-200 dark:bg-gray-700">
+                <div className="h-1.5 rounded-full bg-blue-500 transition-all" style={{ width: `${uploadProgress}%` }} />
+              </div>
+            )}
             <input
               type="text"
               value={form.thumbnail}
               onChange={(e) => handleChange("thumbnail", e.target.value)}
-              className="w-full rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 px-4 py-3 text-sm"
-              placeholder="/images/thumbnail.jpg"
+              className="mt-2 w-full rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 px-4 py-2 text-xs"
+              placeholder="Or paste thumbnail URL"
             />
           </div>
           <div>
@@ -1402,7 +1563,15 @@ function PlayersAdminSection() {
     task.on(
       "state_changed",
       (snap) => setUploadProgress(Math.round((snap.bytesTransferred / snap.totalBytes) * 100)),
-      (err) => { console.error(err); setUploadProgress(null); },
+      (err) => { 
+        console.error("Upload error:", err); 
+        setUploadProgress(null); 
+        if (err.code === 'storage/unauthorized') {
+          alert("PERMISSION DENIED: You don't have permission to upload to Firebase Storage. Please check your Security Rules.");
+        } else {
+          alert("Upload failed: " + err.message);
+        }
+      },
       async () => {
         const url = await getDownloadURL(task.snapshot.ref);
         setForm((prev) => ({ ...prev, image: url }));

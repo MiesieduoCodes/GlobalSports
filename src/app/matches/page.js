@@ -68,9 +68,9 @@ export default function MatchesPage() {
   }, []);
 
   const filteredMatches = matches.filter(m => {
-    const matchDate = new Date(`${m.date}T${m.time || "00:00"}`);
-    const isPast = matchDate < new Date();
-    return activeTab === "upcoming" ? !isPast : isPast;
+    // Use manual status if set, otherwise fallback to date-based logic
+    const status = m.status || (new Date(`${m.date}T${m.time || "00:00"}`) < new Date() ? 'past' : 'upcoming');
+    return activeTab === "upcoming" ? status === 'upcoming' : status === 'past';
   });
 
   return (

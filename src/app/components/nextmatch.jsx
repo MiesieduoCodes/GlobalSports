@@ -40,8 +40,11 @@ export default function NextMatch() {
           const matches = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
           const today = new Date().toISOString().split('T')[0];
           const upcoming = matches
-            .filter(m => m.date && m.date >= today)
-            .sort((a, b) => a.date.localeCompare(b.date))[0];
+            .filter(m => {
+              const status = m.status || (m.date && m.date >= today ? 'upcoming' : 'past');
+              return status === 'upcoming';
+            })
+            .sort((a, b) => (a.date || '').localeCompare(b.date || ''))[0];
 
           if (upcoming) {
             setMatch({
@@ -65,15 +68,9 @@ export default function NextMatch() {
     team2: match.team2 || "Opponent",
     team2Abbr: match.team2?.substring(0, 3).toUpperCase() || "OPP",
     venue: match.venue || t.venue
-  } : {
-    date: "Saturday, 22 March 2026",
-    time: "17:00",
-    team1: "VE-GLOBALSPORTS FC",
-    team1Abbr: "VEG",
-    team2: "FC Tobol",
-    team2Abbr: "TOB",
-    venue: t.venue
-  };
+  } : null;
+
+  if (!displayMatch) return null;
 
   return (
     <section className="section bg-vnavy">
@@ -84,16 +81,23 @@ export default function NextMatch() {
         <div className="mt-12 bg-vnavy-light rounded-[20px] border border-vsky/10 overflow-hidden shadow-2xl">
           <div className="bg-vsky/[0.07] px-9 py-5 flex items-center justify-between border-b border-vsky/10">
             <span className="font-barlow-condensed font-bold text-[11px] tracking-[2.5px] uppercase text-vsky">{t.label}</span>
-            <span className="font-barlow-condensed font-semibold text-[13px] text-vmuted">{displayMatch.date}</span>
+            <div className="flex items-center gap-3">
+              <span className="px-2 py-0.5 rounded bg-vsky/20 border border-vsky/30 text-[9px] font-bold tracking-[1px] text-vsky uppercase animate-pulse">Upcoming</span>
+              <span className="font-barlow-condensed font-semibold text-[13px] text-vmuted">{displayMatch.date}</span>
+            </div>
           </div>
 
           <div className="px-9 py-12 flex flex-col md:flex-row items-center gap-8 md:gap-0">
             <div className="flex-1 flex flex-col items-center gap-3.5">
-              <div className="w-20 h-20 rounded-full bg-vsky/10 border-2 border-vsky/30 text-vsky flex items-center justify-center font-bebas text-[22px] tracking-[1px]">
-                {displayMatch.team1Abbr}
+              <div className="w-24 h-24 rounded-full bg-vnavy border-2 border-vsky/30 flex items-center justify-center p-4 overflow-hidden group-hover:scale-105 transition-transform duration-500">
+                {match?.team1Logo ? (
+                  <img src={match.team1Logo} alt={displayMatch.team1} className="w-full h-full object-contain" />
+                ) : (
+                  <div className="text-vsky font-bebas text-[22px] tracking-[1px]">{displayMatch.team1Abbr}</div>
+                )}
               </div>
               <div className="font-bebas text-[22px] text-vwhite tracking-[1px]">{displayMatch.team1}</div>
-              <div className="font-barlow-condensed text-[12px] text-vmuted">Almaty · Home</div>
+              <div className="font-barlow-condensed text-[12px] text-vmuted">Home</div>
             </div>
 
             <div className="flex flex-col items-center gap-2 px-10">
@@ -103,11 +107,15 @@ export default function NextMatch() {
             </div>
 
             <div className="flex-1 flex flex-col items-center gap-3.5">
-              <div className="w-20 h-20 rounded-full bg-vgold/10 border-2 border-vgold/25 text-vgold flex items-center justify-center font-bebas text-[22px] tracking-[1px]">
-                {displayMatch.team2Abbr}
+              <div className="w-24 h-24 rounded-full bg-vnavy border-2 border-vgold/25 flex items-center justify-center p-4 overflow-hidden group-hover:scale-105 transition-transform duration-500">
+                {match?.team2Logo ? (
+                  <img src={match.team2Logo} alt={displayMatch.team2} className="w-full h-full object-contain" />
+                ) : (
+                  <div className="text-vgold font-bebas text-[22px] tracking-[1px]">{displayMatch.team2Abbr}</div>
+                )}
               </div>
               <div className="font-bebas text-[22px] text-vwhite tracking-[1px]">{displayMatch.team2}</div>
-              <div className="font-barlow-condensed text-[12px] text-vmuted">Kostanay · Away</div>
+              <div className="font-barlow-condensed text-[12px] text-vmuted">Away</div>
             </div>
           </div>
 
