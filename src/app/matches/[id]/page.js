@@ -247,7 +247,6 @@ export default function MatchDetailPage() {
         </div>
       </section>
 
-      <Footer />
     </main>
   );
 }
