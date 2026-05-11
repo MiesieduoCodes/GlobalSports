@@ -1,8 +1,10 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/app/context/LanguageContext";
-import { Star, Users, History, ShieldHeader, ChevronRight } from "lucide-react";
+import { Star, Users, History, X } from "lucide-react";
+import Image from "next/image";
 
 const translations = {
   en: {
@@ -41,7 +43,7 @@ const translations = {
         role: "Founder & Chairman",
         name: "Veria Lawrence Ebiks",
         initials: "VLE",
-        image: "/images/IMG-20260324-WA0048.jpg",
+        image: "/images/IMG-20260324-WA0048.jpg-removebg-preview.png",
         bio: "The driving force behind VE-GLOBALSPORTS FC, Veria Lawrence Ebiks founded the club with a singular conviction: that world-class football could and should thrive in Almaty, Kazakhstan. His entrepreneurial vision, global perspective and unwavering passion for the beautiful game have shaped every aspect of the club — from its philosophy and identity to its long-term strategic ambitions.",
         isFounder: true
       },
@@ -49,6 +51,7 @@ const translations = {
         role: "Technical Director",
         name: "Otanwa Louis",
         initials: "OL",
+        image:"/images/IMG_3656.JPG-removebg-preview.png",
         bio: "Otanwa Louis brings deep tactical expertise and a modern football philosophy to VE-GLOBALSPORTS FC. Responsible for the club's technical structure — from first team to academy — he has built a cohesive playing identity that demands intensity, intelligence and creativity."
       },
       {
@@ -97,6 +100,61 @@ const translations = {
 export default function AboutPage() {
   const { language } = useLanguage();
   const t = translations[language] || translations.en;
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  // Carousel images
+  const carouselImages = [
+    "/carousel/WhatsApp Image 2026-05-12 at 12.29.43 AM.jpeg",
+    "/carousel/WhatsApp Image 2026-05-12 at 12.29.55 AM.jpeg",
+    "/carousel/WhatsApp Image 2026-05-12 at 12.35.34 AM.jpeg",
+    "/carousel/WhatsApp Image 2026-05-12 at 12.35.35 AM (1).jpeg",
+    "/carousel/WhatsApp Image 2026-05-12 at 12.35.35 AM.jpeg",
+    "/carousel/WhatsApp Image 2026-05-12 at 12.35.36 AM (1).jpeg",
+    "/carousel/WhatsApp Image 2026-05-12 at 12.35.36 AM (2).jpeg",
+    "/carousel/WhatsApp Image 2026-05-12 at 12.35.36 AM (3).jpeg",
+    "/carousel/WhatsApp Image 2026-05-12 at 12.35.36 AM.jpeg",
+    "/carousel/WhatsApp Image 2026-05-12 at 12.35.37 AM (1).jpeg",
+    "/carousel/WhatsApp Image 2026-05-12 at 12.35.37 AM (2).jpeg",
+    "/carousel/WhatsApp Image 2026-05-12 at 12.35.37 AM (3).jpeg",
+    "/carousel/WhatsApp Image 2026-05-12 at 12.35.37 AM (4).jpeg",
+    "/carousel/WhatsApp Image 2026-05-12 at 12.35.37 AM.jpeg",
+    "/carousel/WhatsApp Image 2026-05-12 at 12.35.38 AM (1).jpeg",
+    "/carousel/WhatsApp Image 2026-05-12 at 12.35.38 AM (2).jpeg",
+    "/carousel/WhatsApp Image 2026-05-12 at 12.35.38 AM (3).jpeg",
+    "/carousel/WhatsApp Image 2026-05-12 at 12.35.38 AM (4).jpeg",
+    "/carousel/WhatsApp Image 2026-05-12 at 12.35.38 AM.jpeg",
+    "/carousel/WhatsApp Image 2026-05-12 at 12.35.39 AM.jpeg",
+    "/carousel/WhatsApp Image 2026-05-12 at 12.35.36 AM (1).jpeg"
+  ];
+
+  // Shuffle array function for random positioning
+  const shuffleArray = (array) => {
+    const shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+  };
+
+  // Get shuffled images for bento grid (using first 12 for better layout)
+  const shuffledImages = shuffleArray(carouselImages).slice(0, 12);
+
+  // Bento grid layout configuration
+  const bentoLayout = [
+    { span: "col-span-2 row-span-2" },
+    { span: "col-span-1 row-span-1" },
+    { span: "col-span-1 row-span-1" },
+    { span: "col-span-1 row-span-2" },
+    { span: "col-span-1 row-span-1" },
+    { span: "col-span-2 row-span-1" },
+    { span: "col-span-1 row-span-1" },
+    { span: "col-span-1 row-span-1" },
+    { span: "col-span-2 row-span-1" },
+    { span: "col-span-1 row-span-1" },
+    { span: "col-span-2 row-span-1" },
+    { span: "col-span-1 row-span-1" }
+  ];
 
   return (
     <main className="bg-vnavy min-h-screen">
@@ -117,19 +175,41 @@ export default function AboutPage() {
             </div>
           </div>
           <div className="flex justify-center">
-            <div className="w-64 h-64 md:w-[300px] md:h-[300px] rounded-full bg-vsky/[0.05] border border-vsky/10 flex items-center justify-center relative">
-              <div className="absolute inset-4 rounded-full border border-dashed border-vgold/15" />
+            <div className="w-64 h-64 md:w-[300px] md:h-[300px] rounded-full flex items-center justify-center relative">
+              <div className="absolute inset-4 rounded-full" />
               <div className="scale-75 md:scale-100">
-                <svg width="200" height="200" viewBox="0 0 90 90" fill="none">
-                  <path d="M45 5 L78 18 L78 52 Q78 72 45 85 Q12 72 12 52 L12 18 Z" fill="#172038" stroke="#C8A84B" strokeWidth="2.5" />
-                  <path d="M45 10 L72 21 L72 50 Q72 68 45 79 Q18 68 18 50 L18 21 Z" fill="none" stroke="rgba(0,174,239,0.15)" strokeWidth="1" />
-                  <text x="45" y="34" fontFamily="Bebas Neue, sans-serif" fontSize="13" fill="#C8A84B" textAnchor="middle" letterSpacing="1.5">VERIA</text>
-                  <text x="45" y="56" fontFamily="Bebas Neue, sans-serif" fontSize="26" fill="#F0EEE8" textAnchor="middle" letterSpacing="1">FC</text>
-                  <line x1="30" y1="62" x2="60" y2="62" stroke="#C8A84B" strokeWidth="1" opacity="0.4" />
-                  <text x="45" y="74" fontFamily="Bebas Neue, sans-serif" fontSize="10" fill="#00AEEF" textAnchor="middle" letterSpacing="2">ALMATY</text>
-                </svg>
+                <Image src="/logo.png" alt="Club Logo" width={300} height={300} className="rounded-full" />
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Bento Grid Gallery Section */}
+      <section className="section">
+        <div className="max-w-[1440px] mx-auto">
+          <span className="section-eyebrow">Gallery</span>
+          <h2 className="section-heading mb-12">Club Moments</h2>
+
+          <div className="grid grid-cols-4 gap-4 auto-rows-[200px]">
+            {shuffledImages.map((image, index) => (
+              <motion.div
+                key={`${image}-${index}`}
+                className={`${bentoLayout[index].span} relative overflow-hidden rounded-xl border border-[rgba(255,255,255,0.06)] hover:border-vgold/30 transition-all duration-300 group cursor-pointer`}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                whileHover={{ scale: 1.02 }}
+                onClick={() => setSelectedImage(image)}
+              >
+                <img
+                  src={image}
+                  alt={`Gallery image ${index + 1}`}
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-vnavy/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
@@ -194,6 +274,42 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
+
+      {/* Full Screen Image Modal */}
+      {selectedImage && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
+          className="fixed inset-0 z-[9999] bg-vnavy/95 backdrop-blur-sm flex items-center justify-center p-4"
+          onClick={() => setSelectedImage(null)}
+        >
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.9, opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="relative max-w-6xl max-h-[90vh] w-full h-full flex items-center justify-center"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Close Button */}
+            <button
+              onClick={() => setSelectedImage(null)}
+              className="absolute top-4 right-4 z-10 bg-vnavy/80 backdrop-blur-sm text-vwhite hover:text-vgold transition-colors p-3 rounded-full border border-[rgba(255,255,255,0.1)] hover:border-vgold/30"
+            >
+              <X size={24} />
+            </button>
+
+            {/* Image */}
+            <img
+              src={selectedImage}
+              alt="Full screen gallery image"
+              className="max-w-full max-h-full object-contain rounded-lg"
+            />
+          </motion.div>
+        </motion.div>
+      )}
 
     </main>
   );

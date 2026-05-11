@@ -68,11 +68,25 @@ export default function MatchesPage() {
     loadMatches();
   }, []);
 
-  const filteredMatches = matches.filter(m => {
-    // Use manual status if set, otherwise fallback to date-based logic
-    const status = m.status || (new Date(`${m.date}T${m.time || "00:00"}`) < new Date() ? 'past' : 'upcoming');
-    return activeTab === "upcoming" ? status === 'upcoming' : status === 'past';
-  });
+  const filteredMatches = matches
+    .filter(m => {
+      // Use manual status if set, otherwise fallback to date-based logic
+      const status = m.status || (new Date(`${m.date}T${m.time || "00:00"}`) < new Date() ? 'past' : 'upcoming');
+      return activeTab === "upcoming" ? status === 'upcoming' : status === 'past';
+    })
+    .sort((a, b) => {
+      // Parse dates for comparison
+      const dateA = new Date(`${a.date}T${a.time || "00:00"}`);
+      const dateB = new Date(`${b.date}T${b.time || "00:00"}`);
+      
+      // For upcoming matches: sort ascending (soonest first)
+      // For past matches: sort descending (most recent first)
+      if (activeTab === "upcoming") {
+        return dateA - dateB;
+      } else {
+        return dateB - dateA;
+      }
+    });
 
   return (
     <main className="bg-vnavy min-h-screen">

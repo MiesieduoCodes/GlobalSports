@@ -83,7 +83,7 @@ const Navbar = () => {
         </div>
 
         {/* CTA & Mobile Toggle */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 ml-8">
           <Link
             href="/contact"
             className="bg-vgold text-vnavy px-5 py-2.5 rounded-[6px] font-barlow-condensed font-bold text-[12px] tracking-[2px] uppercase hover:bg-vgold-light transition-colors hidden sm:block"

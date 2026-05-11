@@ -290,9 +290,12 @@ function NewsAdminSection() {
   const [items, setItems] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
   const [form, setForm] = useState<Partial<NewsItem>>({ title: "", description: "", image: "", link: "" });
   const [query, setQuery] = useState("");
   const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     load();
@@ -324,6 +327,66 @@ function NewsAdminSection() {
         },
       },
     } as any));
+  }
+
+  async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      alert('Please select an image file');
+      return;
+    }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      alert('Image size should be less than 5MB');
+      return;
+    }
+
+    setUploading(true);
+    setUploadProgress(0);
+
+    try {
+      // Create a unique filename
+      const timestamp = Date.now();
+      const filename = `news/${timestamp}-${file.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
+      const imageRef = storageRef(storage, filename);
+
+      // Upload file
+      const uploadTask = uploadBytesResumable(imageRef, file);
+
+      uploadTask.on('state_changed',
+        (snapshot) => {
+          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          setUploadProgress(Math.round(progress));
+        },
+        (error) => {
+          console.error('Upload error:', error);
+          alert('Failed to upload image');
+          setUploading(false);
+          setUploadProgress(0);
+        },
+        async () => {
+          // Get download URL
+          const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+          setForm((prev) => ({ ...prev, image: downloadURL }));
+          setUploading(false);
+          setUploadProgress(0);
+          
+          // Clear file input
+          if (fileInputRef.current) {
+            fileInputRef.current.value = '';
+          }
+        }
+      );
+    } catch (error) {
+      console.error('Upload error:', error);
+      alert('Failed to upload image');
+      setUploading(false);
+      setUploadProgress(0);
+    }
   }
 
   function startCreate() {
@@ -442,14 +505,71 @@ function NewsAdminSection() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium mb-2">Image URL</label>
-            <input
-              type="text"
-              value={form.image ?? ""}
-              onChange={(e) => handleChange("image", e.target.value)}
-              className="w-full rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500"
-              placeholder="/images/news.jpg or https://..."
-            />
+            <label className="block text-sm font-medium mb-2">Image</label>
+            <div className="space-y-3">
+              {/* File Upload */}
+              <div className="flex items-center gap-3">
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                  disabled={uploading}
+                  className="hidden"
+                  id="image-upload"
+                />
+                <label
+                  htmlFor="image-upload"
+                  className={`px-4 py-2 rounded-xl text-sm font-medium cursor-pointer transition-all ${
+                    uploading
+                      ? 'bg-gray-200 dark:bg-gray-700 text-gray-500 cursor-not-allowed'
+                      : 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/30 border border-blue-200 dark:border-blue-800'
+                  }`}
+                >
+                  {uploading ? `Uploading... ${uploadProgress}%` : '📤 Upload Image'}
+                </label>
+                {form.image && (
+                  <button
+                    type="button"
+                    onClick={() => setForm(prev => ({ ...prev, image: '' }))}
+                    className="px-3 py-2 rounded-xl text-sm font-medium bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/30 border border-red-200 dark:border-red-800"
+                  >
+                    Clear
+                  </button>
+                )}
+              </div>
+              
+              {/* Upload Progress */}
+              {uploading && (
+                <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                  <div
+                    className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                    style={{ width: `${uploadProgress}%` }}
+                  />
+                </div>
+              )}
+              
+              {/* Image URL Input */}
+              <input
+                type="text"
+                value={form.image ?? ""}
+                onChange={(e) => handleChange("image", e.target.value)}
+                className="w-full rounded-xl border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500"
+                placeholder="/images/news.jpg or https://..."
+              />
+              
+              {/* Image Preview */}
+              {form.image && (
+                <div className="mt-3">
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">Preview:</p>
+                  <img
+                    src={form.image}
+                    alt="News preview"
+                    className="w-full h-32 object-cover rounded-lg border border-gray-200 dark:border-gray-600"
+                  />
+                </div>
+              )}
+            </div>
           </div>
           <div>
             <label className="block text-sm font-medium mb-2">Category</label>
