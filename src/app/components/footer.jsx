@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import emailjs from "emailjs-com";
 import { useLanguage } from "@/app/context/LanguageContext";
 import Link from "next/link";
+import Image from "next/image";
 
 const translations = {
   en: {
@@ -95,14 +96,7 @@ export default function Footer() {
 
           <div className="flex flex-col gap-5">
             <Link href="/" className="inline-block hover:opacity-80 transition-opacity">
-              <svg width="60" height="60" viewBox="0 0 90 90" fill="none">
-                <path d="M45 5 L78 18 L78 52 Q78 72 45 85 Q12 72 12 52 L12 18 Z" fill="#172038" stroke="#C8A84B" strokeWidth="2.5" />
-                <path d="M45 10 L72 21 L72 50 Q72 68 45 79 Q18 68 18 50 L18 21 Z" fill="none" stroke="rgba(0,174,239,0.15)" strokeWidth="1" />
-                <text x="45" y="34" fontFamily="Bebas Neue, sans-serif" fontSize="7.5" fill="#C8A84B" textAnchor="middle" letterSpacing="0.5">VE-GLOBALSPORTS</text>
-                <text x="45" y="56" fontFamily="Bebas Neue, sans-serif" fontSize="26" fill="#F0EEE8" textAnchor="middle" letterSpacing="1">FC</text>
-                <line x1="30" y1="62" x2="60" y2="62" stroke="#C8A84B" strokeWidth="1" opacity="0.4" />
-                <text x="45" y="74" fontFamily="Bebas Neue, sans-serif" fontSize="10" fill="#00AEEF" textAnchor="middle" letterSpacing="2">ALMATY</text>
-              </svg>
+            <Image src="/logo.png" alt="VE-GLOBALSPORTS" width={60} height={60} />
             </Link>
             <div className="font-bebas text-[28px] text-vwhite tracking-[2px]">{t.brandName}</div>
             <div className="text-[12px] text-vmuted leading-relaxed max-w-[280px]">
