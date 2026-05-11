@@ -7,7 +7,7 @@ import { Goal, Trophy, Target, Users, Circle, Zap, Star, Heart, Hexagon, Triangl
 
 const translations = {
   en: {
-    badge: "Kazakhstan Premier League · Season 2025/26",
+    badge: "Almaty League A, Kazakhstan · Season 2025/26",
     title: "VE-GLOBALSPORTS FC",
     subtitle: "One club. One city. One ambition.",
     btnPrimary: "VIEW MATCHES",
@@ -22,12 +22,12 @@ const translations = {
     ]
   },
   ru: {
-    badge: "Премьер-лига Казахстана · Сезон 2025/26",
+    badge: "Алматинская лига A, Казахстан · Сезон 2025/26",
     title: "ВЕ-ГЛОБАЛСПОРТС ФК",
     subtitle: "Один клуб. Один город. Одна цель.",
     btnPrimary: "СМОТРЕТЬ МАТЧИ",
     liveLabel: "ПОСЛЕДНИЙ МАТЧ",
-    liveMeta: "КПЛ ТУР 21 · ЦЕНТРАЛЬНЫЙ СТАДИОН, АЛМАТЫ",
+    liveMeta: "АЛМАТИНСКАЯ ЛИГА A ТУР 21 · ЦЕНТРАЛЬНЫЙ СТАДИОН, АЛМАТЫ",
     stats: [
       { label: "ПОБЕДЫ", val: "14" },
       { label: "НИЧЬИ", val: "5" },
@@ -191,7 +191,6 @@ const Hero = () => {
           }}
           transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
         >
-          <Hexagon className="w-14 h-14" />
         </motion.div>
         
         <motion.div 
@@ -436,7 +435,7 @@ const Hero = () => {
                 <Trophy className="w-8 h-8" />
               </motion.div>
               <motion.div 
-                className="absolute bottom-0 left-0 text-vsky/30"
+                className="absolute bottom-0 left-0 text-vgold/30"
                 animate={{ 
                   scale: [1, 1.2, 1],
                   rotate: [360, 180, 0]
@@ -469,9 +468,9 @@ const Hero = () => {
                 {/* Score Display */}
                 <div className="flex items-center justify-between gap-6 mb-6">
                   <div className="flex-1 flex flex-col items-center">
-                    <div className="w-16 h-16 mx-auto bg-white/10 rounded-full flex items-center justify-center mb-3 p-3 overflow-hidden">
+                    <div className="w-16 h-16 mx-auto bg-white/10 rounded-full flex items-center justify-center mb-3 overflow-hidden">
                       {lastMatch.team1Logo ? (
-                        <img src={lastMatch.team1Logo} alt="" className="w-full h-full object-contain" />
+                        <img src={lastMatch.team1Logo} alt="" className="w-[60px] h-[60px]" />
                       ) : (
                         <span className="font-bebas text-2xl text-white">VS</span>
                       )}
@@ -485,14 +484,14 @@ const Hero = () => {
                     </div>
                     <div className="font-bebas text-2xl text-white/60">:</div>
                     <div className="text-center">
-                      <div className="font-bebas text-5xl text-white leading-none">{lastMatch.awayScore ?? 0}</div>
+                      <div className="font-bebas text-5xl text-vgold leading-none">{lastMatch.awayScore ?? 0}</div>
                     </div>
                   </div>
                   
                   <div className="flex-1 flex flex-col items-center">
-                    <div className="w-16 h-16 mx-auto bg-white/10 rounded-full flex items-center justify-center mb-3 p-3 overflow-hidden">
+                    <div className="w-16 h-16 mx-auto bg-white/10 rounded-full flex items-center justify-center mb-3 overflow-hidden">
                       {lastMatch.team2Logo ? (
-                        <img src={lastMatch.team2Logo} alt="" className="w-full h-full object-contain" />
+                        <img src={lastMatch.team2Logo} alt="" className="w-[60px] h-[60px]" />
                       ) : (
                         <span className="font-bebas text-2xl text-white">FC</span>
                       )}

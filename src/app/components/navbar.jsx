@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useLanguage } from "@/app/context/LanguageContext";
 import { Menu, X } from "lucide-react";
+import Image from "next/image";
 
 const translations = {
   en: {
@@ -56,15 +57,8 @@ const Navbar = () => {
       <nav className={`navbar flex items-center justify-between px-6 md:px-[60px] h-[72px] fixed top-0 left-0 right-0 z-[1000] transition-all duration-300 ${scrolled ? 'bg-[rgba(8,12,24,0.95)] backdrop-blur-xl border-b border-[rgba(200,168,75,0.2)]' : 'bg-[rgba(8,12,24,0.85)] backdrop-blur-md border-b border-[rgba(255,255,255,0.06)]'}`}>
 
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-3.5 no-underline group">
-          <svg width="42" height="42" viewBox="0 0 90 90" fill="none">
-            <path d="M45 5 L78 18 L78 52 Q78 72 45 85 Q12 72 12 52 L12 18 Z" fill="#172038" stroke="#C8A84B" strokeWidth="2.5" />
-            <path d="M45 10 L72 21 L72 50 Q72 68 45 79 Q18 68 18 50 L18 21 Z" fill="none" stroke="rgba(0,174,239,0.15)" strokeWidth="1" />
-            <text x="45" y="34" fontFamily="Bebas Neue, sans-serif" fontSize="7.5" fill="#C8A84B" textAnchor="middle" letterSpacing="0.5">VE-GLOBALSPORTS</text>
-            <text x="45" y="56" fontFamily="Bebas Neue, sans-serif" fontSize="26" fill="#F0EEE8" textAnchor="middle" letterSpacing="1">FC</text>
-            <line x1="30" y1="62" x2="60" y2="62" stroke="#C8A84B" strokeWidth="1" opacity="0.4" />
-            <text x="45" y="74" fontFamily="Bebas Neue, sans-serif" fontSize="10" fill="#00AEEF" textAnchor="middle" letterSpacing="2">ALMATY</text>
-          </svg>
+        <Link href="/" className="flex items-center gap-3.5 no-underline group h-full w-full" >
+        <Image src="/logo.png" alt="VE-GLOBALSPORTS FC" width={42} height={42} />
           <div className="flex flex-col leading-none">
             <span className="font-bebas text-[18px] text-vwhite tracking-[1px] group-hover:text-vgold transition-colors truncate max-w-[180px] sm:max-w-none">VE-GLOBALSPORTS FC</span>
             <span className="font-barlow-condensed text-[10px] font-bold tracking-[3px] uppercase text-vsky">{t.city}</span>

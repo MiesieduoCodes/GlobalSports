@@ -90,11 +90,11 @@ export default function NextMatch() {
 
           <div className="px-9 py-12 flex flex-col md:flex-row items-center gap-8 md:gap-0">
             <div className="flex-1 flex flex-col items-center gap-3.5">
-              <div className="w-24 h-24 rounded-full bg-vnavy border-2 border-vsky/30 flex items-center justify-center p-4 overflow-hidden group-hover:scale-105 transition-transform duration-500">
+              <div className="w-24 h-24 rounded-full bg-vnavy border-2 border-vsky/30 flex items-center justify-center p-2 overflow-hidden group-hover:scale-105 transition-transform duration-500">
                 {match?.team1Logo ? (
-                  <img src={match.team1Logo} alt={displayMatch.team1} className="w-full h-full object-contain" />
+                  <img src={match.team1Logo} alt={displayMatch.team1} className="w-[90px] h-[90px]" />
                 ) : (
-                  <div className="text-vsky font-bebas text-[22px] tracking-[1px]">{displayMatch.team1Abbr}</div>
+                  <div className="text-vsky font-bebas text-[22px tracking-[1px]">{displayMatch.team1Abbr}</div>
                 )}
               </div>
               <div className="font-bebas text-[22px] text-vwhite tracking-[1px]">{displayMatch.team1}</div>
@@ -108,9 +108,9 @@ export default function NextMatch() {
             </div>
 
             <div className="flex-1 flex flex-col items-center gap-3.5">
-              <div className="w-24 h-24 rounded-full bg-vnavy border-2 border-vgold/25 flex items-center justify-center p-4 overflow-hidden group-hover:scale-105 transition-transform duration-500">
+              <div className="w-24 h-24 rounded-full bg-vnavy border-2 border-vgold/25 flex items-center justify-center p-2 overflow-hidden group-hover:scale-105 transition-transform duration-500">
                 {match?.team2Logo ? (
-                  <img src={match.team2Logo} alt={displayMatch.team2} className="w-full h-full object-contain" />
+                  <img src={match.team2Logo} alt={displayMatch.team2} className="w-[90px] h-[90px]" />
                 ) : (
                   <div className="text-vgold font-bebas text-[22px] tracking-[1px]">{displayMatch.team2Abbr}</div>
                 )}
