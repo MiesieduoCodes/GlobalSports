@@ -7,26 +7,26 @@ import { motion } from "framer-motion";
 const translations = {
   en: {
     heroEyebrow: "Club Achievements",
-    heroTitle: "Glory & ",
-    heroTitleAccent: "Awards",
-    sub: "A legacy forged in gold. Our record of excellence across all competitions.",
+    heroTitle: "Progress & ",
+    heroTitleAccent: "Recognition",
+    sub: "We're not finished, and we're not trying to be — yet. Here's the record so far.",
     honors: [
-      { year: "2025", title: "Kazakhstan Cup Winners", category: "Major Trophy", desc: "A historic night at Central Stadium as VE-GLOBALSPORTS FC claimed their first major title.", icon: <Trophy className="w-6 h-6 text-vgold" /> },
-      { year: "2024", title: "KPL Fair Play Award", category: "Sportsmanship", desc: "Recognized for maintaining the highest standards of conduct throughout the season.", icon: <Award className="w-6 h-6 text-vsky" /> },
-      { year: "2024", title: "Academy Excellence", category: "Youth", desc: "Awarded to VE-GLOBALSPORTS Academy for outstanding youth development infrastructure.", icon: <Star className="w-6 h-6 text-vgold" /> },
-      { year: "2023", title: "Best New Club", category: "Innovation", desc: "KPL recognition for the most impactful entrance of a new institution.", icon: <Medal className="w-6 h-6 text-vsky" /> }
+      { year: "2025/26", title: "Best-Ever League Finish — 2nd Place", category: "Almaty League A", desc: "14 wins, 5 draws, 3 losses, 47 points — the best finish in the club's history so far, and not the ceiling.", icon: <Trophy className="w-6 h-6 text-vgold" /> },
+      { year: "2024", title: "First International Transfer Talks", category: "Global Pathway", desc: "Players moved into transfer conversations with clubs in Croatia — the first deliberate step from Central Asia into Europe.", icon: <Award className="w-6 h-6 text-vsky" /> },
+      { year: "2017–", title: "Academy Pathway, U8 to U19", category: "Youth Development", desc: "A structured pipeline from first touch to first professional trial, built to outlast any single season, coach, or squad.", icon: <Star className="w-6 h-6 text-vgold" /> },
+      { year: "2017", title: "Club Founded in Almaty", category: "Foundation", desc: "Founded by Veria Lawrence Ebiks on a specific bet: Kazakhstani football had more talent than infrastructure.", icon: <Medal className="w-6 h-6 text-vsky" /> }
     ]
   },
   ru: {
     heroEyebrow: "Достижения Клуба",
-    heroTitle: "Слава и ",
-    heroTitleAccent: "Награды",
-    sub: "Наследие, выкованное в золоте. Наша история успеха во всех турнирах.",
+    heroTitle: "Прогресс и ",
+    heroTitleAccent: "Признание",
+    sub: "Мы ещё не закончили — и пока не стремимся к этому. Вот наш путь на сегодня.",
     honors: [
-      { year: "2025", title: "Обладатели Кубка Казахстана", category: "Главный Трофей", desc: "Историческая ночь на Центральном Стадионе.", icon: <Trophy className="w-6 h-6 text-vgold" /> },
-      { year: "2024", title: "Награда Fair Play КПЛ", category: "Спортивное поведение", desc: "Признание за соблюдение высочайших стандартов поведения.", icon: <Award className="w-6 h-6 text-vsky" /> },
-      { year: "2024", title: "Превосходство Академии", category: "Молодежь", desc: "Награда Академии Veria Sport за инфраструктуру.", icon: <Star className="w-6 h-6 text-vgold" /> },
-      { year: "2023", title: "Лучший Новый Клуб", category: "Инновации", desc: "Признание КПЛ за самый яркий дебют нового клуба.", icon: <Medal className="w-6 h-6 text-vsky" /> }
+      { year: "2025/26", title: "Лучший результат в истории — 2-е место", category: "Алматинская лига A", desc: "14 побед, 5 ничьих, 3 поражения, 47 очков — лучший результат в истории клуба на сегодня, и не предел.", icon: <Trophy className="w-6 h-6 text-vgold" /> },
+      { year: "2024", title: "Первые международные трансферные переговоры", category: "Глобальный путь", desc: "Игроки вышли на трансферные переговоры с клубами Хорватии — первый шаг из Центральной Азии в Европу.", icon: <Award className="w-6 h-6 text-vsky" /> },
+      { year: "2017–", title: "Академический путь, от U8 до U19", category: "Развитие молодежи", desc: "Структурированный путь от первого касания мяча до первого профессионального просмотра.", icon: <Star className="w-6 h-6 text-vgold" /> },
+      { year: "2017", title: "Основание клуба в Алматы", category: "Основание", desc: "Основан Верией Лоуренсом Эбиксом на конкретной ставке: в казахстанском футболе больше таланта, чем инфраструктуры.", icon: <Medal className="w-6 h-6 text-vsky" /> }
     ]
   }
 };

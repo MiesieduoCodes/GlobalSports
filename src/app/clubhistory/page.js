@@ -1,7 +1,7 @@
 "use client";
 
 import { useLanguage } from "@/app/context/LanguageContext";
-import { History, Shield, Globe, Trophy } from "lucide-react";
+import { Flag, Shield, Globe, TrendingUp } from "lucide-react";
 import { motion } from "framer-motion";
 
 const translations = {
@@ -9,22 +9,24 @@ const translations = {
     heroEyebrow: "Our Legacy",
     heroTitle: "Club ",
     heroTitleAccent: "History",
-    sub: "Founded by Veria Lawrence Ebiks, VE-GLOBALSPORTS FC was built on a vision to revolutionise football in Almaty, Kazakhstan.",
+    sub: "Founded by Veria Lawrence Ebiks in 2017, VE-GlobalSportFC was built to turn Almaty into a city that exports football talent — not just imports foreign coaches.",
     timeline: [
-      { year: "2023", title: "The Foundation", desc: "Veria Lawrence Ebiks establishes VE-GLOBALSPORTS FC in Almaty, setting the groundwork for a world-class institution.", icon: <Shield className="w-5 h-5 text-vsky" /> },
-      { year: "2024", title: "KPL Entrance", desc: "The club makes its debut in the Kazakhstan Premier League, instantly becoming a symbol of Almaty's ambition.", icon: <Globe className="w-5 h-5 text-vgold" /> },
-      { year: "2025", title: "First Silverware", desc: "A historic victory in the Kazakhstan Cup marks the beginning of a golden era for the club.", icon: <Trophy className="w-5 h-5 text-vsky" /> }
+      { year: "2017", title: "The Foundation", desc: "Veria Lawrence Ebiks founds VE-GlobalSportFC in Almaty, betting that Kazakhstani football had more talent than infrastructure.", icon: <Flag className="w-5 h-5 text-vsky" /> },
+      { year: "2018–2023", title: "Building The Pathway", desc: "The academy pathway takes shape from U8 to U19, and the first team's coaching structure and squad are built out.", icon: <Shield className="w-5 h-5 text-vgold" /> },
+      { year: "2024", title: "First International Conversations", desc: "The club moves players into transfer conversations with clubs in Croatia — the first deliberate step from Central Asia into Europe.", icon: <Globe className="w-5 h-5 text-vsky" /> },
+      { year: "2025/26", title: "Best-Ever League Finish", desc: "2nd place in Almaty League A — 14 wins, 5 draws, 3 losses, 47 points. The best finish in the club's history so far, and not the ceiling.", icon: <TrendingUp className="w-5 h-5 text-vgold" /> }
     ]
   },
   ru: {
     heroEyebrow: "Наше Наследие",
     heroTitle: "История ",
     heroTitleAccent: "Клуба",
-    sub: "Основанный Верией Лоуренсом Эбиксом, ВЕ-ГЛОБАЛСПОРТС ФК был создан с видением революции в футболе Алматы.",
+    sub: "Основанный Верией Лоуренсом Эбиксом в 2017 году, VE-GlobalSportFC создавался, чтобы превратить Алматы в город, экспортирующий футбольный талант.",
     timeline: [
-      { year: "2023", title: "Основание", desc: "Верия Лоуренс Эбикс основывает ВЕ-ГЛОБАЛСПОРТС ФК в Алматы.", icon: <Shield className="w-5 h-5 text-vsky" /> },
-      { year: "2024", title: "Вход в КПЛ", desc: "Дебют клуба в Премьер-лиге Казахстана.", icon: <Globe className="w-5 h-5 text-vgold" /> },
-      { year: "2025", title: "Первый Трофей", desc: "Историческая победа в Кубке Казахстана.", icon: <Trophy className="w-5 h-5 text-vsky" /> }
+      { year: "2017", title: "Основание", desc: "Верия Лоуренс Эбикс основывает VE-GlobalSportFC в Алматы, делая ставку на то, что в казахстанском футболе больше таланта, чем инфраструктуры.", icon: <Flag className="w-5 h-5 text-vsky" /> },
+      { year: "2018–2023", title: "Строительство пути", desc: "Формируется академический путь от U8 до U19, выстраивается тренерская структура и состав первой команды.", icon: <Shield className="w-5 h-5 text-vgold" /> },
+      { year: "2024", title: "Первые международные переговоры", desc: "Клуб выходит на трансферные переговоры с клубами Хорватии — первый осознанный шаг из Центральной Азии в Европу.", icon: <Globe className="w-5 h-5 text-vsky" /> },
+      { year: "2025/26", title: "Лучший результат в истории", desc: "2-е место в Алматинской лиге A — 14 побед, 5 ничьих, 3 поражения, 47 очков. Лучший результат в истории клуба на сегодня — и не предел.", icon: <TrendingUp className="w-5 h-5 text-vgold" /> }
     ]
   }
 };
@@ -39,7 +41,7 @@ export default function ClubHistoryPage() {
         <div className="kz-grid opacity-[0.025]" />
         <div className="relative z-10 max-w-[1440px] mx-auto">
           <span className="section-eyebrow">{t.heroEyebrow}</span>
-          <h1 className="section-heading mt-4">{t.title}<span className="text-vgold">{t.titleAccent}</span></h1>
+          <h1 className="section-heading mt-4">{t.heroTitle}<span className="text-vgold">{t.heroTitleAccent}</span></h1>
           <p className="section-sub mx-auto">{t.sub}</p>
         </div>
       </section>

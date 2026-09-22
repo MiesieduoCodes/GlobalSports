@@ -2,27 +2,34 @@
 
 import { useLanguage } from "@/app/context/LanguageContext";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 const translations = {
   en: {
     heroEyebrow: "Global Network",
     heroTitle: "Club ",
     heroTitleAccent: "Partners",
-    sub: "Working with the most prestigious brands in Central Asia and beyond to scale the VE-GLOBALSPORTS FC vision.",
+    sub: "The brands and organisations already building alongside VE-GlobalSportFC as it scales from Almaty outward.",
     tiers: [
       { name: "Principal Partners", color: "text-vgold", partners: ["Gold Air", "Almaty Energy", "KazBank"] },
       { name: "Official Partners", color: "text-vsky", partners: ["Steppe Motors", "Sky Logistics", "Mount Vision"] }
-    ]
+    ],
+    ctaTitle: "Want a seat at the table?",
+    ctaBody: "Our Business Club is built for companies who want direct access to the club — matchday hospitality, brand visibility, and a genuine relationship with a club still shaping its identity.",
+    ctaBtn: "Join the Business Club"
   },
   ru: {
     heroEyebrow: "Глобальная сеть",
     heroTitle: "Партнеры ",
     heroTitleAccent: "Клуба",
-    sub: "Работа с самыми престижными брендами в Центральной Азии для масштабирования видения ВЕ-ГЛОБАЛСПОРТС ФК.",
+    sub: "Бренды и организации, уже строящие будущее вместе с VE-GlobalSportFC на его пути из Алматы вовне.",
     tiers: [
       { name: "Генеральные партнеры", color: "text-vgold", partners: ["Gold Air", "Almaty Energy", "KazBank"] },
       { name: "Официальные партнеры", color: "text-vsky", partners: ["Steppe Motors", "Sky Logistics", "Mount Vision"] }
-    ]
+    ],
+    ctaTitle: "Хотите место за столом?",
+    ctaBody: "Наш Бизнес-клуб создан для компаний, которые хотят прямого доступа к клубу — гостеприимство в дни матчей, видимость бренда и настоящие отношения с клубом.",
+    ctaBtn: "Присоединиться к бизнес-клубу"
   }
 };
 
@@ -63,6 +70,16 @@ export default function PartnersPage() {
               </div>
             </div>
           ))}
+
+          <div className="bg-vnavy-card border border-white/5 rounded-[16px] p-10 flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
+            <div>
+              <h3 className="font-bebas text-2xl text-vwhite tracking-[1px] mb-2">{t.ctaTitle}</h3>
+              <p className="text-vmuted text-sm leading-relaxed max-w-[480px]">{t.ctaBody}</p>
+            </div>
+            <Link href="/business-club" className="shrink-0 bg-vgold text-vnavy font-barlow-condensed font-bold text-[12px] tracking-[2px] uppercase px-7 py-3 rounded-[6px] hover:bg-vgold-light transition-colors">
+              {t.ctaBtn}
+            </Link>
+          </div>
         </div>
       </section>
     </main>

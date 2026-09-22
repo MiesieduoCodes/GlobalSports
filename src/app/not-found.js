@@ -18,7 +18,7 @@ export default function NotFound() {
                     LOST <br /> OFF <br /> PITCH
                 </h1>
                 <p className="font-barlow text-vmuted text-xl mb-12 max-w-md mx-auto leading-relaxed">
-                    The page you are looking for has been moved or doesn't exist. Let's get you back to the main action.
+                    The page you are looking for has been moved or doesn&apos;t exist. Let&apos;s get you back to the main action.
                 </p>
 
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-6">

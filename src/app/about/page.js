@@ -3,97 +3,59 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { useLanguage } from "@/app/context/LanguageContext";
-import { Star, Users, History, X } from "lucide-react";
-import Image from "next/image";
+import { X } from "lucide-react";
+import Link from "next/link";
 
 const translations = {
   en: {
     heroEyebrow: "Our Story",
-    heroTitle: "The Club. ",
-    heroTitleAccent: "The Vision.",
+    heroTitle: "Founded 2017. Still early. ",
+    heroTitleAccent: "Already moving.",
     story: [
-      "Founded with a bold vision to bring world-class football to the heart of Central Asia, Veria Football Club was established in Almaty, Kazakhstan — a city of mountains, ambition and unstoppable energy.",
-      "Under the leadership of founder Veria Lawrence Ebiks, the club has grown from a passionate idea into one of Kazakhstan's most dynamic football institutions, blending elite sporting standards with deep community values.",
-      "From the shadow of the Tian Shan mountains, VE-GLOBALSPORTS FC rises — building legacy, developing talent, and competing at the highest level the Kazakhstan Premier League has to offer."
+      "VE-GlobalSportFC was founded in Almaty by Veria Lawrence Ebiks with a specific bet: that Kazakhstani football had more talent than infrastructure, and that a club willing to build the infrastructure properly — coaching, pathways, contracts, international relationships — would outgrow clubs that only focused on this season's results.",
+      "Every player CV, every academy trial, every transfer conversation with clubs abroad is part of the same long build. We're not finished. We're not trying to be, yet."
     ],
-    pillarsTitle: "Club Values",
-    pillarsEyebrow: "What We Stand For",
+    visionTitle: "Our Vision",
+    visionBody: "To become the football organisation Kazakhstan is measured against — and one of the first names Central Asian talent thinks of when they think \"professional pathway.\"",
+    missionTitle: "Our Mission",
+    missionBody: "Develop players properly. Compete with integrity. Build a structure that outlasts any single season, coach, or squad.",
+    pillarsTitle: "Six things we don't compromise on.",
+    pillarsEyebrow: "Our Values",
     pillars: [
-      {
-        title: "Excellence",
-        desc: "We pursue the highest standards in every aspect of our game — on the pitch, in the academy, and in the front office. Mediocrity has no home at VE-GLOBALSPORTS FC.",
-        color: "rgba(200,168,75,0.1)", border: "rgba(200,168,75,0.2)", iconColor: "#C8A84B"
-      },
-      {
-        title: "Community",
-        desc: "Rooted in Almaty, we are a club for every Kazakh — from the mountains of the south to the steppes of the north. Football belongs to the people.",
-        color: "rgba(0,174,239,0.1)", border: "rgba(0,174,239,0.2)", iconColor: "#00AEEF"
-      },
-      {
-        title: "Legacy",
-        desc: "Every match, every player, every season adds another chapter to the story we are writing. We build not just for today, but for generations to come.",
-        color: "rgba(200,168,75,0.08)", border: "rgba(200,168,75,0.15)", iconColor: "#C8A84B"
-      }
+      { title: "Discipline", desc: "Talent without it goes nowhere. We've seen it happen elsewhere." },
+      { title: "Development", desc: "Players, coaches, staff — everyone here is still improving, including at the top." },
+      { title: "Teamwork", desc: "No individual result matters more than the collective one." },
+      { title: "Respect", desc: "For opponents, for officials, for the game, for each other." },
+      { title: "Ambition", desc: "We set targets that make people uncomfortable, on purpose." },
+      { title: "Opportunity", desc: "A club in Almaty should be able to produce a player who plays in Europe. We intend to prove it." }
     ],
-    leadershipTitle: "Club Leadership",
-    leadershipEyebrow: "The People Behind The Club",
-    leadershipSub: "A united front of visionary professionals driving VE-GLOBALSPORTS FC's ambitions on and off the pitch.",
-    leaders: [
-      {
-        role: "Founder & Chairman",
-        name: "Veria Lawrence Ebiks",
-        initials: "VLE",
-        image: "/images/IMG-20260324-WA0048.jpg-removebg-preview.png",
-        bio: "The driving force behind VE-GLOBALSPORTS FC, Veria Lawrence Ebiks founded the club with a singular conviction: that world-class football could and should thrive in Almaty, Kazakhstan. His entrepreneurial vision, global perspective and unwavering passion for the beautiful game have shaped every aspect of the club — from its philosophy and identity to its long-term strategic ambitions.",
-        isFounder: true
-      },
-      {
-        role: "Technical Director",
-        name: "Otanwa Louis",
-        initials: "OL",
-        image:"/images/IMG_3656.JPG-removebg-preview.png",
-        bio: "Otanwa Louis brings deep tactical expertise and a modern football philosophy to VE-GLOBALSPORTS FC. Responsible for the club's technical structure — from first team to academy — he has built a cohesive playing identity that demands intensity, intelligence and creativity."
-      },
-      {
-        role: "Business Development Manager",
-        name: "Audu Emmanuel Kaz",
-        initials: "AEK",
-        bio: "Kaz leads VE-GLOBALSPORTS FC's commercial strategy — forging partnerships, growing the club's brand across Central Asia and beyond, and building the commercial infrastructure that sustains long-term success."
-      },
-      {
-        role: "Strategic Manager",
-        name: "Bariy A Sanusi",
-        initials: "BAS",
-        image: "/images/IMG-20260324-WA0050.jpg",
-        bio: "Bariy A Sanusi serves as the club's Strategic Manager, responsible for translating the founder's vision into actionable long-term plans and growth roadmaps."
-      }
-    ]
+    managementCta: "Meet the people running the club",
+    managementLink: "See Management"
   },
   ru: {
     heroEyebrow: "Наша История",
-    heroTitle: "Клуб. ",
-    heroTitleAccent: "Видение.",
+    heroTitle: "Основан в 2017. Всё ещё рано. ",
+    heroTitleAccent: "Уже в движении.",
     story: [
-      "Основанный с смелым видением принести футбол мирового класса в сердце Центральной Азии, футбольный клуб ВЕ-ГЛОБАЛСПОРТС был создан в Алматы, Казахстан — городе гор, амбиций и неудержимой энергии.",
-      "Под руководством основателя Верии Лоуренса Эбикса клуб вырос из страстной идеи в один из самых динамичных футбольных институтов Казахстана.",
-      "Из тени гор Тянь-Шаня ВЕ-ГЛОБАЛСПОРТС ФК поднимается — создавая наследие, развивая таланты и соревнуясь на самом высоком уровне."
+      "VE-GlobalSportFC был основан в Алматы Верией Лоуренсом Эбиксом с конкретной ставкой: в казахстанском футболе больше таланта, чем инфраструктуры, и клуб, готовый построить эту инфраструктуру правильно — тренерский состав, пути развития, контракты, международные связи — перерастёт клубы, сосредоточенные только на результатах текущего сезона.",
+      "Каждое резюме игрока, каждый просмотр в академии, каждые переговоры о трансфере с клубами за рубежом — часть одного долгого пути. Мы ещё не закончили. И пока не стремимся к этому."
     ],
-    pillarsTitle: "Ценности Клуба",
-    pillarsEyebrow: "За Что Мы Стоим",
+    visionTitle: "Наше видение",
+    visionBody: "Стать футбольной организацией, с которой сравнивают Казахстан — и одним из первых имён, о которых думают таланты Центральной Азии, когда речь заходит о «профессиональном пути».",
+    missionTitle: "Наша миссия",
+    missionBody: "Правильно развивать игроков. Соревноваться честно. Строить структуру, которая переживёт любой отдельный сезон, тренера или состав.",
+    pillarsTitle: "Шесть вещей, в которых мы не идём на компромисс.",
+    pillarsEyebrow: "Наши ценности",
     pillars: [
-      { title: "Превосходство", desc: "Мы стремимся к самым высоким стандартам во всех аспектах нашей игры." },
-      { title: "Сообщество", desc: "Укорененный в Алматы, мы — клуб для каждого казахстанца." },
-      { title: "Наследие", desc: "Каждый матч, каждый игрок добавляет еще одну главу в нашу историю." }
+      { title: "Дисциплина", desc: "Талант без неё никуда не ведёт. Мы видели это на примере других." },
+      { title: "Развитие", desc: "Игроки, тренеры, персонал — все здесь продолжают расти, включая руководство." },
+      { title: "Командная работа", desc: "Ни один индивидуальный результат не важнее общего." },
+      { title: "Уважение", desc: "К соперникам, к судьям, к игре, друг к другу." },
+      { title: "Амбиции", desc: "Мы ставим цели, которые вызывают дискомфорт — намеренно." },
+      { title: "Возможности", desc: "Клуб из Алматы должен уметь вырастить игрока, который заиграет в Европе. Мы намерены это доказать." }
     ],
-    leadershipTitle: "Руководство Клуба",
-    leadershipEyebrow: "Люди, Стоящие За Клубом",
-    leadershipSub: "Единый фронт дальновидных профессионалов, реализующих амбиции ВЕ-ГЛОБАЛСПОРТС ФК.",
-    leaders: [
-      { role: "Основатель и Председатель", name: "Верия Лоуренс Эбикс", initials: "VLE", image: "/images/IMG-20260324-WA0048.jpg", bio: "Движущая сила ВЕ-ГЛОБАЛСПОРТС ФК, Верия Лоуренс Эбикс основал клуб с твердым убеждением в успехе футбола мирового класса в Алматы.", isFounder: true },
-      { role: "Технический Директор", name: "Отанва Луис", initials: "OL", bio: "Отанва Луис привносит глубокую тактическую экспертизу и современную футбольную философию в ВЕ-ГЛОБАЛСПОРТС ФК." },
-      { role: "Менеджер по развитию бизнеса", name: "Ауду Эммануэль Каз", initials: "AEK", bio: "Каз руководит коммерческой стратегией ВЕ-ГЛОБАЛСПОРТС ФК — создавая партнерства и развивая бренд клуба." },
-      { role: "Стратегический Менеджер", name: "Барий А Сануси", initials: "BAS", image: "/images/IMG-20260324-WA0050.jpg", bio: "Барий А Сануси выступает в качестве стратегического менеджера клуба, отвечая за реализацию видения основателя." }
-    ]
+    managementCta: "Познакомьтесь с руководством клуба",
+    managementLink: "Руководство клуба"
   }
 };
 
@@ -164,7 +126,7 @@ export default function AboutPage() {
         <div className="kz-grid opacity-[0.025]" />
         <div className="absolute right-[-20px] top-1/2 -translate-y-1/2 font-bebas text-[200px] text-vwhite/[0.02] tracking-[10px] pointer-events-none hidden lg:block">ABOUT</div>
 
-        <div className="max-w-[1440px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center relative z-10">
+        <div className="max-w-[1440px] mx-auto grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-12 lg:gap-20 items-start relative z-10">
           <div>
             <span className="section-eyebrow">{t.heroEyebrow}</span>
             <h1 className="section-heading mb-6">{t.heroTitle}<span className="text-vgold">{t.heroTitleAccent}</span></h1>
@@ -174,12 +136,14 @@ export default function AboutPage() {
               ))}
             </div>
           </div>
-          <div className="flex justify-center">
-            <div className="w-64 h-64 md:w-[300px] md:h-[300px] rounded-full flex items-center justify-center relative">
-              <div className="absolute inset-4 rounded-full" />
-              <div className="scale-75 md:scale-100">
-                <Image src="/logo.png" alt="Club Logo" width={300} height={300} className="rounded-full" />
-              </div>
+          <div className="flex flex-col gap-5 lg:pt-[52px]">
+            <div className="bg-vnavy-card border-l-2 border-vsky rounded-[10px] p-6">
+              <h3 className="font-bebas text-xl text-vwhite tracking-[1px] mb-2">{t.visionTitle}</h3>
+              <p className="text-vmuted text-sm leading-relaxed font-light">{t.visionBody}</p>
+            </div>
+            <div className="bg-vnavy-card border-l-2 border-vgold rounded-[10px] p-6">
+              <h3 className="font-bebas text-xl text-vwhite tracking-[1px] mb-2">{t.missionTitle}</h3>
+              <p className="text-vmuted text-sm leading-relaxed font-light">{t.missionBody}</p>
             </div>
           </div>
         </div>
@@ -218,17 +182,12 @@ export default function AboutPage() {
       <section className="section">
         <div className="max-w-[1440px] mx-auto">
           <span className="section-eyebrow">{t.pillarsEyebrow}</span>
-          <h2 className="section-heading mb-12">{t.pillarsTitle}</h2>
+          <h2 className="section-heading mb-12 max-w-[700px]">{t.pillarsTitle}</h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="flex flex-col">
             {t.pillars.map((p, i) => (
-              <div key={i} className="bg-vnavy-card border border-[rgba(255,255,255,0.06)] rounded-[14px] p-8 hover:border-vgold/30 hover:-translate-y-1 transition-all">
-                <div className="w-12 h-12 rounded-[12px] flex items-center justify-center mb-6" style={{ background: p.color || 'rgba(255,255,255,0.05)', border: `1px solid ${p.border || 'transparent'}` }}>
-                  {i === 0 && <Star className="w-5 h-5 text-vgold" />}
-                  {i === 1 && <Users className="w-5 h-5 text-vsky" />}
-                  {i === 2 && <History className="w-5 h-5 text-vgold" />}
-                </div>
-                <h3 className="font-bebas text-2xl text-vwhite tracking-[1px] mb-3">{p.title}</h3>
+              <div key={i} className="grid grid-cols-1 sm:grid-cols-[220px_1fr] gap-2 sm:gap-8 py-6 border-b border-white/5">
+                <h3 className="font-bebas text-2xl text-vwhite tracking-[1px]">{p.title}</h3>
                 <p className="font-barlow text-vmuted text-sm leading-relaxed">{p.desc}</p>
               </div>
             ))}
@@ -238,40 +197,13 @@ export default function AboutPage() {
 
       <div className="section-divider" />
 
-      {/* Leadership Section */}
+      {/* Management CTA */}
       <section className="section">
-        <div className="max-w-[1440px] mx-auto">
-          <span className="section-eyebrow">{t.leadershipEyebrow}</span>
-          <h2 className="section-heading mb-4">{t.leadershipTitle}</h2>
-          <p className="section-sub mb-12">{t.leadershipSub}</p>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {t.leaders.map((l, i) => (
-              <div key={i} className={`leader-card group ${l.isFounder ? 'md:col-span-2 founder' : ''}`}>
-                <div className="leader-card-hero">
-                  <div className="leader-initials-bg">
-                    <div className="initials-circle overflow-hidden border-vgold/30">
-                      {l.image ? (
-                        <img src={l.image} alt={l.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
-                      ) : (
-                        l.initials
-                      )}
-                    </div>
-                  </div>
-                  {l.isFounder && (
-                    <div className="absolute right-10 top-1/2 -translate-y-1/2 font-bebas text-9xl text-vwhite/[0.03] tracking-[4px] pointer-events-none hidden md:block uppercase">
-                      FOUNDER
-                    </div>
-                  )}
-                </div>
-                <div className="leader-card-body">
-                  <span className="leader-role">{l.role}</span>
-                  <h3 className="leader-name">{l.name}</h3>
-                  <p className="leader-bio">{l.bio}</p>
-                </div>
-              </div>
-            ))}
-          </div>
+        <div className="max-w-[1440px] mx-auto bg-vnavy-card border border-white/5 rounded-[16px] p-10 flex flex-col sm:flex-row items-center justify-between gap-6">
+          <p className="font-bebas text-2xl text-vwhite tracking-[1px] text-center sm:text-left">{t.managementCta}</p>
+          <Link href="/management" className="shrink-0 bg-vgold text-vnavy font-barlow-condensed font-bold text-[12px] tracking-[2px] uppercase px-7 py-3 rounded-[6px] hover:bg-vgold-light transition-colors">
+            {t.managementLink}
+          </Link>
         </div>
       </section>
 

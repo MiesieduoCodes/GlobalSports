@@ -9,56 +9,84 @@ import Image from "next/image";
 const translations = {
   en: {
     brandName: "VE-GLOBALSPORTS FC · Almaty",
-    tagline: <>Kazakhstan Premier League · Центральный Стадион<br />Founded by Veria Lawrence Ebiks<br />Almaty, Kazakhstan</>,
-    col1Title: "Navigate",
+    tagline: <>Almaty, Kazakhstan · Founded 2017<br />Founded by Veria Lawrence Ebiks<br />One Club. One City. One Ambition.</>,
+    col1Title: "Club",
     col1Links: [
-      { name: "Home", href: "/" },
-      { name: "About The Club", href: "/about" },
-      { name: "First Team Roster", href: "/squad" },
-      { name: "Contact & Address", href: "/contact" }
+      { name: "About", href: "/about" },
+      { name: "First Team", href: "/squad" },
+      { name: "Academy", href: "/academy" },
+      { name: "Management", href: "/management" },
+      { name: "Club History", href: "/clubhistory" }
     ],
-    col2Title: "The Club",
+    col2Title: "Matches",
     col2Links: [
-      { name: "KPL Fixtures", href: "/matches" },
-      { name: "Match Tickets", href: "/contact" },
-      { name: "Club Shop", href: "#" },
-      { name: "Media", href: "/videos" }
+      { name: "Fixtures", href: "/matches" },
+      { name: "Results", href: "/matches" },
+      { name: "League Table", href: "/matches" }
     ],
-    col3Title: "Academy",
+    col3Title: "Media",
     col3Links: [
-      { name: "VE-GLOBALSPORTS Academy", href: "/kidscamp" },
-      { name: "Youth Fixtures", href: "#" },
-      { name: "Enroll Your Child", href: "/kidscamp" },
-      { name: "Coaching Staff", href: "/coaches" }
+      { name: "News", href: "/news" },
+      { name: "Videos", href: "/videos" },
+      { name: "Awards", href: "/awards" }
     ],
-    copy: "© 2026 VE-GLOBALSPORTS FC · Almaty, Kazakhstan. All rights reserved.",
+    col4Title: "Join",
+    col4Links: [
+      { name: "Members", href: "/members" },
+      { name: "Business Club", href: "/business-club" },
+      { name: "Press & Accreditation", href: "/business-club#press" },
+      { name: "Partners", href: "/partners" },
+      { name: "VE-GlobalSportFC For All", href: "/forall" }
+    ],
+    col5Title: "Follow",
+    col5Links: [
+      { name: "Instagram", href: "#" },
+      { name: "Facebook", href: "#" },
+      { name: "TikTok", href: "#" },
+      { name: "YouTube", href: "#" }
+    ],
+    copy: "© 2026 VE-GlobalSportFC. All Rights Reserved.",
     subscribe: "Subscribe to Newsletter"
   },
   ru: {
     brandName: "ВЕ-ГЛОБАЛСПОРТС ФК · Алматы",
-    tagline: <>Премьер-лига Казахстана · Центральный Стадион<br />Основано Верией Лоуренсом Эбиксом<br />Алматы, Казахстан</>,
-    col1Title: "Навигация",
+    tagline: <>Алматы, Казахстан · Основан в 2017<br />Основано Верией Лоуренсом Эбиксом<br />Один клуб. Один город. Одна цель.</>,
+    col1Title: "Клуб",
     col1Links: [
-      { name: "Главная", href: "/" },
       { name: "О клубе", href: "/about" },
-      { name: "Состав команды", href: "/squad" },
-      { name: "Контактная информация", href: "/contact" }
+      { name: "Первая команда", href: "/squad" },
+      { name: "Академия", href: "/academy" },
+      { name: "Руководство", href: "/management" },
+      { name: "История клуба", href: "/clubhistory" }
     ],
-    col2Title: "Клуб",
+    col2Title: "Матчи",
     col2Links: [
-      { name: "Матчи КПЛ", href: "/matches" },
-      { name: "Билеты", href: "/contact" },
-      { name: "Магазин", href: "#" },
-      { name: "Медиа", href: "/videos" }
+      { name: "Расписание", href: "/matches" },
+      { name: "Результаты", href: "/matches" },
+      { name: "Таблица лиги", href: "/matches" }
     ],
-    col3Title: "Академия",
+    col3Title: "Медиа",
     col3Links: [
-      { name: "Академия VE-GLOBALSPORTS", href: "/kidscamp" },
-      { name: "Новости молодежи", href: "#" },
-      { name: "Записать ребенка", href: "/kidscamp" },
-      { name: "Тренерский штаб", href: "/coaches" }
+      { name: "Новости", href: "/news" },
+      { name: "Видео", href: "/videos" },
+      { name: "Награды", href: "/awards" }
     ],
-    copy: "© 2026 ВЕ-ГЛОБАЛСПОРТС ФК · Алматы, Казахстан. Все права защищены.",
+    col4Title: "Присоединиться",
+    col4Links: [
+      { name: "Участники", href: "/members" },
+      { name: "Бизнес-клуб", href: "/business-club" },
+      { name: "Аккредитация прессы", href: "/business-club#press" },
+      { name: "Партнеры", href: "/partners" },
+      { name: "VE-GlobalSportFC для всех", href: "/forall" }
+    ],
+    col5Title: "Мы в соцсетях",
+    col5Links: [
+      { name: "Instagram", href: "#" },
+      { name: "Facebook", href: "#" },
+      { name: "TikTok", href: "#" },
+      { name: "YouTube", href: "#" }
+    ],
+    copy: "© 2026 ВЕ-ГЛОБАЛСПОРТС ФК. Все права защищены.",
     subscribe: "Подписаться на рассылку"
   }
 };
@@ -92,9 +120,9 @@ export default function Footer() {
   return (
     <footer className="bg-vnavy border-t border-white/5 px-6 md:px-[60px] pt-[50px] pb-[30px]">
       <div className="max-w-[1440px] mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1fr] gap-10 mb-10">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-[1.3fr_0.8fr_0.8fr_0.8fr_1fr_0.8fr] gap-x-8 gap-y-10 mb-10">
 
-          <div className="flex flex-col gap-5">
+          <div className="col-span-2 md:col-span-3 lg:col-span-1 flex flex-col gap-5">
             <Link href="/" className="inline-block hover:opacity-80 transition-opacity">
             <Image src="/logo.png" alt="VE-GLOBALSPORTS" width={60} height={60} />
             </Link>
@@ -144,6 +172,24 @@ export default function Footer() {
             <div className="font-barlow-condensed font-bold text-[11px] tracking-[2px] uppercase text-vgold mb-4">{t.col3Title}</div>
             <div className="flex flex-col gap-2">
               {t.col3Links.map((l, i) => (
+                <Link key={i} href={l.href} className="font-barlow-condensed text-sm text-vmuted hover:text-vwhite transition-colors">{l.name}</Link>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <div className="font-barlow-condensed font-bold text-[11px] tracking-[2px] uppercase text-vgold mb-4">{t.col4Title}</div>
+            <div className="flex flex-col gap-2">
+              {t.col4Links.map((l, i) => (
+                <Link key={i} href={l.href} className="font-barlow-condensed text-sm text-vmuted hover:text-vwhite transition-colors">{l.name}</Link>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <div className="font-barlow-condensed font-bold text-[11px] tracking-[2px] uppercase text-vgold mb-4">{t.col5Title}</div>
+            <div className="flex flex-col gap-2">
+              {t.col5Links.map((l, i) => (
                 <Link key={i} href={l.href} className="font-barlow-condensed text-sm text-vmuted hover:text-vwhite transition-colors">{l.name}</Link>
               ))}
             </div>

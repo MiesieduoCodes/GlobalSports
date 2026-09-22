@@ -1,39 +1,42 @@
 "use client";
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { useLanguage } from "@/app/context/LanguageContext";
 import { motion } from "framer-motion";
 import { Goal, Trophy, Target, Users, Circle, Zap, Star, Heart, Hexagon, Triangle, Square, Diamond } from "lucide-react";
 
 const translations = {
   en: {
-    badge: "Almaty League A, Kazakhstan · Season 2025/26",
-    title: "VE-GLOBALSPORTS FC",
-    subtitle: "One club. One city. One ambition.",
+    badge: "Almaty, Kazakhstan · Founded 2017",
+    title: "Almaty's club.",
+    titleAccent: "Kazakhstan's ambition.",
+    subtitle: "Founded in 2017 by Veria Lawrence Ebiks, VE-GlobalSportFC is one of the fastest-rising football organisations in Kazakhstan — a first team built to compete now, and an academy built to compete for the next twenty years.",
     btnPrimary: "VIEW MATCHES",
+    btnSecondary: "MEET THE SQUAD",
     liveLabel: "LAST MATCH",
     liveMeta: "KPL MATCHDAY 21 · CENTRAL STADIUM, ALMATY",
     stats: [
-      { label: "WINS", val: "14" },
-      { label: "DRAWS", val: "5" },
-      { label: "LOSSES", val: "3" },
-      { label: "POSITION", val: "2ND", color: "text-vsky" },
-      { label: "POINTS", val: "47" }
+      { label: "CURRENT LEAGUE POSITION", val: "2ND", color: "text-vsky" },
+      { label: "WINS – DRAWS – LOSSES", val: "14–5–3" },
+      { label: "FIRST-TEAM PLAYERS", val: "30" },
+      { label: "NATIONALITIES", val: "5+" }
     ]
   },
   ru: {
-    badge: "Алматинская лига A, Казахстан · Сезон 2025/26",
-    title: "ВЕ-ГЛОБАЛСПОРТС ФК",
-    subtitle: "Один клуб. Один город. Одна цель.",
+    badge: "Алматы, Казахстан · Основан в 2017",
+    title: "Клуб Алматы.",
+    titleAccent: "Амбиции Казахстана.",
+    subtitle: "Основанный в 2017 году Верией Лоуренсом Эбиксом, VE-GlobalSportFC — одна из самых быстрорастущих футбольных организаций Казахстана: первая команда, готовая побеждать сейчас, и академия, построенная на двадцать лет вперёд.",
     btnPrimary: "СМОТРЕТЬ МАТЧИ",
+    btnSecondary: "СОСТАВ КОМАНДЫ",
     liveLabel: "ПОСЛЕДНИЙ МАТЧ",
     liveMeta: "АЛМАТИНСКАЯ ЛИГА A ТУР 21 · ЦЕНТРАЛЬНЫЙ СТАДИОН, АЛМАТЫ",
     stats: [
-      { label: "ПОБЕДЫ", val: "14" },
-      { label: "НИЧЬИ", val: "5" },
-      { label: "ПОРАЖЕНИЯ", val: "3" },
-      { label: "ПОЗИЦИЯ", val: "2", color: "text-vsky" },
-      { label: "ОЧКИ", val: "47" }
+      { label: "ТЕКУЩАЯ ПОЗИЦИЯ В ЛИГЕ", val: "2-Е", color: "text-vsky" },
+      { label: "ПОБЕДЫ – НИЧЬИ – ПОРАЖЕНИЯ", val: "14–5–3" },
+      { label: "ИГРОКОВ ПЕРВОЙ КОМАНДЫ", val: "30" },
+      { label: "НАЦИОНАЛЬНОСТЕЙ", val: "5+" }
     ]
   }
 };
@@ -340,28 +343,29 @@ const Hero = () => {
               {t.badge}
             </motion.div>
 
-            <motion.div 
-              className="font-bebas text-[clamp(48px,8vw,96px)] leading-[0.85] text-white tracking-[2px] uppercase mb-4 relative"
+            <motion.div
+              className="font-bebas text-[clamp(40px,7vw,80px)] leading-[0.95] text-white tracking-[1px] mb-4 relative"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
             >
               {/* Doodles around title */}
-              <motion.div 
+              <motion.div
                 className="absolute -top-4 -left-8 text-vgold/30"
                 animate={{ rotate: [0, 360] }}
                 transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
               >
                 <Star className="w-6 h-6" />
               </motion.div>
-              <motion.div 
+              <motion.div
                 className="absolute -top-2 -right-6 text-vsky/30"
                 animate={{ rotate: [360, 0] }}
                 transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
               >
                 <Circle className="w-5 h-5" />
               </motion.div>
-              {t.title}
+              <div>{t.title}</div>
+              <div className="text-vgold">{t.titleAccent}</div>
             </motion.div>
 
             <motion.div 
@@ -388,30 +392,33 @@ const Hero = () => {
               {t.subtitle}
             </motion.div>
 
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.6 }}
-              className="relative"
+              className="relative flex flex-wrap items-center justify-center lg:justify-start gap-4"
             >
               {/* Button decorations */}
-              <motion.div 
+              <motion.div
                 className="absolute -top-3 -left-3 text-vgold/40"
                 animate={{ scale: [1, 1.2, 1] }}
                 transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
               >
                 <Zap className="w-5 h-5" />
               </motion.div>
-              <motion.div 
+              <motion.div
                 className="absolute -bottom-2 -right-2 text-vsky/40"
                 animate={{ scale: [1, 1.2, 1] }}
                 transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: 1 }}
               >
                 <Star className="w-4 h-4" />
               </motion.div>
-              <button className="bg-vgold text-vnavy font-barlow-condensed font-bold text-[14px] tracking-[2px] uppercase px-12 py-4 rounded-[8px] hover:bg-vgold-light transition-all transform hover:-translate-y-1 shadow-xl shadow-vgold/30">
+              <Link href="/matches" className="bg-vgold text-vnavy font-barlow-condensed font-bold text-[14px] tracking-[2px] uppercase px-12 py-4 rounded-[8px] hover:bg-vgold-light transition-all transform hover:-translate-y-1 shadow-xl shadow-vgold/30 inline-block text-center">
                 {t.btnPrimary}
-              </button>
+              </Link>
+              <Link href="/squad" className="border border-white/30 text-white font-barlow-condensed font-bold text-[14px] tracking-[2px] uppercase px-12 py-4 rounded-[8px] hover:border-vgold hover:text-vgold transition-all inline-block text-center">
+                {t.btnSecondary}
+              </Link>
             </motion.div>
           </div>
 
@@ -524,11 +531,11 @@ const Hero = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 1 }}
       >
-        <div className="grid grid-cols-2 md:grid-cols-5 w-full bg-black/40 backdrop-blur-md border border-white/10 rounded-[16px] overflow-hidden">
+        <div className="grid grid-cols-2 md:grid-cols-4 w-full bg-black/40 backdrop-blur-md border border-white/10 rounded-[16px] overflow-hidden">
           {t.stats.map((s, idx) => (
             <motion.div
               key={idx}
-              className={`p-6 border-r border-white/10 last:border-r-0 border-t md:border-t-0 border-white/10 first:border-t-2 first:border-vgold hover:bg-white/5 transition-all group cursor-pointer ${idx === 4 ? 'col-span-2 md:col-span-1' : ''}`}
+              className="p-6 border-r border-white/10 last:border-r-0 border-t md:border-t-0 border-white/10 first:border-t-2 first:border-vgold hover:bg-white/5 transition-all group cursor-pointer"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >

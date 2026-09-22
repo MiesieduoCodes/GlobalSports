@@ -11,7 +11,7 @@ const translations = {
     heroTitle: "First Team ",
     heroTitleAccent: "Squad",
     heroEyebrow: "2025/26 Season",
-    heroSub: "Under Technical Director Otanwa Louis — a blend of Kazakh talent and international quality.",
+    heroSub: "Under Sporting Director Ontanwa Louis — a blend of Kazakh talent and international quality. Thirty players. Five-plus nationalities. One dressing room.",
     filters: {
       all: "All Players",
       gk: "Goalkeepers",
@@ -31,7 +31,7 @@ const translations = {
     heroTitle: "Основной ",
     heroTitleAccent: "Состав",
     heroEyebrow: "Сезон 2025/26",
-    heroSub: "Под руководством технического директора Отанва Луиса — сочетание казахстанских талантов и международного качества.",
+    heroSub: "Под руководством спортивного директора Онтанва Луиса — сочетание казахстанских талантов и международного качества. Тридцать игроков. Более пяти национальностей.",
     filters: {
       all: "Все Игроки",
       gk: "Вратари",

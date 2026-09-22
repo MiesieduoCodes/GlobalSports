@@ -1,78 +1,79 @@
 "use client";
 
 import { useLanguage } from "@/app/context/LanguageContext";
-import { Mail, Phone, MapPin, Clock, Twitter, Instagram, Facebook, Youtube } from "lucide-react";
+import { Mail, Phone, MapPin, Twitter, Instagram, Facebook, Youtube } from "lucide-react";
+import Link from "next/link";
 
 const translations = {
   en: {
-    heroEyebrow: "Find Us",
-    heroTitle: "Our ",
-    heroTitleAccent: "Address",
+    heroEyebrow: "Contact",
+    heroTitle: "There's a place ",
+    heroTitleAccent: "for you at this club.",
+    heroSub: "Player. Parent. Member. Corporate partner. Wherever you fit, this is where you start.",
     items: [
       {
-        title: "Stadium Address",
-        val: <>Центральный Стадион<br />Central Stadium, Almaty</>,
-        sub: "Kazakhstan · 050010",
-        icon: <MapPin className="w-[18px] h-[18px] text-vsky" />
-      },
-      {
-        title: "Club Office",
-        val: "+7 (727) 000-0000",
-        sub: "Mon–Fri · 09:00–18:00 (ALMT)",
-        icon: <Phone className="w-[18px] h-[18px] text-vsky" />
-      },
-      {
-        title: "Email",
-        val: "info@ve-globalsportfc.kz",
-        sub: "Tickets: tickets@ve-globalsportfc.kz",
+        title: "General Enquiries",
+        val: "info@veglobalsports.com",
+        sub: "We aim to respond within 2 business days",
         icon: <Mail className="w-[18px] h-[18px] text-vsky" />
       },
       {
-        title: "Match Day Gates",
-        val: "Open 2 hours before kick-off",
-        sub: "All stands · Family zone available",
-        icon: <Clock className="w-[18px] h-[18px] text-vgold" />
+        title: "Phone",
+        val: "+7 747 686 8145",
+        sub: "Almaty, Kazakhstan (ALMT)",
+        icon: <Phone className="w-[18px] h-[18px] text-vsky" />
+      },
+      {
+        title: "Location",
+        val: "Almaty, Kazakhstan",
+        sub: "VE-GlobalSportFC · Founded 2017",
+        icon: <MapPin className="w-[18px] h-[18px] text-vgold" />
       }
     ],
+    actions: [
+      { name: "Register for Trials", href: "/academy#register" },
+      { name: "Join the Business Club", href: "/business-club" },
+      { name: "Send a Message", href: "mailto:info@veglobalsports.com" }
+    ],
     follow: "Follow The Club",
-    mapLabel: "Central Stadium",
-    mapSub: "Almaty, Kazakhstan",
+    mapLabel: "Almaty",
+    mapSub: "Kazakhstan",
     mapCoords: "43.2220° N, 76.8512° E",
     mapBtn: "Open in Maps"
   },
   ru: {
-    heroEyebrow: "Найти Нас",
-    heroTitle: "Наш ",
-    heroTitleAccent: "Адрес",
+    heroEyebrow: "Контакты",
+    heroTitle: "В этом клубе есть ",
+    heroTitleAccent: "место для вас.",
+    heroSub: "Игрок. Родитель. Участник. Корпоративный партнёр. Где бы вы ни были — начните здесь.",
     items: [
       {
-        title: "Адрес Стадиона",
-        val: <>Центральный Стадион<br />Central Stadium, Алматы</>,
-        sub: "Казахстан · 050010",
-        icon: <MapPin className="w-[18px] h-[18px] text-vsky" />
-      },
-      {
-        title: "Офис Клуба",
-        val: "+7 (727) 000-0000",
-        sub: "Пн–Пт · 09:00–18:00 (ALMT)",
-        icon: <Phone className="w-[18px] h-[18px] text-vsky" />
-      },
-      {
-        title: "Email",
-        val: "info@ve-globalsportfc.kz",
-        sub: "Билеты: tickets@ve-globalsportfc.kz",
+        title: "Общие вопросы",
+        val: "info@veglobalsports.com",
+        sub: "Отвечаем в течение 2 рабочих дней",
         icon: <Mail className="w-[18px] h-[18px] text-vsky" />
       },
       {
-        title: "Ворота в день матча",
-        val: "Открываются за 2 часа",
-        sub: "Все трибуны · Семейная зона",
-        icon: <Clock className="w-[18px] h-[18px] text-vgold" />
+        title: "Телефон",
+        val: "+7 747 686 8145",
+        sub: "Алматы, Казахстан (ALMT)",
+        icon: <Phone className="w-[18px] h-[18px] text-vsky" />
+      },
+      {
+        title: "Расположение",
+        val: "Алматы, Казахстан",
+        sub: "VE-GlobalSportFC · Основан в 2017",
+        icon: <MapPin className="w-[18px] h-[18px] text-vgold" />
       }
     ],
+    actions: [
+      { name: "Записаться на просмотр", href: "/academy#register" },
+      { name: "Присоединиться к бизнес-клубу", href: "/business-club" },
+      { name: "Написать нам", href: "mailto:info@veglobalsports.com" }
+    ],
     follow: "Следите за нами",
-    mapLabel: "Центральный Стадион",
-    mapSub: "Алматы, Казахстан",
+    mapLabel: "Алматы",
+    mapSub: "Казахстан",
     mapCoords: "43.2220° N, 76.8512° E",
     mapBtn: "Открыть в Картах"
   }
@@ -90,7 +91,22 @@ export default function ContactPage() {
 
         <div className="max-w-[1440px] mx-auto relative z-10">
           <span className="section-eyebrow">{t.heroEyebrow}</span>
-          <h1 className="section-heading">{t.heroTitle}<span className="text-vgold">{t.heroTitleAccent}</span></h1>
+          <h1 className="section-heading mb-4">{t.heroTitle}<span className="text-vgold">{t.heroTitleAccent}</span></h1>
+          <p className="section-sub">{t.heroSub}</p>
+
+          <div className="flex flex-wrap gap-4 mt-8">
+            {t.actions.map((a, i) => (
+              <Link
+                key={i}
+                href={a.href}
+                className={i === 0
+                  ? "bg-vgold text-vnavy font-barlow-condensed font-bold text-[12px] tracking-[2px] uppercase px-7 py-3 rounded-[6px] hover:bg-vgold-light transition-colors"
+                  : "border border-white/20 text-vwhite font-barlow-condensed font-bold text-[12px] tracking-[2px] uppercase px-7 py-3 rounded-[6px] hover:border-vgold hover:text-vgold transition-colors"}
+              >
+                {a.name}
+              </Link>
+            ))}
+          </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-[60px] items-start mt-12">
 

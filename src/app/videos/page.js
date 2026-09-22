@@ -7,27 +7,27 @@ import { motion } from "framer-motion";
 
 const translations = {
   en: {
-    heroEyebrow: "Veria Media",
-    heroTitle: "Premium ",
-    heroTitleAccent: "Video",
-    sub: "Exclusive match highlights, player interviews, and behind-the-scenes content.",
+    heroEyebrow: "VE-GlobalSportFC Media",
+    heroTitle: "From Almaty, ",
+    heroTitleAccent: "on camera.",
+    sub: "Match highlights, player interviews, and behind-the-scenes footage from a club still writing its story.",
     categories: ["All", "Highlights", "Interviews", "Academy"],
     watch: "Watch Now"
   },
   ru: {
-    heroEyebrow: "Медиа ВЕ-ГЛОБАЛСПОРТС",
-    heroTitle: "Премиум ",
-    heroTitleAccent: "Видео",
-    sub: "Эксклюзивные обзоры матчей, интервью с игроками и закулисный контент.",
+    heroEyebrow: "Медиа VE-GlobalSportFC",
+    heroTitle: "Из Алматы ",
+    heroTitleAccent: "в кадре.",
+    sub: "Обзоры матчей, интервью с игроками и закулисный контент клуба, который всё ещё пишет свою историю.",
     categories: ["Все", "Обзоры", "Интервью", "Академия"],
     watch: "Смотреть"
   }
 };
 
 const mockVideos = [
-  { id: "1", title: "Highlights: VE-GLOBALSPORTS FC 3–0 FC Kairat", category: "Highlights", date: "Mar 18, 2026", duration: "8:45" },
-  { id: "2", title: "Interview: K. Nurlan on joining the club", category: "Interviews", date: "Mar 16, 2026", duration: "12:20" },
-  { id: "3", title: "Academy Spotlight: U17 Champions", category: "Academy", date: "Mar 14, 2026", duration: "15:10" }
+  { id: "1", title: "Highlights: VE-GlobalSportFC 3–0 FC Kairat", category: "Highlights", date: "Mar 18, 2026", duration: "8:45" },
+  { id: "2", title: "Interview: Yassine Arouhi on the season so far", category: "Interviews", date: "Mar 16, 2026", duration: "12:20" },
+  { id: "3", title: "Academy Spotlight: U17–U19 Performance Stage", category: "Academy", date: "Mar 14, 2026", duration: "15:10" }
 ];
 
 export default function VideosPage() {
