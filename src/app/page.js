@@ -33,8 +33,8 @@ const translations = {
     ftCta1: "Meet the Squad",
     ftCta2: "View Fixtures",
     acEyebrow: "The Academy",
-    acTitle: "We're not just developing players. We're building a pipeline.",
-    acBody: "VE-GlobalSportFC Academy takes players from their first touch to their first professional trial — U8 through U19, structured so a nine-year-old in Almaty and a nineteen-year-old chasing a European move are both training inside the same club identity.",
+    acTitle:"We’re not just developing players. We’re building the next generation of football.",
+    acBody: "VE-GlobalSportFC Academy takes players from their first touch to their first professional trial — U8 through U19, giving every player a clear path to grow, compete, and take the next step in the game.",
     acStages: [
       { num: "01", range: "U8 – U10", title: "Foundation", desc: "Fall in love with the ball. Technical basics, coordination, confidence." },
       { num: "02", range: "U12 – U15", title: "Development", desc: "Learn to read the game. Tactical understanding, decision-making under pressure." },
@@ -71,8 +71,8 @@ const translations = {
     ftCta1: "Состав команды",
     ftCta2: "Расписание матчей",
     acEyebrow: "Академия",
-    acTitle: "Мы не просто развиваем игроков. Мы строим конвейер.",
-    acBody: "Академия VE-GlobalSportFC ведёт игроков от первого касания мяча до первого профессионального просмотра — от U8 до U19.",
+    acTitle: "Мы не просто развиваем игроков. Мы готовим следующее поколение футбола.",
+    acBody: "Академия VE-GlobalSportFC ведёт игроков от первого касания мяча до первого профессионального просмотра — от U8 до U19, помогая каждому игроку расти, конкурировать и делать следующий шаг в футболе.",
     acStages: [
       { num: "01", range: "U8 – U10", title: "Основа", desc: "Полюбить мяч. Технические основы, координация, уверенность." },
       { num: "02", range: "U12 – U15", title: "Развитие", desc: "Учиться читать игру. Тактическое понимание, принятие решений под давлением." },
