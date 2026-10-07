@@ -2,7 +2,7 @@
 
 import { useLanguage } from "@/app/context/LanguageContext";
 import { motion } from "framer-motion";
-import { findPlayer } from "@/lib/squad";
+import LineupPitch, { BenchPlayer } from "@/app/components/LineupPitch";
 
 const translations = {
   en: {
@@ -54,7 +54,6 @@ const translations = {
     lineupEyebrow: "Matchday Lineup",
     lineupTitle: "The XI, however we set up.",
     lineupSub: "A live template for the confirmed starting eleven and bench — updated per fixture from the official team sheet. Formation below is illustrative.",
-    lineLabels: ["Goalkeeper", "Defence", "Midfield", "Attack"],
     subsTitle: "Substitutes",
     staffTitle: "Coaching Staff",
     staff: [
@@ -78,7 +77,6 @@ const translations = {
     lineupEyebrow: "Состав на матч",
     lineupTitle: "Стартовый состав — как бы мы ни играли.",
     lineupSub: "Живой шаблон стартового состава и скамейки запасных — обновляется по протоколу матча. Формация ниже приведена для примера.",
-    lineLabels: ["Вратарь", "Защита", "Полузащита", "Атака"],
     subsTitle: "Запасные",
     staffTitle: "Тренерский штаб",
     staff: [
@@ -88,13 +86,22 @@ const translations = {
   }
 };
 
-// Illustrative 4-3-3 — shirt numbers resolve to names from the squad roster
+// Illustrative 4-3-3 — shirt numbers resolve to the squad roster.
+// x: 0..100 across the pitch (left -> right when attacking up), y: 0..100 from our goal line.
 const LINEUP = {
-  lines: [
-    [{ num: 45, pos: "GK" }],
-    [{ num: 2, pos: "RB" }, { num: 3, pos: "CB" }, { num: 20, pos: "CB" }, { num: 14, pos: "LB" }],
-    [{ num: 5, pos: "CDM" }, { num: 4, pos: "CM" }, { num: 18, pos: "CM" }],
-    [{ num: 7, pos: "LW" }, { num: 16, pos: "ST" }, { num: 10, pos: "RW" }]
+  formation: "4-3-3",
+  starters: [
+    { num: 45, pos: "GK", x: 50, y: 4 },
+    { num: 14, pos: "LB", x: 14, y: 30 },
+    { num: 20, pos: "CB", x: 37, y: 23 },
+    { num: 3, pos: "CB", x: 63, y: 23 },
+    { num: 2, pos: "RB", x: 86, y: 30 },
+    { num: 5, pos: "CDM", x: 50, y: 43 },
+    { num: 18, pos: "CM", x: 27, y: 58 },
+    { num: 4, pos: "CM", x: 73, y: 58 },
+    { num: 7, pos: "LW", x: 16, y: 80 },
+    { num: 16, pos: "ST", x: 50, y: 88 },
+    { num: 10, pos: "RW", x: 84, y: 80 }
   ],
   subs: [
     { num: 55, pos: "GK" },
@@ -104,8 +111,6 @@ const LINEUP = {
     { num: 28, pos: "ST" }
   ]
 };
-
-const withName = (p) => ({ ...p, name: findPlayer(p.num)?.name || "TBC" });
 
 export default function ManagementPage() {
   const { language } = useLanguage();
@@ -165,52 +170,27 @@ export default function ManagementPage() {
           <h2 className="section-heading mb-4">{t.lineupTitle}</h2>
           <p className="section-sub mb-12">{t.lineupSub}</p>
 
-          <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-10">
+          <LineupPitch formation={LINEUP.formation} starters={LINEUP.starters} language={language} />
 
-            {/* Formation by line */}
-            <div className="flex flex-col gap-8">
-              {LINEUP.lines.map((line, i) => (
-                <div key={i}>
-                  <div className="font-barlow-condensed font-bold text-[11px] tracking-[2px] uppercase text-vgold mb-4">{t.lineLabels[i]}</div>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                    {line.map(withName).map((p, j) => (
-                      <div key={j} className="bg-vnavy-card border border-white/5 rounded-[12px] p-4 text-center hover:border-vsky/30 transition-all">
-                        <div className="w-10 h-10 mx-auto rounded-full bg-vnavy border border-vgold/30 flex items-center justify-center font-bebas text-lg text-vgold mb-2">
-                          {p.num}
-                        </div>
-                        <div className="font-barlow-condensed font-semibold text-xs text-vwhite leading-tight">{p.name}</div>
-                        <div className="font-barlow-condensed text-[10px] tracking-[1px] uppercase text-vmuted mt-1">{p.pos}</div>
-                      </div>
-                    ))}
+          <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-10 mt-10">
+            <div>
+              <div className="font-barlow-condensed font-bold text-[11px] tracking-[2px] uppercase text-vsky mb-4">{t.subsTitle}</div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
+                {LINEUP.subs.map((s) => (
+                  <BenchPlayer key={s.num} num={s.num} pos={s.pos} language={language} />
+                ))}
+              </div>
+            </div>
+            <div>
+              <div className="font-barlow-condensed font-bold text-[11px] tracking-[2px] uppercase text-vsky mb-4">{t.staffTitle}</div>
+              <div className="flex flex-col gap-2">
+                {t.staff.map((s, i) => (
+                  <div key={i} className="bg-vnavy-card border border-white/5 rounded-[8px] px-4 py-3 text-sm font-barlow-condensed text-vwhite">
+                    {s}
                   </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Substitutes & Staff */}
-            <div className="flex flex-col gap-10">
-              <div>
-                <div className="font-barlow-condensed font-bold text-[11px] tracking-[2px] uppercase text-vsky mb-4">{t.subsTitle}</div>
-                <div className="flex flex-wrap gap-2">
-                  {LINEUP.subs.map(withName).map((s, i) => (
-                    <div key={i} className="bg-vnavy-card border border-white/5 rounded-[8px] px-3 py-2 text-xs font-barlow-condensed text-vmuted">
-                      {s.num} — {s.name}{s.pos ? ` (${s.pos})` : ""}
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <div>
-                <div className="font-barlow-condensed font-bold text-[11px] tracking-[2px] uppercase text-vsky mb-4">{t.staffTitle}</div>
-                <div className="flex flex-col gap-2">
-                  {t.staff.map((s, i) => (
-                    <div key={i} className="bg-vnavy-card border border-white/5 rounded-[8px] px-4 py-3 text-sm font-barlow-condensed text-vwhite">
-                      {s}
-                    </div>
-                  ))}
-                </div>
+                ))}
               </div>
             </div>
-
           </div>
         </div>
       </section>
