@@ -6,6 +6,7 @@ import { collection, getDocs } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { LOCAL_SQUAD, fromFirestorePlayer, POSITION_LABELS, CATEGORY_LABELS, NATIONALITY_LABELS } from "@/lib/squad";
 import { motion, AnimatePresence } from "framer-motion";
+import Flag from "@/app/components/Flag";
 
 const translations = {
   en: {
@@ -150,6 +151,12 @@ export default function SquadPage() {
                               </div>
                             )}
 
+                            <Flag
+                              code={player.nationality}
+                              label={nationalities[player.nationality]}
+                              className="absolute top-3 right-3 z-10 w-[34px] h-[23px] rounded-[3px] ring-2 ring-vnavy/70 shadow-[0_2px_8px_rgba(0,0,0,0.45)]"
+                            />
+
                             {/* Position Badge */}
                             <div
                               className="absolute bottom-3 left-4 z-10 font-barlow-condensed font-bold text-[10px] tracking-[1.5px] uppercase px-2 py-0.5 rounded-[4px]"
@@ -169,7 +176,14 @@ export default function SquadPage() {
                           <div className="player-card-info">
                             <div className="player-num">#{player.number}</div>
                             <div className="player-web-name">{player.name}</div>
-                            <div className="player-nat">{nationalities[player.nationality] || player.nationality}</div>
+                            <div className="player-nat flex items-center gap-2">
+                              <Flag
+                                code={player.nationality}
+                                label={nationalities[player.nationality]}
+                                className="w-[22px] h-[15px] shrink-0 rounded-[2px] ring-1 ring-white/15"
+                              />
+                              <span>{nationalities[player.nationality] || player.nationality}</span>
+                            </div>
                           </div>
                         </motion.div>
                       );
