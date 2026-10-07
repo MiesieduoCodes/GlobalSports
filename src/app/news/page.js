@@ -93,7 +93,7 @@ function NewsPageContent() {
   });
 
   return (
-    <main className="bg-vnavy min-h-screen pt-[72px]">
+    <main className="bg-vnavy min-h-screen pt-[88px]">
 
       {/* Search Header */}
       <section className="relative py-24 px-6 md:px-[60px] border-b border-[rgba(255,255,255,0.06)] overflow-hidden">
@@ -126,7 +126,7 @@ function NewsPageContent() {
       </section>
 
       {/* Category Pills */}
-      <div className="sticky top-[72px] z-20 bg-vnavy/80 backdrop-blur-md border-b border-[rgba(255,255,255,0.06)] py-4">
+      <div className="sticky top-[88px] z-20 bg-vnavy/80 backdrop-blur-md border-b border-[rgba(255,255,255,0.06)] py-4">
         <div className="max-w-[1440px] mx-auto px-6 md:px-[60px] flex overflow-x-auto gap-3 no-scrollbar justify-center">
           {t.categories.map((cat) => (
             <button

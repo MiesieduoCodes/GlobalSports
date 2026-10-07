@@ -9,8 +9,8 @@ import { Goal, Trophy, Target, Users, Circle, Zap, Star, Heart, Hexagon, Triangl
 const translations = {
   en: {
     badge: "Almaty, Kazakhstan · Founded 2017",
-    title: "Almaty's club.",
-    titleAccent: "Kazakhstan's ambition.",
+    title: "Many nations.",
+    titleAccent: "One shirt.",
     subtitle: "Founded in 2017 by Veria Lawrence Ebiks, VE-GlobalSportFC is one of the fastest-rising football organisations in Kazakhstan — a first team built to compete now, and an academy built to compete for the next twenty years.",
     btnPrimary: "VIEW MATCHES",
     btnSecondary: "MEET THE SQUAD",
@@ -19,14 +19,14 @@ const translations = {
     stats: [
       { label: "CURRENT LEAGUE POSITION", val: "2ND", color: "text-vsky" },
       { label: "WINS – DRAWS – LOSSES", val: "14–5–3" },
-      { label: "FIRST-TEAM PLAYERS", val: "30" },
-      { label: "NATIONALITIES", val: "5+" }
+      { label: "FIRST-TEAM PLAYERS", val: "21" },
+      { label: "NATIONALITIES", val: "5" }
     ]
   },
   ru: {
     badge: "Алматы, Казахстан · Основан в 2017",
-    title: "Клуб Алматы.",
-    titleAccent: "Амбиции Казахстана.",
+    title: "Много наций.",
+    titleAccent: "Одна форма.",
     subtitle: "Основанный в 2017 году Верией Лоуренсом Эбиксом, VE-GlobalSportFC — одна из самых быстрорастущих футбольных организаций Казахстана: первая команда, готовая побеждать сейчас, и академия, построенная на двадцать лет вперёд.",
     btnPrimary: "СМОТРЕТЬ МАТЧИ",
     btnSecondary: "СОСТАВ КОМАНДЫ",
@@ -35,8 +35,8 @@ const translations = {
     stats: [
       { label: "ТЕКУЩАЯ ПОЗИЦИЯ В ЛИГЕ", val: "2-Е", color: "text-vsky" },
       { label: "ПОБЕДЫ – НИЧЬИ – ПОРАЖЕНИЯ", val: "14–5–3" },
-      { label: "ИГРОКОВ ПЕРВОЙ КОМАНДЫ", val: "30" },
-      { label: "НАЦИОНАЛЬНОСТЕЙ", val: "5+" }
+      { label: "ИГРОКОВ ПЕРВОЙ КОМАНДЫ", val: "21" },
+      { label: "НАЦИОНАЛЬНОСТЕЙ", val: "5" }
     ]
   }
 };
@@ -70,7 +70,7 @@ const Hero = () => {
   }, []);
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center px-6 md:px-[60px] pt-[72px] pb-[80px] overflow-hidden">
+    <section className="relative min-h-screen flex items-center justify-center px-6 md:px-[60px] pt-[88px] pb-[80px] overflow-hidden">
       {/* Dynamic Background Image */}
       <div className="absolute inset-0">
         <div className="hero-bg-image" />

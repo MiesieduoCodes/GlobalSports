@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useLanguage } from "@/app/context/LanguageContext";
@@ -40,10 +40,24 @@ const translations = {
 
 const Navbar = () => {
   const pathname = usePathname();
-  const { language } = useLanguage();
+  const { language, setLanguage } = useLanguage();
   const t = translations[language] || translations.en;
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  // Longer labels (e.g. Russian) can overflow the desktop link row; fall back to the menu drawer
+  const linksRef = useRef(null);
+  const [linksFit, setLinksFit] = useState(true);
+
+  useEffect(() => {
+    const el = linksRef.current;
+    if (!el) return;
+    const check = () => setLinksFit(el.scrollWidth <= el.clientWidth + 1);
+    // Watch the links too: their width changes when a web font (e.g. the Cyrillic fallback) arrives
+    const observer = new ResizeObserver(check);
+    [el, ...el.children].forEach((node) => observer.observe(node));
+    check();
+    return () => observer.disconnect();
+  }, [language]);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -66,26 +80,26 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className={`navbar flex items-center justify-between px-6 md:px-[40px] xl:px-[60px] h-[72px] fixed top-0 left-0 right-0 z-[1000] transition-all duration-300 ${scrolled ? 'bg-[rgba(8,12,24,0.95)] backdrop-blur-xl border-b border-[rgba(200,168,75,0.2)]' : 'bg-[rgba(8,12,24,0.85)] backdrop-blur-md border-b border-[rgba(255,255,255,0.06)]'}`}>
+      <nav className={`navbar flex items-center justify-between px-6 md:px-[40px] 2xl:px-[60px] h-[88px] fixed top-0 left-0 right-0 z-[1000] transition-all duration-300 ${scrolled ? 'bg-[rgba(8,12,24,0.95)] backdrop-blur-xl border-b border-[rgba(200,168,75,0.2)]' : 'bg-[rgba(8,12,24,0.85)] backdrop-blur-md border-b border-[rgba(255,255,255,0.06)]'}`}>
 
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-3.5 no-underline group h-full shrink-0" >
-        <Image src="/logo.png" alt="VE-GLOBALSPORTS FC" width={42} height={42} />
+        <Link href="/" className="flex items-center gap-4 no-underline group h-full shrink-0" >
+        <Image src="/logo.png" alt="VE-GLOBALSPORTS FC" width={50} height={60} className="shrink-0" style={{ height: 60, width: "auto" }} />
           <div className="hidden sm:flex flex-col leading-none">
-            <span className="font-bebas text-[18px] text-vwhite tracking-[1px] group-hover:text-vgold transition-colors truncate max-w-[180px] sm:max-w-none">VE-GLOBALSPORTS FC</span>
-            <span className="font-barlow-condensed text-[10px] font-bold tracking-[3px] uppercase text-vsky">{t.city}</span>
+            <span className="font-bebas text-[23px] text-vwhite tracking-[1px] group-hover:text-vgold transition-colors truncate max-w-[180px] sm:max-w-none">VE-GLOBALSPORTS FC</span>
+            <span className="font-barlow-condensed text-[11px] font-bold tracking-[3px] uppercase text-vsky mt-0.5">{t.city}</span>
           </div>
         </Link>
 
         {/* Links */}
-        <div className="hidden xl:flex items-center gap-5 2xl:gap-7 mx-4 overflow-hidden">
+        <div ref={linksRef} className={`hidden xl:flex items-center gap-3.5 2xl:gap-7 mx-4 overflow-hidden ${linksFit ? "" : "invisible"}`} aria-hidden={!linksFit}>
           {navLinks.map((link) => {
             const isActive = pathname === link.path;
             return (
               <Link
                 key={link.path}
                 href={link.path}
-                className={`font-barlow-condensed text-[12px] font-bold tracking-[1.5px] uppercase transition-all relative py-1 whitespace-nowrap hover:text-vwhite ${isActive ? 'text-vgold' : 'text-vmuted'}`}
+                className={`font-barlow-condensed text-[12px] 2xl:text-[15px] font-bold tracking-[1.5px] uppercase transition-all relative py-1 whitespace-nowrap hover:text-vwhite ${isActive ? 'text-vgold' : 'text-vmuted'}`}
               >
                 {link.name}
                 <span className={`absolute bottom-[-4px] left-0 right-0 h-[2px] bg-vgold transition-transform origin-left ${isActive ? 'scale-x-100' : 'scale-x-0'}`} />
@@ -95,19 +109,33 @@ const Navbar = () => {
         </div>
 
         {/* CTA & Mobile Toggle */}
-        <div className="flex items-center gap-4 ml-4 shrink-0">
+        <div className="flex items-center gap-3 2xl:gap-4 ml-3 shrink-0">
+          <div className="flex items-center rounded-[6px] border border-white/10 overflow-hidden" role="group" aria-label="Language">
+            {["en", "ru"].map((lang) => (
+              <button
+                key={lang}
+                type="button"
+                onClick={() => setLanguage(lang)}
+                aria-pressed={language === lang}
+                className={`px-2.5 py-2 font-barlow-condensed font-bold text-[12px] tracking-[1.5px] uppercase transition-colors ${language === lang ? "bg-white/10 text-vgold" : "text-vmuted hover:text-vwhite"}`}
+              >
+                {lang}
+              </button>
+            ))}
+          </div>
+
           <Link
             href="/academy#register"
-            className="bg-vgold text-vnavy px-5 py-2.5 rounded-[6px] font-barlow-condensed font-bold text-[12px] tracking-[2px] uppercase hover:bg-vgold-light transition-colors hidden sm:block whitespace-nowrap"
+            className="bg-vgold text-vnavy px-5 2xl:px-6 py-3 rounded-[6px] font-barlow-condensed font-bold text-[13px] 2xl:text-[14px] tracking-[2px] uppercase hover:bg-vgold-light transition-colors hidden sm:block whitespace-nowrap"
           >
             {t.cta}
           </Link>
 
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="xl:hidden text-vwhite hover:text-vgold transition-colors p-1"
+            className={`${linksFit ? "xl:hidden" : ""} text-vwhite hover:text-vgold transition-colors p-1`}
           >
-            {mobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+            {mobileMenuOpen ? <X size={32} /> : <Menu size={32} />}
           </button>
         </div>
 
@@ -115,7 +143,7 @@ const Navbar = () => {
 
       {/* Mobile Menu Drawer */}
       <div
-        className={`fixed inset-0 z-[998] bg-vnavy transition-all duration-500 ease-in-out xl:hidden overflow-y-auto ${mobileMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+        className={`fixed inset-0 z-[998] bg-vnavy transition-all duration-500 ease-in-out ${linksFit ? "xl:hidden" : ""} overflow-y-auto ${mobileMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
       >
         <div className={`flex flex-col items-center justify-center min-h-full gap-6 px-6 py-24 transition-transform duration-500 ${mobileMenuOpen ? 'translate-y-0' : 'translate-y-10'}`}>
           {navLinks.map((link) => {

@@ -4,6 +4,7 @@ import { useLanguage } from "@/app/context/LanguageContext";
 import { useEffect, useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "@/lib/firebase";
+import { LOCAL_SQUAD, fromFirestorePlayer, POSITION_LABELS, CATEGORY_LABELS, NATIONALITY_LABELS } from "@/lib/squad";
 import { motion, AnimatePresence } from "framer-motion";
 
 const translations = {
@@ -11,7 +12,7 @@ const translations = {
     heroTitle: "First Team ",
     heroTitleAccent: "Squad",
     heroEyebrow: "2025/26 Season",
-    heroSub: "Under Sporting Director Ontanwa Louis — a blend of Kazakh talent and international quality. Thirty players. Five-plus nationalities. One dressing room.",
+    heroSub: "Under Sporting Director Ontanwa Louis — a blend of Kazakh talent and international quality. Twenty-one players. Five nationalities. One dressing room.",
     filters: {
       all: "All Players",
       gk: "Goalkeepers",
@@ -31,7 +32,7 @@ const translations = {
     heroTitle: "Основной ",
     heroTitleAccent: "Состав",
     heroEyebrow: "Сезон 2025/26",
-    heroSub: "Под руководством спортивного директора Онтанва Луиса — сочетание казахстанских талантов и международного качества. Тридцать игроков. Более пяти национальностей.",
+    heroSub: "Под руководством спортивного директора Онтанва Луиса — сочетание казахстанских талантов и международного качества. Двадцать один игрок. Пять национальностей. Одна раздевалка.",
     filters: {
       all: "Все Игроки",
       gk: "Вратари",
@@ -55,66 +56,29 @@ export default function SquadPage() {
   const { language } = useLanguage();
   const t = translations[language] || translations.en;
 
-  const [players, setPlayers] = useState([]);
   const [activeFilter, setActiveFilter] = useState("all");
-  const [isLoading, setIsLoading] = useState(true);
+  // Local roster renders immediately; Firestore (managed in /admin) replaces it once loaded
+  const [players, setPlayers] = useState(LOCAL_SQUAD);
+  const positions = POSITION_LABELS[language] || POSITION_LABELS.en;
+  const categories = CATEGORY_LABELS[language] || CATEGORY_LABELS.en;
+  const nationalities = NATIONALITY_LABELS[language] || NATIONALITY_LABELS.en;
 
   useEffect(() => {
-    const loadPlayers = async () => {
-      try {
-        const snapshot = await getDocs(collection(db, "players"));
-        const docs = snapshot.docs.map(doc => {
-          const data = doc.data();
-          return {
-            id: doc.id,
-            ...data,
-            name: data.name || "Unknown Player",
-            position: data.position || "Midfielder",
-            image: data.image || data.imageUrl || ""
-          };
-        });
-        setPlayers(docs);
-      } catch (err) {
-        console.error("Error fetching players:", err);
-        if (err.code === 'permission-denied' || err.message?.includes('permission')) {
-          setPlayers([{ 
-            id: 'error', 
-            name: "Database Access Error", 
-            position: "Admin action required", 
-            nationality: "Please update Firebase Security Rules",
-            image: "" 
-          }]);
-        } else {
-          setPlayers([]);
+    getDocs(collection(db, "players"))
+      .then((snapshot) => {
+        if (!snapshot.empty) {
+          setPlayers(snapshot.docs.map((d) => fromFirestorePlayer(d.id, d.data())));
         }
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    loadPlayers();
+      })
+      .catch((err) => console.error("Error fetching players:", err));
   }, []);
 
+  const byCategory = (cat) => players.filter(p => p.category === cat).sort((a, b) => a.number - b.number);
   const categorized = {
-    gk: players.filter(p => {
-      const pos = (p.position || "").toLowerCase();
-      const cat = (p.category || "").toLowerCase();
-      return cat === "gk" || pos.includes("gk") || pos.includes("goalkeeper");
-    }),
-    def: players.filter(p => {
-      const pos = (p.position || "").toLowerCase();
-      const cat = (p.category || "").toLowerCase();
-      return cat === "def" || pos.includes("def") || pos.includes("cb") || pos.includes("lb") || pos.includes("rb");
-    }),
-    mid: players.filter(p => {
-      const pos = (p.position || "").toLowerCase();
-      const cat = (p.category || "").toLowerCase();
-      return cat === "mid" || pos.includes("mid") || pos.includes("dm") || pos.includes("cm") || pos.includes("am");
-    }),
-    fwd: players.filter(p => {
-      const pos = (p.position || "").toLowerCase();
-      const cat = (p.category || "").toLowerCase();
-      return cat === "fwd" || pos.includes("fwd") || pos.includes("st") || pos.includes("lw") || pos.includes("rw") || pos.includes("att");
-    })
+    gk: byCategory("gk"),
+    def: byCategory("def"),
+    mid: byCategory("mid"),
+    fwd: byCategory("fwd")
   };
 
   const sections = activeFilter === "all" ? ["gk", "def", "mid", "fwd"] : [activeFilter];
@@ -175,13 +139,13 @@ export default function SquadPage() {
                           <div className={`player-card-top ${sectionId} !h-[260px]`}>
                             {/* Huge Background Number */}
                             <div className="absolute top-[45%] left-1/2 -translate-x-1/2 -translate-y-1/2 font-bebas text-[180px] text-vwhite/[0.04] leading-none pointer-events-none z-0 group-hover:scale-110 group-hover:text-vwhite/[0.08] transition-all duration-700">
-                              {player.jerseyNumber || "0"}
+                              {player.number}
                             </div>
 
                             {/* Background Image */}
                             {player.image && (
                               <div className="absolute inset-0 z-0">
-                                <img src={player.image} alt={player.name} className="w-full h-full object-cover object-top opacity-75 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700" />
+                                <img src={player.image} alt={player.name} loading="lazy" className="w-full h-full object-cover object-top opacity-75 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700" />
                                 <div className="absolute inset-0 bg-gradient-to-t from-vnavy-card via-vnavy-card/20 to-transparent" />
                               </div>
                             )}
@@ -199,13 +163,13 @@ export default function SquadPage() {
                                     'white'
                               }}
                             >
-                              {player.position || sectionId.toUpperCase()}
+                              {positions[player.positionKey] || categories[player.category]}
                             </div>
                           </div>
                           <div className="player-card-info">
-                            <div className="player-num">#{player.jerseyNumber || "0"}</div>
+                            <div className="player-num">#{player.number}</div>
                             <div className="player-web-name">{player.name}</div>
-                            <div className="player-nat">{player.nationality || "Kazakhstan"}</div>
+                            <div className="player-nat">{nationalities[player.nationality] || player.nationality}</div>
                           </div>
                         </motion.div>
                       );

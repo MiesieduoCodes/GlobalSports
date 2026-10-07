@@ -2,6 +2,7 @@
 
 import { useLanguage } from "@/app/context/LanguageContext";
 import { motion } from "framer-motion";
+import { findPlayer } from "@/lib/squad";
 
 const translations = {
   en: {
@@ -52,46 +53,9 @@ const translations = {
     ],
     lineupEyebrow: "Matchday Lineup",
     lineupTitle: "The XI, however we set up.",
-    lineupSub: "A live template for the confirmed starting eleven and bench — updated per fixture from the official team sheet. Formation and names below are illustrative.",
-    lines: [
-      {
-        label: "Goalkeeper",
-        players: [{ num: 1, name: "Player Name", pos: "GK" }]
-      },
-      {
-        label: "Defence",
-        players: [
-          { num: 2, name: "Alikhan Tokat", pos: "RB" },
-          { num: 4, name: "Nurtas Hairulla", pos: "CB" },
-          { num: 5, name: "Rakhat Dinash", pos: "CB" },
-          { num: 3, name: "Serikbay Shyngyskhan", pos: "LB" }
-        ]
-      },
-      {
-        label: "Midfield",
-        players: [
-          { num: 6, name: "Nursultan Omuraliyeu", pos: "CDM" },
-          { num: 8, name: "Samson Alabi", pos: "CM" },
-          { num: 10, name: "Yeraly Zhomartuly", pos: "CAM" }
-        ]
-      },
-      {
-        label: "Attack",
-        players: [
-          { num: 7, name: "Yassine Arouhi", pos: "LW" },
-          { num: 9, name: "Player Name", pos: "ST" },
-          { num: 11, name: "Bekzhan Bakytzhanuky", pos: "RW" }
-        ]
-      }
-    ],
+    lineupSub: "A live template for the confirmed starting eleven and bench — updated per fixture from the official team sheet. Formation below is illustrative.",
+    lineLabels: ["Goalkeeper", "Defence", "Midfield", "Attack"],
     subsTitle: "Substitutes",
-    subs: [
-      { num: 12, name: "Player Name", pos: "GK" },
-      { num: 14, name: "Player Name", pos: "" },
-      { num: 15, name: "Player Name", pos: "" },
-      { num: 16, name: "Player Name", pos: "" },
-      { num: 17, name: "Player Name", pos: "" }
-    ],
     staffTitle: "Coaching Staff",
     staff: [
       "Bernard Cyriaque Erokotan — Head Coach",
@@ -113,34 +77,9 @@ const translations = {
     ],
     lineupEyebrow: "Состав на матч",
     lineupTitle: "Стартовый состав — как бы мы ни играли.",
-    lineupSub: "Живой шаблон стартового состава и скамейки запасных — обновляется по протоколу матча. Формация и имена ниже приведены для примера.",
-    lines: [
-      { label: "Вратарь", players: [{ num: 1, name: "Player Name", pos: "GK" }] },
-      { label: "Защита", players: [
-        { num: 2, name: "Alikhan Tokat", pos: "RB" },
-        { num: 4, name: "Nurtas Hairulla", pos: "CB" },
-        { num: 5, name: "Rakhat Dinash", pos: "CB" },
-        { num: 3, name: "Serikbay Shyngyskhan", pos: "LB" }
-      ] },
-      { label: "Полузащита", players: [
-        { num: 6, name: "Nursultan Omuraliyeu", pos: "CDM" },
-        { num: 8, name: "Samson Alabi", pos: "CM" },
-        { num: 10, name: "Yeraly Zhomartuly", pos: "CAM" }
-      ] },
-      { label: "Атака", players: [
-        { num: 7, name: "Yassine Arouhi", pos: "LW" },
-        { num: 9, name: "Player Name", pos: "ST" },
-        { num: 11, name: "Bekzhan Bakytzhanuky", pos: "RW" }
-      ] }
-    ],
+    lineupSub: "Живой шаблон стартового состава и скамейки запасных — обновляется по протоколу матча. Формация ниже приведена для примера.",
+    lineLabels: ["Вратарь", "Защита", "Полузащита", "Атака"],
     subsTitle: "Запасные",
-    subs: [
-      { num: 12, name: "Player Name", pos: "GK" },
-      { num: 14, name: "Player Name", pos: "" },
-      { num: 15, name: "Player Name", pos: "" },
-      { num: 16, name: "Player Name", pos: "" },
-      { num: 17, name: "Player Name", pos: "" }
-    ],
     staffTitle: "Тренерский штаб",
     staff: [
       "Бернард Сириак Эрокотан — Главный тренер",
@@ -148,6 +87,25 @@ const translations = {
     ]
   }
 };
+
+// Illustrative 4-3-3 — shirt numbers resolve to names from the squad roster
+const LINEUP = {
+  lines: [
+    [{ num: 45, pos: "GK" }],
+    [{ num: 2, pos: "RB" }, { num: 3, pos: "CB" }, { num: 20, pos: "CB" }, { num: 14, pos: "LB" }],
+    [{ num: 5, pos: "CDM" }, { num: 4, pos: "CM" }, { num: 18, pos: "CM" }],
+    [{ num: 7, pos: "LW" }, { num: 16, pos: "ST" }, { num: 10, pos: "RW" }]
+  ],
+  subs: [
+    { num: 55, pos: "GK" },
+    { num: 29, pos: "RB" },
+    { num: 9, pos: "MF" },
+    { num: 11, pos: "W" },
+    { num: 28, pos: "ST" }
+  ]
+};
+
+const withName = (p) => ({ ...p, name: findPlayer(p.num)?.name || "TBC" });
 
 export default function ManagementPage() {
   const { language } = useLanguage();
@@ -211,11 +169,11 @@ export default function ManagementPage() {
 
             {/* Formation by line */}
             <div className="flex flex-col gap-8">
-              {t.lines.map((line, i) => (
+              {LINEUP.lines.map((line, i) => (
                 <div key={i}>
-                  <div className="font-barlow-condensed font-bold text-[11px] tracking-[2px] uppercase text-vgold mb-4">{line.label}</div>
+                  <div className="font-barlow-condensed font-bold text-[11px] tracking-[2px] uppercase text-vgold mb-4">{t.lineLabels[i]}</div>
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                    {line.players.map((p, j) => (
+                    {line.map(withName).map((p, j) => (
                       <div key={j} className="bg-vnavy-card border border-white/5 rounded-[12px] p-4 text-center hover:border-vsky/30 transition-all">
                         <div className="w-10 h-10 mx-auto rounded-full bg-vnavy border border-vgold/30 flex items-center justify-center font-bebas text-lg text-vgold mb-2">
                           {p.num}
@@ -234,7 +192,7 @@ export default function ManagementPage() {
               <div>
                 <div className="font-barlow-condensed font-bold text-[11px] tracking-[2px] uppercase text-vsky mb-4">{t.subsTitle}</div>
                 <div className="flex flex-wrap gap-2">
-                  {t.subs.map((s, i) => (
+                  {LINEUP.subs.map(withName).map((s, i) => (
                     <div key={i} className="bg-vnavy-card border border-white/5 rounded-[8px] px-3 py-2 text-xs font-barlow-condensed text-vmuted">
                       {s.num} — {s.name}{s.pos ? ` (${s.pos})` : ""}
                     </div>

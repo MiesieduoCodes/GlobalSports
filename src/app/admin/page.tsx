@@ -4,12 +4,13 @@ export const dynamic = "force-dynamic";
 
 import { useEffect, useState, useRef } from "react";
 import type React from "react";
-import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from "firebase/firestore";
+import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, writeBatch } from "firebase/firestore";
 import { db, auth, storage } from "@/lib/firebase";
 import { ref as storageRef, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "firebase/auth";
 import type { NewsItem, MatchItem, VideoItem, LocalizedText } from "@/types/content";
+import { SQUAD, squadDocId, toFirestorePlayer, CATEGORY_TO_POSITION } from "@/lib/squad";
 
 const tabs = [
   { id: "news" as const, label: "📰 News", icon: "📰" },
@@ -24,6 +25,8 @@ type PlayerItem = {
   id: string;
   name: string;
   position: string;
+  positionKey?: string | null;
+  category?: string;
   nationality: string;
   jerseyNumber: number;
   image: string;
@@ -1516,6 +1519,18 @@ function VideosAdminSection() {
 // ============================================
 // PLAYERS ADMIN SECTION (NEW)
 // ============================================
+const POSITION_CATEGORY: Record<string, string> = Object.fromEntries(
+  Object.entries(CATEGORY_TO_POSITION).map(([cat, pos]) => [pos, cat])
+);
+
+// Squad page sections come from `category`; the detailed label (`positionKey`) only
+// survives while the player stays in the same section.
+function categoryFields(form: Partial<PlayerItem>) {
+  const category = POSITION_CATEGORY[form.position ?? ""] ?? "mid";
+  const positionKey = form.category === category ? form.positionKey ?? null : null;
+  return { category, positionKey };
+}
+
 function PlayersAdminSection() {
   const [items, setItems] = useState<PlayerItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -1537,11 +1552,65 @@ function PlayersAdminSection() {
   });
   const [query, setQuery] = useState("");
   const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
+  const [importOpen, setImportOpen] = useState(false);
+  const [removeStale, setRemoveStale] = useState(false);
+  const [importResult, setImportResult] = useState<string | null>(null);
   const formRef = useRef<HTMLDivElement>(null);
+
+  const rosterIds = new Set(SQUAD.map(squadDocId));
+  const stalePlayers = items.filter((item) => !rosterIds.has(item.id));
 
   useEffect(() => {
     load();
   }, []);
+
+  // Writes the first-team roster from src/lib/squad.js. Doc ids are fixed (squad-<number>),
+  // so re-running updates the same players instead of duplicating them. Stats, stories and
+  // translations already edited here are kept.
+  async function importRoster() {
+    setSaving(true);
+    setImportResult(null);
+    try {
+      const existingIds = new Set(items.map((item) => item.id));
+      const batch = writeBatch(db);
+      SQUAD.forEach((p) => {
+        const id = squadDocId(p);
+        const defaults = existingIds.has(id)
+          ? {}
+          : {
+              story: "",
+              strengths: "",
+              joinYear: new Date().getFullYear().toString(),
+              appearances: 0,
+              goals: 0,
+              assists: 0,
+              cleanSheets: 0,
+              translations: {},
+            };
+        batch.set(doc(db, "players", id), { ...defaults, ...toFirestorePlayer(p) }, { merge: true });
+      });
+      if (removeStale) {
+        stalePlayers.forEach((item) => batch.delete(doc(db, "players", item.id)));
+      }
+      await batch.commit();
+      setImportResult(
+        `Imported ${SQUAD.length} players` + (removeStale && stalePlayers.length ? `, removed ${stalePlayers.length}.` : ".")
+      );
+      setImportOpen(false);
+      setRemoveStale(false);
+      await load();
+    } catch (error) {
+      console.error("Roster import failed:", error);
+      const code = (error as { code?: string })?.code;
+      setImportResult(
+        code === "permission-denied"
+          ? "Permission denied — this account needs the admin claim (scripts/set-admin-user.js)."
+          : "Import failed — see the browser console for details."
+      );
+    } finally {
+      setSaving(false);
+    }
+  }
 
   async function load() {
     setLoading(true);
@@ -1630,6 +1699,7 @@ function PlayersAdminSection() {
         assists: Number(form.assists) || 0,
         cleanSheets: Number(form.cleanSheets) || 0,
         translations: (form as any).translations || {},
+        ...categoryFields(form),
       };
 
       // Check if trying to update a fallback player (starts with 'fb-')
@@ -1714,6 +1784,63 @@ function PlayersAdminSection() {
           >
             + Add Player
           </button>
+        </div>
+
+        <div className="mb-6">
+          {!importOpen ? (
+            <div className="flex flex-wrap items-center gap-3">
+              <button
+                type="button"
+                onClick={() => { setImportOpen(true); setImportResult(null); }}
+                disabled={loading || saving}
+                className="px-4 py-2 text-sm rounded-xl border border-blue-300 dark:border-blue-700 text-blue-700 dark:text-blue-300 font-semibold hover:bg-blue-50 dark:hover:bg-blue-900/20 disabled:opacity-50"
+              >
+                ⬇ Import squad roster ({SQUAD.length} players)
+              </button>
+              {importResult && <p className="text-sm text-gray-600 dark:text-gray-300">{importResult}</p>}
+            </div>
+          ) : (
+            <div className="p-4 rounded-xl border border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-900/20 space-y-3">
+              <p className="text-sm text-gray-800 dark:text-gray-200">
+                Adds or updates the {SQUAD.length} first-team players from the squad roster — names, numbers,
+                positions, nationalities and photos. Stats, stories and translations already entered here are kept.
+              </p>
+              {stalePlayers.length > 0 && (
+                <label className="flex items-start gap-2 text-sm text-gray-800 dark:text-gray-200">
+                  <input
+                    type="checkbox"
+                    checked={removeStale}
+                    onChange={(e) => setRemoveStale(e.target.checked)}
+                    className="mt-1"
+                  />
+                  <span>
+                    Also delete the {stalePlayers.length} player{stalePlayers.length === 1 ? "" : "s"} not in the roster:{" "}
+                    <span className="text-gray-600 dark:text-gray-400">
+                      {stalePlayers.map((item) => `#${item.jerseyNumber} ${item.name}`).join(", ")}
+                    </span>
+                  </span>
+                </label>
+              )}
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={importRoster}
+                  disabled={saving}
+                  className="px-4 py-2 text-sm rounded-xl bg-blue-600 text-white font-semibold disabled:opacity-50"
+                >
+                  {saving ? "Importing…" : removeStale && stalePlayers.length ? "Import and delete" : "Import"}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => { setImportOpen(false); setRemoveStale(false); }}
+                  disabled={saving}
+                  className="px-4 py-2 text-sm rounded-xl border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          )}
         </div>
 
         <form onSubmit={handleSubmit} className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">

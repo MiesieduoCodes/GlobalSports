@@ -17,9 +17,9 @@ export default {
 					'"Segoe UI"',
 					'sans-serif',
 				],
-				bebas: ['"Bebas Neue"', 'sans-serif'],
+				bebas: ['"Bebas Neue"', 'Oswald', 'sans-serif'],
 				barlow: ['Barlow', 'sans-serif'],
-				'barlow-condensed': ['"Barlow Condensed"', 'sans-serif'],
+				'barlow-condensed': ['"Barlow Condensed"', '"Roboto Condensed"', 'sans-serif'],
 			},
 			colors: {
 				vgold: {

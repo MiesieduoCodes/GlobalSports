@@ -124,7 +124,7 @@ export default function Footer() {
 
           <div className="col-span-2 md:col-span-3 lg:col-span-1 flex flex-col gap-5">
             <Link href="/" className="inline-block hover:opacity-80 transition-opacity">
-            <Image src="/logo.png" alt="VE-GLOBALSPORTS" width={60} height={60} />
+            <Image src="/logo.png" alt="VE-GLOBALSPORTS" width={50} height={60} style={{ height: 60, width: "auto" }} />
             </Link>
             <div className="font-bebas text-[28px] text-vwhite tracking-[2px]">{t.brandName}</div>
             <div className="text-[12px] text-vmuted leading-relaxed max-w-[280px]">

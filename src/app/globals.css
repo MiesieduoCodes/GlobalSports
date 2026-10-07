@@ -88,7 +88,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: 'Bebas Neue', cursive;
+  font-family: 'Bebas Neue', 'Oswald', sans-serif;
   letter-spacing: 1px;
 }
 
@@ -105,7 +105,7 @@ button,
 a,
 .btn,
 nav {
-  font-family: 'Barlow Condensed', sans-serif;
+  font-family: 'Barlow Condensed', 'Roboto Condensed', sans-serif;
 }
 
 ::-webkit-scrollbar {
@@ -204,7 +204,7 @@ nav {
   }
 
   .flag-strip {
-    @apply fixed top-[72px] left-0 right-0 z-[999] flex h-[3px];
+    @apply fixed top-[88px] left-0 right-0 z-[999] flex h-[3px];
   }
 
   /* Animations */
