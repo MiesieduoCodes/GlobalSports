@@ -1,8 +1,8 @@
 // Gallery + video helpers shared by the About page, Videos pages and the admin.
 //
-// Source of truth is Firestore (`gallery`, `videos`), managed in /admin. The local files below are
-// only (a) what /admin → Gallery → "Import local media" uploads to Firebase Storage, and
-// (b) a fallback so pages aren't empty before that import has run.
+// Source of truth is Firestore (`gallery`, `videos`), managed in /admin. The local file lists below
+// are only what /admin → Gallery → "Import local media" uploads when those files are present
+// (public/gallery from the photo converter, public/videos) — both have been imported already.
 
 export const GALLERY_PAGE_SIZE = 12;
 
@@ -17,18 +17,6 @@ export const localGalleryItem = (entry, order) => ({
   orientation: entry.orientation,
   caption: "",
   order
-});
-
-// Last-resort fallback (tracked in git) when neither Firestore nor public/gallery has photos
-const CAROUSEL_FILES = [
-  "1.09.58 AM", "12.29.43 AM", "12.29.55 AM", "12.35.34 AM", "12.35.35 AM (1)", "12.35.35 AM",
-  "12.35.36 AM (2)", "12.35.36 AM (3)", "12.35.36 AM", "12.35.37 AM (1)", "12.35.37 AM (2)",
-  "12.35.37 AM (3)", "12.35.37 AM (4)", "12.35.37 AM", "12.35.38 AM (1)", "12.35.38 AM (2)",
-  "12.35.38 AM (3)", "12.35.38 AM (4)", "12.35.38 AM", "12.35.39 AM"
-];
-export const CAROUSEL_GALLERY = CAROUSEL_FILES.map((t, i) => {
-  const src = `/carousel/WhatsApp Image 2026-05-12 at ${t}.jpeg`;
-  return { id: `carousel-${i}`, thumb: src, full: src, orientation: "square", caption: "", order: i };
 });
 
 export const fromFirestoreGallery = (id, d) => ({
@@ -107,7 +95,7 @@ export const fromFirestoreVideo = (id, d) => ({
   duration: Number(d.duration) || 0
 });
 
-// Newest first; falls back to the local clips until /admin → Gallery → "Import local media" has run
+// Newest first
 export async function loadVideos() {
   const { collection, getDocs } = await import("firebase/firestore");
   const { db } = await import("@/lib/firebase");
@@ -121,7 +109,7 @@ export async function loadVideos() {
   } catch (err) {
     console.error("Error fetching videos:", err);
   }
-  return LOCAL_VIDEOS.map((v) => ({ ...v, duration: 0 }));
+  return [];
 }
 
 export const localized = (text, language) =>

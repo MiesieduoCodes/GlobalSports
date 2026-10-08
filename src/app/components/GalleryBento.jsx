@@ -8,7 +8,6 @@ import { db } from "@/lib/firebase";
 import {
   GALLERY_PAGE_SIZE,
   LOCAL_GALLERY_MANIFEST,
-  CAROUSEL_GALLERY,
   fromFirestoreGallery,
   localGalleryItem,
   layoutPage
@@ -42,9 +41,9 @@ async function loadGallery() {
     const res = await fetch(LOCAL_GALLERY_MANIFEST);
     if (res.ok) return (await res.json()).map(localGalleryItem);
   } catch {
-    // no local manifest (e.g. deployed without public/gallery) — fall through
+    // no local manifest — public/gallery only exists before photos are imported
   }
-  return CAROUSEL_GALLERY;
+  return [];
 }
 
 export default function GalleryBento({ language }) {
