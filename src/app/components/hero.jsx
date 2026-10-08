@@ -10,7 +10,7 @@ const translations = {
   en: {
     badge: "Almaty, Kazakhstan · Founded 2017",
     title: "Many nations.",
-    titleAccent: "One shirt.",
+    titleAccent: "One Club.",
     subtitle: "Founded in 2017 by Veria Lawrence Ebiks, VE-GlobalSportFC is one of the fastest-rising football organisations in Kazakhstan — a first team built to compete now, and an academy built to compete for the next twenty years.",
     btnPrimary: "VIEW MATCHES",
     btnSecondary: "MEET THE SQUAD",
@@ -26,7 +26,7 @@ const translations = {
   ru: {
     badge: "Алматы, Казахстан · Основан в 2017",
     title: "Много наций.",
-    titleAccent: "Одна форма.",
+    titleAccent: "Одна клуб.",
     subtitle: "Основанный в 2017 году Верией Лоуренсом Эбиксом, VE-GlobalSportFC — одна из самых быстрорастущих футбольных организаций Казахстана: первая команда, готовая побеждать сейчас, и академия, построенная на двадцать лет вперёд.",
     btnPrimary: "СМОТРЕТЬ МАТЧИ",
     btnSecondary: "СОСТАВ КОМАНДЫ",
