@@ -19,12 +19,6 @@ const translations = {
         bio: "The driving force behind VE-GlobalSportFC, Veria Lawrence Ebiks founded the club with a singular conviction: that world-class football could and should thrive in Almaty, Kazakhstan."
       },
       {
-        role: "Head Coach",
-        name: "Bernard Cyriaque Erokotan",
-        initials: "BE",
-        bio: "Leads the first team's tactical identity and matchday preparation — building a squad that competes with discipline over talent alone."
-      },
-      {
         role: "Sporting Director",
         name: "Ontanwa Louis",
         initials: "OL",
@@ -32,15 +26,10 @@ const translations = {
         bio: "Responsible for the club's technical structure — from first team to academy — building a cohesive playing identity that demands intensity, intelligence and creativity."
       },
       {
-        role: "Assistant Coach",
-        name: "Sunday Jerimoyamoh",
-        initials: "SJ",
-        bio: "Supports the Head Coach on training design, opposition analysis and player development across the first-team squad."
-      },
-      {
         role: "Business Development Manager",
         name: "Audu Emmanuel Kaz",
         initials: "AK",
+        image: "/images/WhatsApp_Image_2026-10-08_at_12.32.42_PM-removebg-preview.png",
         bio: "Leads the club's commercial strategy — forging partnerships and growing VE-GlobalSportFC's brand across Central Asia and beyond."
       },
       {
@@ -91,20 +80,20 @@ const translations = {
 const LINEUP = {
   formation: "4-3-3",
   starters: [
-    { num: 45, pos: "GK", x: 50, y: 4 },
+    { num: 55, pos: "GK", x: 50, y: 4 },
     { num: 14, pos: "LB", x: 14, y: 30 },
-    { num: 20, pos: "CB", x: 37, y: 23 },
+    { num: 10, pos: "CB", x: 37, y: 23 },
     { num: 3, pos: "CB", x: 63, y: 23 },
-    { num: 2, pos: "RB", x: 86, y: 30 },
-    { num: 5, pos: "CDM", x: 50, y: 43 },
-    { num: 18, pos: "CM", x: 27, y: 58 },
-    { num: 4, pos: "CM", x: 73, y: 58 },
-    { num: 7, pos: "LW", x: 16, y: 80 },
-    { num: 16, pos: "ST", x: 50, y: 88 },
-    { num: 10, pos: "RW", x: 84, y: 80 }
+    { num: 12, pos: "RB", x: 86, y: 30 },
+    { num: 4, pos: "CDM", x: 50, y: 40 },
+    { num: 18, pos: "CM", x: 27, y: 53 },
+    { num: 5, pos: "CM", x: 73, y: 50 },
+    { num: 19, pos: "LW", x: 16, y: 70 },
+    { num: 15, pos: "ST", x: 50, y: 76 },
+    { num: 6, pos: "RW", x: 84, y: 75 }
   ],
   subs: [
-    { num: 55, pos: "GK" },
+    { num: 45, pos: "GK" },
     { num: 29, pos: "RB" },
     { num: 9, pos: "MF" },
     { num: 11, pos: "W" },
