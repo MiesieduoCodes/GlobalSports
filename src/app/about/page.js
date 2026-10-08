@@ -1,10 +1,8 @@
 "use client";
 
-import { useState } from "react";
-import { motion } from "framer-motion";
 import { useLanguage } from "@/app/context/LanguageContext";
-import { X } from "lucide-react";
 import Link from "next/link";
+import GalleryBento from "@/app/components/GalleryBento";
 
 const translations = {
   en: {
@@ -62,61 +60,6 @@ const translations = {
 export default function AboutPage() {
   const { language } = useLanguage();
   const t = translations[language] || translations.en;
-  const [selectedImage, setSelectedImage] = useState(null);
-
-  // Carousel images
-  const carouselImages = [
-    "/carousel/WhatsApp Image 2026-05-12 at 12.29.43 AM.jpeg",
-    "/carousel/WhatsApp Image 2026-05-12 at 12.29.55 AM.jpeg",
-    "/carousel/WhatsApp Image 2026-05-12 at 12.35.34 AM.jpeg",
-    "/carousel/WhatsApp Image 2026-05-12 at 12.35.35 AM (1).jpeg",
-    "/carousel/WhatsApp Image 2026-05-12 at 12.35.35 AM.jpeg",
-    "/carousel/WhatsApp Image 2026-05-12 at 12.35.36 AM (1).jpeg",
-    "/carousel/WhatsApp Image 2026-05-12 at 12.35.36 AM (2).jpeg",
-    "/carousel/WhatsApp Image 2026-05-12 at 12.35.36 AM (3).jpeg",
-    "/carousel/WhatsApp Image 2026-05-12 at 12.35.36 AM.jpeg",
-    "/carousel/WhatsApp Image 2026-05-12 at 12.35.37 AM (1).jpeg",
-    "/carousel/WhatsApp Image 2026-05-12 at 12.35.37 AM (2).jpeg",
-    "/carousel/WhatsApp Image 2026-05-12 at 12.35.37 AM (3).jpeg",
-    "/carousel/WhatsApp Image 2026-05-12 at 12.35.37 AM (4).jpeg",
-    "/carousel/WhatsApp Image 2026-05-12 at 12.35.37 AM.jpeg",
-    "/carousel/WhatsApp Image 2026-05-12 at 12.35.38 AM (1).jpeg",
-    "/carousel/WhatsApp Image 2026-05-12 at 12.35.38 AM (2).jpeg",
-    "/carousel/WhatsApp Image 2026-05-12 at 12.35.38 AM (3).jpeg",
-    "/carousel/WhatsApp Image 2026-05-12 at 12.35.38 AM (4).jpeg",
-    "/carousel/WhatsApp Image 2026-05-12 at 12.35.38 AM.jpeg",
-    "/carousel/WhatsApp Image 2026-05-12 at 12.35.39 AM.jpeg",
-    "/carousel/WhatsApp Image 2026-05-12 at 12.35.36 AM (1).jpeg"
-  ];
-
-  // Shuffle array function for random positioning
-  const shuffleArray = (array) => {
-    const shuffled = [...array];
-    for (let i = shuffled.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-    }
-    return shuffled;
-  };
-
-  // Get shuffled images for bento grid (using first 12 for better layout)
-  const shuffledImages = shuffleArray(carouselImages).slice(0, 12);
-
-  // Bento grid layout configuration
-  const bentoLayout = [
-    { span: "col-span-2 row-span-2" },
-    { span: "col-span-1 row-span-1" },
-    { span: "col-span-1 row-span-1" },
-    { span: "col-span-1 row-span-2" },
-    { span: "col-span-1 row-span-1" },
-    { span: "col-span-2 row-span-1" },
-    { span: "col-span-1 row-span-1" },
-    { span: "col-span-1 row-span-1" },
-    { span: "col-span-2 row-span-1" },
-    { span: "col-span-1 row-span-1" },
-    { span: "col-span-2 row-span-1" },
-    { span: "col-span-1 row-span-1" }
-  ];
 
   return (
     <main className="bg-vnavy min-h-screen">
@@ -149,34 +92,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Bento Grid Gallery Section */}
-      <section className="section">
-        <div className="max-w-[1440px] mx-auto">
-          <span className="section-eyebrow">Gallery</span>
-          <h2 className="section-heading mb-12">Club Moments</h2>
-
-          <div className="grid grid-cols-4 gap-4 auto-rows-[200px]">
-            {shuffledImages.map((image, index) => (
-              <motion.div
-                key={`${image}-${index}`}
-                className={`${bentoLayout[index].span} relative overflow-hidden rounded-xl border border-[rgba(255,255,255,0.06)] hover:border-vgold/30 transition-all duration-300 group cursor-pointer`}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                whileHover={{ scale: 1.02 }}
-                onClick={() => setSelectedImage(image)}
-              >
-                <img
-                  src={image}
-                  alt={`Gallery image ${index + 1}`}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-vnavy/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <GalleryBento language={language} />
 
       {/* Values Section */}
       <section className="section">
@@ -206,42 +122,6 @@ export default function AboutPage() {
           </Link>
         </div>
       </section>
-
-      {/* Full Screen Image Modal */}
-      {selectedImage && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.3 }}
-          className="fixed inset-0 z-[9999] bg-vnavy/95 backdrop-blur-sm flex items-center justify-center p-4"
-          onClick={() => setSelectedImage(null)}
-        >
-          <motion.div
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.9, opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="relative max-w-6xl max-h-[90vh] w-full h-full flex items-center justify-center"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Close Button */}
-            <button
-              onClick={() => setSelectedImage(null)}
-              className="absolute top-4 right-4 z-10 bg-vnavy/80 backdrop-blur-sm text-vwhite hover:text-vgold transition-colors p-3 rounded-full border border-[rgba(255,255,255,0.1)] hover:border-vgold/30"
-            >
-              <X size={24} />
-            </button>
-
-            {/* Image */}
-            <img
-              src={selectedImage}
-              alt="Full screen gallery image"
-              className="max-w-full max-h-full object-contain rounded-lg"
-            />
-          </motion.div>
-        </motion.div>
-      )}
 
     </main>
   );

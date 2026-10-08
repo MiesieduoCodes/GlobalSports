@@ -48,3 +48,7 @@ serviceAccount*.json
 # firebase rules (optional - you may want to commit these)
 # firestore.rules
 # storage.rules
+
+# Raw match photos and their converted copies — seeded to Firebase Storage from /admin → Gallery
+/public/Match pictures_/
+/public/gallery/

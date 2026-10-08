@@ -44,6 +44,12 @@ service cloud.firestore {
       allow create, update, delete: if canWrite();
     }
     
+    // Gallery (About page photos) - public read, admin write
+    match /gallery/{photoId} {
+      allow read: if true;
+      allow create, update, delete: if canWrite();
+    }
+
     // Players collection - public read, authenticated write (dev) / admin write (prod)
     match /players/{playerId} {
       allow read: if true;

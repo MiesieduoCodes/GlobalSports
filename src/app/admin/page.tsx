@@ -11,11 +11,13 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "firebase/auth";
 import type { NewsItem, MatchItem, VideoItem, LocalizedText } from "@/types/content";
 import { SQUAD, squadDocId, toFirestorePlayer, CATEGORY_TO_POSITION } from "@/lib/squad";
+import GalleryAdminSection from "./GalleryAdminSection";
 
 const tabs = [
   { id: "news" as const, label: "📰 News", icon: "📰" },
   { id: "matches" as const, label: "⚽ Matches", icon: "⚽" },
   { id: "videos" as const, label: "🎬 Videos", icon: "🎬" },
+  { id: "gallery" as const, label: "🖼️ Gallery", icon: "🖼️" },
   { id: "players" as const, label: "👥 Players", icon: "👥" },
 ];
 
@@ -277,6 +279,7 @@ function AdminShell() {
               {activeTab === "news" && <NewsAdminSection />}
               {activeTab === "matches" && <MatchesAdminSection />}
               {activeTab === "videos" && <VideosAdminSection />}
+              {activeTab === "gallery" && <GalleryAdminSection />}
               {activeTab === "players" && <PlayersAdminSection />}
             </div>
           </main>

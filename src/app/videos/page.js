@@ -1,9 +1,10 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useLanguage } from "@/app/context/LanguageContext";
-import { Play, Clock, Calendar, ChevronRight } from "lucide-react";
-import Link from "next/link";
 import { motion } from "framer-motion";
+import VideoCard from "@/app/components/VideoCard";
+import { loadVideos } from "@/lib/media";
 
 const translations = {
   en: {
@@ -11,28 +12,32 @@ const translations = {
     heroTitle: "From Almaty, ",
     heroTitleAccent: "on camera.",
     sub: "Match highlights, player interviews, and behind-the-scenes footage from a club still writing its story.",
-    categories: ["All", "Highlights", "Interviews", "Academy"],
-    watch: "Watch Now"
+    all: "All",
+    empty: "No videos in this category yet."
   },
   ru: {
     heroEyebrow: "Медиа VE-GlobalSportFC",
     heroTitle: "Из Алматы ",
     heroTitleAccent: "в кадре.",
     sub: "Обзоры матчей, интервью с игроками и закулисный контент клуба, который всё ещё пишет свою историю.",
-    categories: ["Все", "Обзоры", "Интервью", "Академия"],
-    watch: "Смотреть"
+    all: "Все",
+    empty: "В этой категории пока нет видео."
   }
 };
-
-const mockVideos = [
-  { id: "1", title: "Highlights: VE-GlobalSportFC 3–0 FC Kairat", category: "Highlights", date: "Mar 18, 2026", duration: "8:45" },
-  { id: "2", title: "Interview: Yassine Arouhi on the season so far", category: "Interviews", date: "Mar 16, 2026", duration: "12:20" },
-  { id: "3", title: "Academy Spotlight: U17–U19 Performance Stage", category: "Academy", date: "Mar 14, 2026", duration: "15:10" }
-];
 
 export default function VideosPage() {
   const { language } = useLanguage();
   const t = translations[language] || translations.en;
+  const [videos, setVideos] = useState([]);
+  const [category, setCategory] = useState("");
+
+  useEffect(() => {
+    loadVideos().then(setVideos);
+  }, []);
+
+  // Filter buttons come from the categories actually used (set per video in /admin)
+  const categories = [...new Set(videos.map((v) => v.category).filter(Boolean))];
+  const shown = category ? videos.filter((v) => v.category === category) : videos;
 
   return (
     <main className="bg-vnavy min-h-screen">
@@ -43,42 +48,40 @@ export default function VideosPage() {
           <h1 className="section-heading mt-4">{t.heroTitle}<span className="text-vgold">{t.heroTitleAccent}</span></h1>
           <p className="section-sub mx-auto mb-10">{t.sub}</p>
 
-          <div className="flex justify-center gap-2">
-            {t.categories.map((c, i) => (
-              <button key={i} className={`px-5 py-2 rounded-full font-barlow-condensed font-bold text-[12px] tracking-[1.5px] uppercase border transition-all ${i === 0 ? 'bg-vgold border-vgold text-vnavy' : 'bg-transparent border-white/10 text-vmuted hover:text-vwhite'}`}>{c}</button>
-            ))}
-          </div>
+          {categories.length > 1 && (
+            <div className="flex flex-wrap justify-center gap-2">
+              {["", ...categories].map((c) => (
+                <button
+                  key={c || "all"}
+                  type="button"
+                  onClick={() => setCategory(c)}
+                  className={`px-5 py-2 rounded-full font-barlow-condensed font-bold text-[12px] tracking-[1.5px] uppercase border transition-all ${category === c ? "bg-vgold border-vgold text-vnavy" : "bg-transparent border-white/10 text-vmuted hover:text-vwhite"}`}
+                >
+                  {c || t.all}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
       <section className="section">
-        <div className="max-w-[1440px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
-          {mockVideos.map((v, i) => (
-            <Link key={i} href={`/videoplayer?v=${v.id}`}>
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                className="bg-vnavy-card border border-white/5 rounded-[20px] overflow-hidden group hover:border-vsky/30 transition-all flex flex-col h-full"
-              >
-                <div className="aspect-video bg-vnavy relative flex items-center justify-center overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-br from-vsky/20 to-transparent opacity-30" />
-                  <div className="w-16 h-16 rounded-full bg-vwhite/10 backdrop-blur-md border border-white/20 flex items-center justify-center group-hover:scale-125 transition-transform duration-500 relative z-20">
-                    <Play className="w-6 h-6 text-vwhite fill-vwhite ml-1" />
-                  </div>
-                  <span className="absolute bottom-3 right-3 bg-black/60 backdrop-blur-md text-vwhite font-barlow-condensed text-[10px] font-bold px-2 py-0.5 rounded tracking-[1px]">{v.duration}</span>
-                </div>
-                <div className="p-7">
-                  <div className="flex items-center gap-3 mb-2.5">
-                    <span className="font-barlow-condensed font-bold text-[10px] tracking-[2px] uppercase text-vsky">{v.category}</span>
-                    <span className="text-vmuted text-[10px]">•</span>
-                    <span className="text-vmuted text-[10px]">{v.date}</span>
-                  </div>
-                  <h3 className="font-barlow-condensed font-bold text-lg text-vwhite leading-snug group-hover:text-vgold transition-colors">{v.title}</h3>
-                </div>
-              </motion.div>
-            </Link>
+        <div className="max-w-[1440px] mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {shown.map((v, i) => (
+            <motion.div
+              key={v.id}
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: (i % 3) * 0.05 }}
+            >
+              <VideoCard video={v} language={language} />
+            </motion.div>
           ))}
         </div>
+        {videos.length > 0 && shown.length === 0 && (
+          <p className="text-center py-16 font-bebas text-xl text-vmuted tracking-[2px]">{t.empty}</p>
+        )}
       </section>
     </main>
   );
