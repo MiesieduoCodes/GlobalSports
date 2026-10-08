@@ -6,6 +6,7 @@ import Hero from "@/app/components/hero";
 import NextMatch from "@/app/components/nextmatch";
 import News from "@/app/components/news";
 import RecentResults from "@/app/components/recentresults";
+import LatestVideos from "@/app/components/LatestVideos";
 import { useLanguage } from "@/app/context/LanguageContext";
 
 const translations = {
@@ -246,6 +247,7 @@ export default function Page() {
       <NextMatch />
       <RecentResults />
       <News />
+      <LatestVideos language={language} />
 
       {/* Footer is rendered by Layout */}
     </div>

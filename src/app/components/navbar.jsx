@@ -16,6 +16,7 @@ const translations = {
     management: "Management",
     fixtures: "Fixtures",
     news: "News",
+    videos: "Videos",
     members: "Members",
     businessClub: "Business Club",
     contact: "Contact",
@@ -30,6 +31,7 @@ const translations = {
     management: "Руководство",
     fixtures: "Матчи",
     news: "Новости",
+    videos: "Видео",
     members: "Участники",
     businessClub: "Бизнес-клуб",
     contact: "Контакт",
@@ -44,14 +46,36 @@ const Navbar = () => {
   const t = translations[language] || translations.en;
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  // Longer labels (e.g. Russian) can overflow the desktop link row; fall back to the menu drawer
+  // When the desktop link row doesn't fit: first hide the wordmark beside the logo ("compact"),
+  // then fall back to the menu drawer ("menu"). Longer labels (e.g. Russian) reach "menu" sooner.
   const linksRef = useRef(null);
-  const [linksFit, setLinksFit] = useState(true);
+  const wordmarkRef = useRef(null);
+  const burgerRef = useRef(null);
+  const widths = useRef({ wordmark: 0, burger: 44 });
+  const [fit, setFit] = useState("full");
+  const fitRef = useRef(fit);
+  fitRef.current = fit;
+  const linksFit = fit !== "menu";
 
   useEffect(() => {
     const el = linksRef.current;
     if (!el) return;
-    const check = () => setLinksFit(el.scrollWidth <= el.clientWidth + 1);
+    const check = () => {
+      const level = fitRef.current;
+      // Cache the widths of whatever is currently visible (each includes its flex gap)
+      if (level !== "compact" && wordmarkRef.current?.offsetWidth) widths.current.wordmark = wordmarkRef.current.offsetWidth + 16;
+      if (level === "menu" && burgerRef.current?.offsetWidth) widths.current.burger = burgerRef.current.offsetWidth + 12;
+      // The row fills the space between logo and buttons; the links' own width is what they need
+      const links = [...el.children];
+      const gap = parseFloat(getComputedStyle(el).columnGap) || 0;
+      const need = links.reduce((sum, a) => sum + a.offsetWidth, 0) + gap * Math.max(0, links.length - 1);
+      // Space the links would have in the "full" layout, whatever the current layout is
+      const space = el.clientWidth
+        - (level === "compact" ? widths.current.wordmark : 0)
+        + (level === "menu" ? widths.current.burger : 0);
+      const next = need <= space + 1 ? "full" : need <= space + widths.current.wordmark + 1 ? "compact" : "menu";
+      if (next !== level) setFit(next);
+    };
     // Watch the links too: their width changes when a web font (e.g. the Cyrillic fallback) arrives
     const observer = new ResizeObserver(check);
     [el, ...el.children].forEach((node) => observer.observe(node));
@@ -73,6 +97,7 @@ const Navbar = () => {
     { name: t.management, path: "/management" },
     { name: t.fixtures, path: "/matches" },
     { name: t.news, path: "/news" },
+    { name: t.videos, path: "/videos" },
     { name: t.members, path: "/members" },
     { name: t.businessClub, path: "/business-club" },
     { name: t.contact, path: "/contact" }
@@ -85,21 +110,21 @@ const Navbar = () => {
         {/* Logo */}
         <Link href="/" className="flex items-center gap-4 no-underline group h-full shrink-0" >
         <Image src="/logo.png" alt="VE-GLOBALSPORTS FC" width={50} height={60} className="shrink-0" style={{ height: 60, width: "auto" }} />
-          <div className="hidden sm:flex flex-col leading-none">
+          <div ref={wordmarkRef} className={`${fit === "compact" ? "hidden" : "hidden sm:flex"} flex-col leading-none`}>
             <span className="font-bebas text-[23px] text-vwhite tracking-[1px] group-hover:text-vgold transition-colors truncate max-w-[180px] sm:max-w-none">VE-GLOBALSPORTS FC</span>
             <span className="font-barlow-condensed text-[11px] font-bold tracking-[3px] uppercase text-vsky mt-0.5">{t.city}</span>
           </div>
         </Link>
 
         {/* Links */}
-        <div ref={linksRef} className={`hidden xl:flex items-center gap-3.5 2xl:gap-7 mx-4 overflow-hidden ${linksFit ? "" : "invisible"}`} aria-hidden={!linksFit}>
+        <div ref={linksRef} className={`hidden xl:flex flex-1 min-w-0 justify-center items-center gap-3.5 2xl:gap-5 mx-4 overflow-hidden ${linksFit ? "" : "invisible"}`} aria-hidden={!linksFit}>
           {navLinks.map((link) => {
             const isActive = pathname === link.path;
             return (
               <Link
                 key={link.path}
                 href={link.path}
-                className={`font-barlow-condensed text-[12px] 2xl:text-[15px] font-bold tracking-[1.5px] uppercase transition-all relative py-1 whitespace-nowrap hover:text-vwhite ${isActive ? 'text-vgold' : 'text-vmuted'}`}
+                className={`font-barlow-condensed text-[12px] 2xl:text-[14px] font-bold tracking-[1.5px] uppercase transition-all relative py-1 whitespace-nowrap hover:text-vwhite ${isActive ? 'text-vgold' : 'text-vmuted'}`}
               >
                 {link.name}
                 <span className={`absolute bottom-[-4px] left-0 right-0 h-[2px] bg-vgold transition-transform origin-left ${isActive ? 'scale-x-100' : 'scale-x-0'}`} />
@@ -132,6 +157,7 @@ const Navbar = () => {
           </Link>
 
           <button
+            ref={burgerRef}
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className={`${linksFit ? "xl:hidden" : ""} text-vwhite hover:text-vgold transition-colors p-1`}
           >
