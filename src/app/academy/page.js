@@ -10,7 +10,7 @@ const translations = {
   en: {
     heroEyebrow: "The Academy",
     heroTitle: "We're not just developing players. ",
-    heroTitleAccent: "We're building a pipeline.",
+    heroTitleAccent: "We're building the next generation of football",
     heroSub: "VE-GlobalSportFC Academy takes players from their first touch to their first professional trial — U8 through U19, structured so a nine-year-old in Almaty and a nineteen-year-old chasing a European move are both training inside the same club identity.",
     groupsTitle: "Age-Group Pathway",
     groups: [
@@ -43,7 +43,7 @@ const translations = {
   ru: {
     heroEyebrow: "Академия",
     heroTitle: "Мы не просто развиваем игроков. ",
-    heroTitleAccent: "Мы строим конвейер.",
+    heroTitleAccent: ". Мы готовим следующее поколение футбола.",
     heroSub: "Академия VE-GlobalSportFC ведёт игроков от первого касания мяча до первого профессионального просмотра — от U8 до U19.",
     groupsTitle: "Возрастной путь",
     groups: [
